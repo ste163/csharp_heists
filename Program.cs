@@ -34,9 +34,10 @@ namespace heist
 
         static void DisplayCriminalRoster(List<Criminal> roster)
         {
-            Console.WriteLine("************************");
-            Console.WriteLine("YOUR CREW FOR THIS HEIST");
-            Console.WriteLine("************************");
+            Console.WriteLine(@"
+
+░▀█▀░█▄█▒██▀░░░▄▀▀▒█▀▄▒██▀░█░░▒█
+░▒█▒▒█▒█░█▄▄▒░░▀▄▄░█▀▄░█▄▄░▀▄▀▄▀");
             roster.ForEach(c => Console.WriteLine($@"
 {c.Name}
  skill level: {c.SkillLevel}
@@ -177,14 +178,12 @@ namespace heist
  \▓▓    ▓▓ | ▓▓| ▓▓      | ▓▓  | ▓▓\▓▓     \ ▓▓       ▓▓  \▓▓  ▓▓       ▓▓
   \▓▓▓▓▓▓   \▓▓ \▓▓       \▓▓   \▓▓ \▓▓▓▓▓▓▓\▓▓\▓▓▓▓▓▓▓    \▓▓▓▓ \▓▓▓▓▓▓▓                                                                                     
 
-
+--------------------------------------------------------------------------
 ");
             Console.WriteLine(@"
- _ _  _              ___                  
-| | |[_] _ _  ___   |  _] _ _  ___  _ _ _ 
-|   || || '_]/ ._]  | [__| '_]/ ._]| | | |
-|_|_||_||_|  \___.  `___/|_|  \___.|__/_/                                          
-            ");
+░█▄█░█▒█▀▄▒██▀░░░▄▀▀▒█▀▄▒██▀░█░░▒█
+▒█▒█░█░█▀▄░█▄▄▒░░▀▄▄░█▀▄░█▄▄░▀▄▀▄▀                       
+");
             Console.Write("Press any key to begin recruiting: ");
             Console.ReadLine();
             Console.WriteLine("");
