@@ -13,19 +13,28 @@ namespace heist
 
 
   
-            // Display team member's info
+            // Display all criminal's info
         }
 
-        static List<Member> CreateCriminalRoster()
+        static List<Criminal> CreateCriminalRoster()
         {
             bool hiring = true;
-            List<Member> CriminalRoster = new List<Member>();
+            // Instantiate empty list of criminals
+            List<Criminal> CriminalRoster = new List<Criminal>();
+
+            // While we are hiring, prompt user to continue hiring
+            // display current amount of criminals hired
             while(hiring)
             {
                 CriminalRoster.Add(HireNewCriminal());
-                // Ask if we want to contine hiring
+
+                string countInRoster = CriminalRoster.Count() == 1 ? $"{CriminalRoster.Count()} criminal hired." : $"{CriminalRoster.Count()} criminals hired.";
+                Console.WriteLine(countInRoster);
+                
                 Console.Write("Continue hiring? [y/n]: ");
                 string response = Console.ReadLine().ToLower();
+                Console.WriteLine("");
+
                 while(response != "y" && response != "n")
                 {
                     Console.Write("Continue hiring? [y/n]: ");
@@ -38,14 +47,14 @@ namespace heist
             return CriminalRoster;
         }
 
-        static Member HireNewCriminal()
+        static Criminal HireNewCriminal()
         {
-            Console.Write("Enter new team member's name: ");
+            Console.Write("Enter new criminal's name: ");
             // User can enter any string, including a string of numbers
             string enteredName = Console.ReadLine();
             int enteredSkill = InputSkill();
             double enteredCourage = InputCourage();
-            Member newCriminal = new Member(enteredName, enteredSkill, enteredCourage);
+            Criminal newCriminal = new Criminal(enteredName, enteredSkill, enteredCourage);
 
             Console.WriteLine($@"
 {newCriminal.Name} hired!
@@ -66,7 +75,7 @@ Courage Factor: {newCriminal.CourageFactor}
             {
                 try
                 {
-                    Console.Write("Enter new team member's skill level: ");
+                    Console.Write("Enter new criminal's skill level: ");
                     entered = int.Parse(Console.ReadLine());
                     break;
                 }
@@ -101,7 +110,7 @@ Courage Factor: {newCriminal.CourageFactor}
             {
                 try
                 {
-                    Console.Write("Enter new team member's courage (0.0 - 2.0): ");
+                    Console.Write("Enter new criminal's courage (0.0 - 2.0): ");
                     entered = double.Parse(Console.ReadLine());
                     break;
                 }

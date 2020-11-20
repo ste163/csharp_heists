@@ -2,7 +2,7 @@ using System;
 
 namespace heist
 {
-    public class Member
+    public class Criminal
     {
         public string Name { get; set; }
         // Skill level must be positive
@@ -11,7 +11,7 @@ namespace heist
         // Courage Factor must be 0.0 - 2.0
         public double CourageFactor { get; set; }
 
-        public Member(string name,int skill, double courage)
+        public Criminal(string name,int skill, double courage)
         {
             Name = name;
             SkillLevel = skill;
