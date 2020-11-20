@@ -15,6 +15,16 @@ namespace heist
             Console.ReadLine();
             Console.WriteLine("");
             DisplayCriminalRoster(CreateCriminalRoster());
+
+            // Name the bank you want to rob
+            // Set a difficulty int for this bank
+            // Tell your criminals to go rob the bank
+            // If the sum of their skills is greater than the bank's difficulty
+                // display a success message (ASCII of bag of money)
+            // If failed, display someone behind bars
+
+            // CREATE AN ASCII art class
+            // and display different art in the functions
         }
 
         static void DisplayCriminalRoster(List<Criminal> roster)
