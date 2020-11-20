@@ -8,12 +8,7 @@ namespace heist
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("****************");
-            Console.WriteLine("PLAN THE HEIST");
-            Console.WriteLine("****************");
-            Console.Write("Press any key to begin recruiting criminals for this heist: ");
-            Console.ReadLine();
-            Console.WriteLine("");
+            DisplayIntro();
             DisplayCriminalRoster(CreateCriminalRoster());
 
             // Show different locations with ASCII art to rob
@@ -29,6 +24,9 @@ namespace heist
             // If failed, display someone behind bars
                 // and give the total amount of money stolen
             // Every time you suceed, display amount of cash stolen
+
+            // The criminals you hire will need to have random skill values
+            // Their courage also needs to be random and multiple their skills
 
             // CREATE AN ASCII art class
             // and display different art in the functions
@@ -161,6 +159,35 @@ namespace heist
             }
 
             return entered;
+        }
+
+        static void DisplayIntro()
+        {
+            Console.WriteLine(@"
+
+
+
+  ______    __  __        __    __          __            __              
+ /      \  |  \|  \      |  \  |  \        |  \          |  \             
+|  ▓▓▓▓▓▓\_| ▓▓| ▓▓_     | ▓▓  | ▓▓ ______  \▓▓ _______ _| ▓▓_    _______ 
+| ▓▓   \▓▓   ▓▓  ▓▓ \    | ▓▓__| ▓▓/      \|  \/       \   ▓▓ \  /       \
+| ▓▓      \▓▓▓▓▓▓▓▓▓▓    | ▓▓    ▓▓  ▓▓▓▓▓▓\ ▓▓  ▓▓▓▓▓▓▓\▓▓▓▓▓▓ |  ▓▓▓▓▓▓▓
+| ▓▓   __|   ▓▓  ▓▓ \    | ▓▓▓▓▓▓▓▓ ▓▓    ▓▓ ▓▓\▓▓    \  | ▓▓ __ \▓▓    \ 
+| ▓▓__/  \\▓▓▓▓▓▓▓▓▓▓    | ▓▓  | ▓▓ ▓▓▓▓▓▓▓▓ ▓▓_\▓▓▓▓▓▓\ | ▓▓|  \_\▓▓▓▓▓▓\
+ \▓▓    ▓▓ | ▓▓| ▓▓      | ▓▓  | ▓▓\▓▓     \ ▓▓       ▓▓  \▓▓  ▓▓       ▓▓
+  \▓▓▓▓▓▓   \▓▓ \▓▓       \▓▓   \▓▓ \▓▓▓▓▓▓▓\▓▓\▓▓▓▓▓▓▓    \▓▓▓▓ \▓▓▓▓▓▓▓                                                                                     
+
+
+");
+            Console.WriteLine(@"
+ _ _  _              ___                  
+| | |[_] _ _  ___   |  _] _ _  ___  _ _ _ 
+|   || || '_]/ ._]  | [__| '_]/ ._]| | | |
+|_|_||_||_|  \___.  `___/|_|  \___.|__/_/                                          
+            ");
+            Console.Write("Press any key to begin recruiting: ");
+            Console.ReadLine();
+            Console.WriteLine("");
         }
     }
 }
