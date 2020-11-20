@@ -42,7 +42,6 @@ namespace heist
                 }
 
                 hiring = response == "y" ? true : false;
-
             }
             return CriminalRoster;
         }
