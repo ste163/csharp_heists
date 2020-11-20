@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace heist
 {
@@ -7,12 +9,33 @@ namespace heist
         static void Main(string[] args)
         {
             Console.WriteLine("Plan Your Heist!");
-            Member Terra = HireNewCriminal();
-            Member Tristan = HireNewCriminal();
-            Member Sam = HireNewCriminal();
+            CreateCriminalRoster();
+
+
   
             // Display team member's info
+        }
 
+        static List<Member> CreateCriminalRoster()
+        {
+            bool hiring = true;
+            List<Member> CriminalRoster = new List<Member>();
+            while(hiring)
+            {
+                CriminalRoster.Add(HireNewCriminal());
+                // Ask if we want to contine hiring
+                Console.Write("Continue hiring? [y/n]: ");
+                string response = Console.ReadLine().ToLower();
+                while(response != "y" && response != "n")
+                {
+                    Console.Write("Continue hiring? [y/n]: ");
+                    response = Console.ReadLine().ToLower();
+                }
+
+                hiring = response == "y" ? true : false;
+
+            }
+            return CriminalRoster;
         }
 
         static Member HireNewCriminal()
@@ -35,8 +58,10 @@ Courage Factor: {newCriminal.CourageFactor}
 
         static int InputSkill()
         {
+            // Declares the variable we will be re-assigning 
             int entered;
 
+            // When user first enters the skill input, ensure they type only a number
             while(true)
             {
                 try
@@ -51,6 +76,7 @@ Courage Factor: {newCriminal.CourageFactor}
                 }
             }
 
+            // After user has entered a number, if it is less than or equal to 0, user must re-enter number
             while(entered <= 0)
             {
                 try
