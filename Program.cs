@@ -16,21 +16,20 @@ namespace heist
                     // User can enter any string, including a string of numbers
                     string enteredName = Console.ReadLine();
 
+                    // User can still enter a negative number
                     Console.Write("Enter new team member's skill level: ");
                     int enteredSkill = int.Parse(Console.ReadLine());
 
+                    // User can still enter ANY number outside the range
                     Console.Write("Enter new team member's courage (0.0 - 2.0): ");
                     double enteredCourage = int.Parse(Console.ReadLine());
 
                     Member newTeamMember = new Member(enteredName, enteredSkill, enteredCourage);
                     break;
                 }
-                // Have specific catches for
-                // each error message based on
-                // which variable we are declaring & assigning
                 catch(FormatException)
                 {
-                    Console.WriteLine("You must enter a number");
+                    Console.WriteLine("You must enter a number.");
                 }
             }
 
