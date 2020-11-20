@@ -16,12 +16,19 @@ namespace heist
             Console.WriteLine("");
             DisplayCriminalRoster(CreateCriminalRoster());
 
-            // Name the bank you want to rob
-            // Set a difficulty int for this bank
+            // Show different locations with ASCII art to rob
+                // Annoying Neighbor's House (dif 0 - 50) ($0 - $100,000)
+                // 7-Eleven (dif 0 - 150) ($50 - $1,000)
+                // Chucky E Cheese (dif 0 - 200) ($100 - $2,000)
+                // Nashville Software School (dif 0 - infinity) ($0-$30)
+                // Bank of America (dif 300 - 900) ($5,000 - $10,000)
             // Tell your criminals to go rob the bank
-            // If the sum of their skills is greater than the bank's difficulty
-                // display a success message (ASCII of bag of money)
+            // If the sum of their skills is greater than the locations's difficulty
+                // display a success message (ASCII of bag of money) - say how much $$ was stolen
+                // Go back to the location select screen, but with the last place removed
             // If failed, display someone behind bars
+                // and give the total amount of money stolen
+            // Every time you suceed, display amount of cash stolen
 
             // CREATE AN ASCII art class
             // and display different art in the functions
