@@ -22,7 +22,11 @@ namespace heist
             Console.WriteLine("************************");
             Console.WriteLine("YOUR CREW FOR THIS HEIST");
             Console.WriteLine("************************");
-            roster.ForEach(c => Console.WriteLine(c.Name));
+            roster.ForEach(c => Console.WriteLine($@"
+{c.Name}
+ skill level: {c.SkillLevel}
+ courage factor: {c.CourageFactor}
+"));         
         }
 
         static List<Criminal> CreateCriminalRoster()
