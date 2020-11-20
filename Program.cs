@@ -8,45 +8,54 @@ namespace heist
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Plan Your Heist!");
-            CreateCriminalRoster();
+            Console.WriteLine("****************");
+            Console.WriteLine("PLAN THE HEIST");
+            Console.WriteLine("****************");
+            Console.Write("Press any key to begin recruiting criminals for this heist: ");
+            Console.ReadLine();
+            Console.WriteLine("");
+            DisplayCriminalRoster(CreateCriminalRoster());
+        }
 
-
-  
-            // Display all criminal's info
+        static void DisplayCriminalRoster(List<Criminal> roster)
+        {
+            Console.WriteLine("************************");
+            Console.WriteLine("YOUR CREW FOR THIS HEIST");
+            Console.WriteLine("************************");
+            roster.ForEach(c => Console.WriteLine(c.Name));
         }
 
         static List<Criminal> CreateCriminalRoster()
         {
-            bool hiring = true;
+            bool recruiting = true;
             // Instantiate empty list of criminals
             List<Criminal> CriminalRoster = new List<Criminal>();
 
-            // While we are hiring, prompt user to continue hiring
-            // display current amount of criminals hired
-            while(hiring)
+            // While we are recruiting, prompt user to continue recruiting
+            // display current amount of criminals recruited
+            while(recruiting)
             {
-                CriminalRoster.Add(HireNewCriminal());
+                CriminalRoster.Add(RecruitNewCriminal());
 
-                string countInRoster = CriminalRoster.Count() == 1 ? $"{CriminalRoster.Count()} criminal hired." : $"{CriminalRoster.Count()} criminals hired.";
+                string countInRoster = CriminalRoster.Count() == 1 ? $"{CriminalRoster.Count()} criminal recruited." : $"{CriminalRoster.Count()} criminals recruited.";
                 Console.WriteLine(countInRoster);
                 
-                Console.Write("Continue hiring? [y/n]: ");
+                Console.Write("Continue recruiting? [y/n]: ");
                 string response = Console.ReadLine().ToLower();
                 Console.WriteLine("");
 
                 while(response != "y" && response != "n")
                 {
-                    Console.Write("Continue hiring? [y/n]: ");
+                    Console.Write("Continue recruiting? [y/n]: ");
                     response = Console.ReadLine().ToLower();
                 }
 
-                hiring = response == "y" ? true : false;
+                recruiting = response == "y" ? true : false;
             }
             return CriminalRoster;
         }
 
-        static Criminal HireNewCriminal()
+        static Criminal RecruitNewCriminal()
         {
             Console.Write("Enter new criminal's name: ");
             // User can enter any string, including a string of numbers
@@ -56,9 +65,9 @@ namespace heist
             Criminal newCriminal = new Criminal(enteredName, enteredSkill, enteredCourage);
 
             Console.WriteLine($@"
-{newCriminal.Name} hired!
-Skill level: {newCriminal.SkillLevel}
-Courage Factor: {newCriminal.CourageFactor}
+{newCriminal.Name} recruited!
+ skill level: {newCriminal.SkillLevel}
+ courage factor: {newCriminal.CourageFactor}
 ");
 
             return newCriminal;
@@ -66,9 +75,8 @@ Courage Factor: {newCriminal.CourageFactor}
 
         static int InputSkill()
         {
-            // Declares the variable we will be re-assigning 
+            // Declares variable we will be re-assigning 
             int entered;
-
             // When user first enters the skill input, ensure they type only a number
             while(true)
             {
@@ -83,7 +91,6 @@ Courage Factor: {newCriminal.CourageFactor}
                     Console.WriteLine("Must enter a whole number.");
                 }
             }
-
             // After user has entered a number, if it is less than or equal to 0, user must re-enter number
             while(entered <= 0)
             {
