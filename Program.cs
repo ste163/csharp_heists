@@ -10,7 +10,7 @@ namespace heist
         {
             Console.Clear();
             DisplayIntro();
-            List<Criminal> currentCrew = CreateCrew();
+            List<Criminal> currentCrew = CreateCrew(new List<Criminal>());
 
             // While there are still levels not yet completed
                 // continue the select & related scripts
@@ -112,21 +112,25 @@ namespace heist
             Console.Clear();
             DisplayCurrentCrew(crew);
                 // Display their face, name, and the how they're doing text based on trust
-            Console.WriteLine("1) recruit crew member");
-            Console.WriteLine("2) ice crew member");
-            Console.WriteLine("3) return to planning menu");
-
-            int input = MenuInput(3);
-
-            switch (input)
+            while(true)
             {
-                case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    LevelSelect(crew);
-                    break;
+                Console.WriteLine("1) recruit crew member");
+                Console.WriteLine("2) ice crew member");
+                Console.WriteLine("3) return to planning menu");
+
+                int input = MenuInput(3);
+
+                switch (input)
+                {
+                    case 1:
+                        ManageCrew(CreateCrew(crew));
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        LevelSelect(crew);
+                        break;
+                }
             }
         }
 
@@ -201,58 +205,67 @@ You: {c.Name}
             });         
         }
 
-        static List<Criminal> CreateCrew()
+        static List<Criminal> CreateCrew(List<Criminal> crew)
         {
             ASCII art = new ASCII();
             bool recruiting = true;
             // Instantiate empty list of criminals
-            List<Criminal> CriminalRoster = new List<Criminal>();
+            List<Criminal> newCrew = new List<Criminal>();
 
-            // Create the player and add them first to the roster
-            CriminalRoster.Add(CreatePlayer());
-
-            // OPTION TO GO SOLO OR HIRE CREW
-            Console.WriteLine("Go solo or hire a crew? [solo/hire]: ");
-            string solo = Console.ReadLine().ToLower();
-
-            Console.Clear();
-
-            while(solo != "solo" && solo != "hire")
+            if (crew.Count != 0)
             {
-                Console.Write("Go solo or hire a crew? [solo/hire]: ");
-                solo = Console.ReadLine().ToLower();
-            }
-
-            if (solo == "solo")
-            {
-                return CriminalRoster;
+                Console.WriteLine("");
+                crew.Add(RecruitNewCriminal());
+                return crew;
             }
             else
             {
-                Console.WriteLine(art.DisplayCrewHire());
+                // Create the player and add them first to the roster
+                newCrew.Add(CreatePlayer());
+                Console.WriteLine("Go solo or hire a crew? [solo/hire]: ");
+                // OPTION TO GO SOLO OR HIRE CREW
+                string solo = Console.ReadLine().ToLower();
 
-                // While we are recruiting, prompt user to continue recruiting
-                // display current amount of criminals recruited
-                while(recruiting)
+                Console.Clear();
+
+                while(solo != "solo" && solo != "hire")
                 {
-                    CriminalRoster.Add(RecruitNewCriminal());
-
-                    Console.WriteLine($"{CriminalRoster.Count()} criminals in crew.");
-                    
-                    Console.Write("Continue recruiting? [y/n]: ");
-                    string response = Console.ReadLine().ToLower();
-                    Console.WriteLine("");
-
-                    while(response != "y" && response != "n")
-                    {
-                        Console.Write("Continue recruiting? [y/n]: ");
-                        response = Console.ReadLine().ToLower();
-                    }
-
-                    recruiting = response == "y" ? true : false;
+                    Console.Write("Go solo or hire a crew? [solo/hire]: ");
+                    solo = Console.ReadLine().ToLower();
                 }
-                return CriminalRoster;
+
+                if (solo == "solo")
+                {
+                    return newCrew;
+                }
+                else
+                {
+                    Console.WriteLine(art.DisplayCrewHire());
+
+                    // While we are recruiting, prompt user to continue recruiting
+                    // display current amount of criminals recruited
+                    while(recruiting)
+                    {
+                        newCrew.Add(RecruitNewCriminal());
+
+                        Console.WriteLine($"{newCrew.Count()} criminals in crew.");
+                        
+                        Console.Write("Continue recruiting? [y/n]: ");
+                        string response = Console.ReadLine().ToLower();
+                        Console.WriteLine("");
+
+                        while(response != "y" && response != "n")
+                        {
+                            Console.Write("Continue recruiting? [y/n]: ");
+                            response = Console.ReadLine().ToLower();
+                        }
+
+                        recruiting = response == "y" ? true : false;
+                    }
+                    return newCrew;
+                }
             }
+
         }
 
         static Criminal RecruitNewCriminal()
