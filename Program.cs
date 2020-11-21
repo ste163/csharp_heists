@@ -19,10 +19,6 @@ namespace heist
                 // Chucky E Cheese (dif 0 - 200) ($100 - $2,000)
                 // Nashville Software School (dif 0 - infinity) ($0-$30)
                 // Bank of America (dif 300 - 900) ($5,000 - $10,000)
-            
-            // ONE day
-            // FIVE heists
-            // One time to split the money.
 
             // Crew Select
                 // User types names
@@ -90,9 +86,10 @@ namespace heist
         static void DisplayCriminalRoster(List<Criminal> roster)
         {
             Console.WriteLine(@"
-
- ▀█▀ █▄█ ██▀   ▄▀▀ █▀▄ ██▀ █   █
-  █  █ █ █▄▄   ▀▄▄ █▀▄ █▄▄ ▀▄▀▄▀");
+-------------------------------
+▀█▀ █▄█ ██▀   ▄▀▀ █▀▄ ██▀ █   █
+ █  █ █ █▄▄   ▀▄▄ █▀▄ █▄▄ ▀▄▀▄▀
+-------------------------------");
             roster.ForEach(c => Console.WriteLine($@"
 {c.Face}
 
@@ -112,36 +109,51 @@ namespace heist
             // Create the player and add them first to the roster
             CriminalRoster.Add(CreatePlayer());
 
-            // Have option to go solo or hire a crew
+            // OPTION TO GO SOLO OR HIRE CREW
+            Console.WriteLine("Go solo or hire a crew? [solo/hire]: ");
+            string solo = Console.ReadLine().ToLower();
 
-                        Console.WriteLine(@"
- █▄█ █ █▀▄ ██▀   ▄▀▀ █▀▄ ██▀ █   █
- █ █ █ █▀▄ █▄▄   ▀▄▄ █▀▄ █▄▄ ▀▄▀▄▀                   
-");
-            Console.WriteLine("");
-
-            // While we are recruiting, prompt user to continue recruiting
-            // display current amount of criminals recruited
-            while(recruiting)
+            while(solo != "solo" && solo != "hire")
             {
-                CriminalRoster.Add(RecruitNewCriminal());
-
-                string countInRoster = CriminalRoster.Count() == 1 ? $"{CriminalRoster.Count()} criminal recruited." : $"{CriminalRoster.Count()} criminals recruited.";
-                Console.WriteLine(countInRoster);
-                
-                Console.Write("Continue recruiting? [y/n]: ");
-                string response = Console.ReadLine().ToLower();
-                Console.WriteLine("");
-
-                while(response != "y" && response != "n")
-                {
-                    Console.Write("Continue recruiting? [y/n]: ");
-                    response = Console.ReadLine().ToLower();
-                }
-
-                recruiting = response == "y" ? true : false;
+                Console.Write("Go solo or hire a crew? [solo/hire]: ");
+                solo = Console.ReadLine().ToLower();
             }
-            return CriminalRoster;
+
+            if (solo == "solo")
+            {
+                return CriminalRoster;
+            }
+            else
+            {
+                Console.WriteLine(@"
+---------------------------------
+█▄█ █ █▀▄ ██▀   ▄▀▀ █▀▄ ██▀ █   █
+█ █ █ █▀▄ █▄▄   ▀▄▄ █▀▄ █▄▄ ▀▄▀▄▀                   
+---------------------------------");
+
+                // While we are recruiting, prompt user to continue recruiting
+                // display current amount of criminals recruited
+                while(recruiting)
+                {
+                    CriminalRoster.Add(RecruitNewCriminal());
+
+                    string countInRoster = CriminalRoster.Count() == 1 ? $"{CriminalRoster.Count()} criminal recruited." : $"{CriminalRoster.Count()} criminals recruited.";
+                    Console.WriteLine(countInRoster);
+                    
+                    Console.Write("Continue recruiting? [y/n]: ");
+                    string response = Console.ReadLine().ToLower();
+                    Console.WriteLine("");
+
+                    while(response != "y" && response != "n")
+                    {
+                        Console.Write("Continue recruiting? [y/n]: ");
+                        response = Console.ReadLine().ToLower();
+                    }
+
+                    recruiting = response == "y" ? true : false;
+                }
+                return CriminalRoster;
+            }
         }
 
         static Criminal RecruitNewCriminal()
@@ -166,15 +178,18 @@ namespace heist
         static Criminal CreatePlayer()
         {
             Console.WriteLine(@"
+-----------------------------------------
 █   █ █▄█ ▄▀▄   ▄▀▄ █▀▄ ██▀   ▀▄▀ ▄▀▄ █ █
-▀▄▀▄▀ █ █ ▀▄▀   █▀█ █▀▄ █▄▄    █  ▀▄▀ ▀▄█                  
-");
+▀▄▀▄▀ █ █ ▀▄▀   █▀█ █▀▄ █▄▄    █  ▀▄▀ ▀▄█
+-----------------------------------------");
             Console.Write("Enter your name: ");
 
             string playerName = Console.ReadLine();
             Criminal player = new Criminal(playerName, true);
             return player;
         }
+
+
 
         // static int InputSkill()
         // {
