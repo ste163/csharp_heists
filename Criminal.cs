@@ -14,27 +14,27 @@ namespace heist
         // Courage Factor must be 0.1 - 1.0
         public double CourageFactor { get; set; }
 
-        private bool _isPlayer;
+        public bool IsPlayer;
 
         public string Face;
 
-        public Criminal(string name,int skill, double courage)
+        public Criminal(string name, bool player)
         {
             ASCII ASCII = new ASCII();
+
             Name = name;
-            SkillLevel = skill;
-            CourageFactor = courage;
+            SkillLevel = new Random().Next(1, 51);;
+            CourageFactor = new Random().NextDouble();;
             Trust = new Random().Next(20, 61);
             Face = ASCII.DisplayCriminalFace();
-            _isPlayer = false;
-        }
-
-        public Criminal(string name)
-        {
-            Name = name;
-            SkillLevel = new Random().Next(1, 51);
-            CourageFactor = new Random().NextDouble();
-            _isPlayer = true;
+            if (player)
+            {
+                IsPlayer = true;
+            }
+            else
+            {
+                IsPlayer = false;
+            }
         }
     }
 }

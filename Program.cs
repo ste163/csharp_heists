@@ -87,6 +87,7 @@ namespace heist
   █  █ █ █▄▄   ▀▄▄ █▀▄ █▄▄ ▀▄▀▄▀");
             roster.ForEach(c => Console.WriteLine($@"
 {c.Face}
+
 {c.Name}
  skill level: {c.SkillLevel}
  courage factor: {c.CourageFactor}
@@ -137,14 +138,14 @@ namespace heist
 
         static Criminal RecruitNewCriminal()
         {
-            Console.Write("Enter new criminal's name: ");
+            Console.Write("Enter new criminal's nickname: ");
             // User can enter any string, including a string of numbers
             string enteredName = Console.ReadLine();
-            int enteredSkill = InputSkill();
-            double enteredCourage = InputCourage();
-            Criminal newCriminal = new Criminal(enteredName, enteredSkill, enteredCourage);
+            Criminal newCriminal = new Criminal(enteredName, false);
 
             Console.WriteLine($@"
+{newCriminal.Face}
+
 {newCriminal.Name} recruited!
  skill level: {newCriminal.SkillLevel}
  courage factor: {newCriminal.CourageFactor}
@@ -163,78 +164,78 @@ namespace heist
             Console.Write("Enter your name: ");
 
             string playerName = Console.ReadLine();
-            Criminal player = new Criminal(playerName);
+            Criminal player = new Criminal(playerName, true);
             return player;
         }
 
-        static int InputSkill()
-        {
-            // Declares variable we will be re-assigning 
-            int entered;
-            // When user first enters the skill input, ensure they type only a number
-            while(true)
-            {
-                try
-                {
-                    Console.Write("Enter new criminal's skill level: ");
-                    entered = int.Parse(Console.ReadLine());
-                    break;
-                }
-                catch
-                {
-                    Console.WriteLine("Must enter a whole number.");
-                }
-            }
-            // After user has entered a number, if it is less than or equal to 0, user must re-enter number
-            while(entered <= 0)
-            {
-                try
-                {
-                    Console.Write("Enter whole number greater than zero: ");
-                    entered = int.Parse(Console.ReadLine());
-                }
-                catch(FormatException)
-                {
-                    Console.WriteLine("Must enter a whole number.");
-                }
-            }
+        // static int InputSkill()
+        // {
+        //     // Declares variable we will be re-assigning 
+        //     int entered;
+        //     // When user first enters the skill input, ensure they type only a number
+        //     while(true)
+        //     {
+        //         try
+        //         {
+        //             Console.Write("Enter new criminal's skill level: ");
+        //             entered = int.Parse(Console.ReadLine());
+        //             break;
+        //         }
+        //         catch
+        //         {
+        //             Console.WriteLine("Must enter a whole number.");
+        //         }
+        //     }
+        //     // After user has entered a number, if it is less than or equal to 0, user must re-enter number
+        //     while(entered <= 0)
+        //     {
+        //         try
+        //         {
+        //             Console.Write("Enter whole number greater than zero: ");
+        //             entered = int.Parse(Console.ReadLine());
+        //         }
+        //         catch(FormatException)
+        //         {
+        //             Console.WriteLine("Must enter a whole number.");
+        //         }
+        //     }
 
-            return entered;
-        }
+        //     return entered;
+        // }
 
-        static double InputCourage()
-        {
-            double entered;
+        // static double InputCourage()
+        // {
+        //     double entered;
 
-            while(true)
-            {
-                try
-                {
-                    Console.Write("Enter new criminal's courage (0.0 - 2.0): ");
-                    entered = double.Parse(Console.ReadLine());
-                    break;
-                }
-                catch
-                {
-                    Console.WriteLine("Must enter number.");
-                }
-            }
+        //     while(true)
+        //     {
+        //         try
+        //         {
+        //             Console.Write("Enter new criminal's courage (0.0 - 2.0): ");
+        //             entered = double.Parse(Console.ReadLine());
+        //             break;
+        //         }
+        //         catch
+        //         {
+        //             Console.WriteLine("Must enter number.");
+        //         }
+        //     }
 
-            while(entered < 0.0 || entered > 2.0)
-            {
-                try
-                {
-                    Console.Write("Enter number between 0.0 - 2.0: ");
-                    entered = double.Parse(Console.ReadLine());
-                }
-                catch(FormatException)
-                {
-                    Console.WriteLine("Must enter a number.");
-                }
-            }
+        //     while(entered < 0.0 || entered > 2.0)
+        //     {
+        //         try
+        //         {
+        //             Console.Write("Enter number between 0.0 - 2.0: ");
+        //             entered = double.Parse(Console.ReadLine());
+        //         }
+        //         catch(FormatException)
+        //         {
+        //             Console.WriteLine("Must enter a number.");
+        //         }
+        //     }
 
-            return entered;
-        }
+        //     return entered;
+        // }
 
         static void DisplayIntro()
         {
