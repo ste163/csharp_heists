@@ -4,6 +4,24 @@ namespace heist
 {
     public class ASCII
     {
+
+        public string DisplayCrewHeading()
+        {
+            return @"
+-------------------------------
+▀█▀ █▄█ ██▀   ▄▀▀ █▀▄ ██▀ █   █
+ █  █ █ █▄▄   ▀▄▄ █▀▄ █▄▄ ▀▄▀▄▀
+-------------------------------";
+        }
+        public string DisplayCrewHire()
+        {
+            return @"
+---------------------------------
+█▄█ █ █▀▄ ██▀   ▄▀▀ █▀▄ ██▀ █   █
+█ █ █ █▀▄ █▄▄   ▀▄▄ █▀▄ █▄▄ ▀▄▀▄▀                   
+---------------------------------";
+        }
+
         public string DisplayCriminalFace()
         {
             int r = new Random().Next(1, 8);
@@ -101,7 +119,8 @@ return @"
        _    .-'   '-. |  |     .--'|  ||   | _|    |
     .-'|  _.|  |    ||   '-__  |   |  |    ||      |
     |' | |.    |    ||       | |   |  |    ||      |
- ___|  '-'     '    ||       '-'   '-.'    '`      |____";
+ ___|  '-'     '    ||       '-'   '-.'    '`      |____
+ ";
         }
 
         public string DisplayMoney()

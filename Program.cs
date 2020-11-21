@@ -95,15 +95,66 @@ namespace heist
             // Only allowed to select the levels you HAVEN'T already robbed
             ASCII art = new ASCII();
             Console.WriteLine(art.DisplayNashville());
+            Console.WriteLine("Enter number to perform action: ");
+            Console.WriteLine("");
+            Console.WriteLine("1) manage crew");
+            int selection = MenuInput();
+            // SWITCH based on what someone selected
+            ManageCrew();
+        }
+
+        static int MenuInput()
+        {
+
+            // Declares variable we will be re-assigning 
+            int entered;
+            // When user first enters the skill input, ensure they type only a number
+            while(true)
+            {
+                try
+                {
+                    Console.Write("Enter number to perform action: ");
+                    entered = int.Parse(Console.ReadLine());
+                    break;
+                }
+                catch {}
+            }
+            // After user has entered a number, if it is less than or equal to 0, user must re-enter number
+            while(entered <= 0 || entered > 1)
+            {
+                try
+                {
+                    Console.Write("Enter number to perform action: ");
+                    entered = int.Parse(Console.ReadLine());
+                }
+                catch {}
+            }
+
+            return entered;
+        }
+
+        static void ManageCrew()
+        {
+            
+         
         }
 
         static void DisplayCriminalRoster(List<Criminal> roster)
         {
-            Console.WriteLine(@"
--------------------------------
-▀█▀ █▄█ ██▀   ▄▀▀ █▀▄ ██▀ █   █
- █  █ █ █▄▄   ▀▄▄ █▀▄ █▄▄ ▀▄▀▄▀
--------------------------------");
+            ASCII art = new ASCII();
+
+            // Get the entire crew's skills
+            List<int> TotalSkills = new List<int>();
+            roster.ForEach(c =>
+            {
+                TotalSkills.Add(c.SkillLevel);
+            });
+
+            int CrewSkill = TotalSkills.Sum();
+            int MaxCrewSkill = (TotalSkills.Count() * 100);
+
+            Console.WriteLine(art.DisplayCrewHeading());
+            Console.WriteLine($"Crew skill level: {CrewSkill} / {MaxCrewSkill}");
             roster.ForEach(c => {
                 if (c.IsPlayer)
                 {
@@ -131,6 +182,7 @@ You: {c.Name}
 
         static List<Criminal> CreateCriminalRoster()
         {
+            ASCII art = new ASCII();
             bool recruiting = true;
             // Instantiate empty list of criminals
             List<Criminal> CriminalRoster = new List<Criminal>();
@@ -154,11 +206,7 @@ You: {c.Name}
             }
             else
             {
-                Console.WriteLine(@"
----------------------------------
-█▄█ █ █▀▄ ██▀   ▄▀▀ █▀▄ ██▀ █   █
-█ █ █ █▀▄ █▄▄   ▀▄▄ █▀▄ █▄▄ ▀▄▀▄▀                   
----------------------------------");
+                Console.WriteLine(art.DisplayCrewHire());
 
                 // While we are recruiting, prompt user to continue recruiting
                 // display current amount of criminals recruited
@@ -166,8 +214,7 @@ You: {c.Name}
                 {
                     CriminalRoster.Add(RecruitNewCriminal());
 
-                    string countInRoster = CriminalRoster.Count() == 1 ? $"{CriminalRoster.Count()} criminal recruited." : $"{CriminalRoster.Count()} criminals recruited.";
-                    Console.WriteLine(countInRoster);
+                    Console.WriteLine($"{CriminalRoster.Count()} criminals in crew.");
                     
                     Console.Write("Continue recruiting? [y/n]: ");
                     string response = Console.ReadLine().ToLower();
