@@ -90,7 +90,11 @@ namespace heist
         public string DisplayNashville()
         {
 
-return @"               .|
+return @"
+            █▄ █ ▄▀▄ ▄▀▀ █▄█ █ █ █ █   █   ██▀
+            █ ▀█ █▀█ ▄██ █ █ ▀▄▀ █ █▄▄ █▄▄ █▄▄
+
+                       .|
                        | |
                        |'|            ._____
                ___    |  |            |.   |' .---|

@@ -11,6 +11,7 @@ namespace heist
             DisplayIntro();
             List<Criminal> CurrentRoster = CreateCriminalRoster();
             DisplayCriminalRoster(CurrentRoster);
+            LevelSelect();
 
             // Show different locations with ASCII art to rob
                 // Annoying Neighbor's House (dif 0 - 50) ($0 - $100,000)
@@ -77,6 +78,13 @@ namespace heist
             // If the sum of their skills is greater than the locations's difficulty
                 // display a success message (ASCII of bag of money) - say how much $$ was stolen
                 // Go back to the location select screen, but with the last place removed
+        }
+
+        static void LevelSelect()
+        {
+            // Only allowed to select the levels you HAVEN'T already robbed
+            ASCII art = new ASCII();
+            Console.WriteLine(art.DisplayNashville());
         }
 
         static void DisplayCriminalRoster(List<Criminal> roster)
