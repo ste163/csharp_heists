@@ -17,23 +17,65 @@ namespace heist
                 // Chucky E Cheese (dif 0 - 200) ($100 - $2,000)
                 // Nashville Software School (dif 0 - infinity) ($0-$30)
                 // Bank of America (dif 300 - 900) ($5,000 - $10,000)
+            
+            // ONE day
+            // FIVE heists
+            // One time to split the money.
 
-            // Tell your criminals to go rob the bank
+            // Crew Select
+                // User types names
+                // Skill is randomly generated from 1 - 50 (max of 100)
+                // Trust random from 10 - 50 (max of 100)
+                    // After every succesful heist, do a trust check for each crew member
+                    // IF any criminal DOES turn, it lowers everyone's trust by -20
+                    // The Trust level is shown to user as a sentence about how the member is feeling
+                        // Trust 1 - 10 - always try to shoot another member and take their money
+                        // Trust 11 - 20 - high chance of shooting another member and taking their money
+                        // Trust 21 - 30 - low chance of turning on crew
+                        // Trust 30 - 40 - very low chance of turning on crew, 0.1 Courage
+                        // Trust 41 - 49 - almost no chance of turning on crew, 0.2 Courage
+                        // Trust 50 - 59 - no chance of turning, 0.3 courage
+                        // Trust 60 - 69 - 0.4 Courage
+                        // Trust 70 -79 - 0.5 Courage
+                        // Trust 80 - 89 - 0.7 Courage
+                        // Trust 90 - 99 - 0.9 Courage
+                        // Trust 100 - 1.0 Courage
+                    // INCREASES after every successful heist by +30
+                    // ADDING a new crew member after a heist randomizes trust for members by -30 to + 30
+                        // The crew will say either "Screw the new guy," "Seems like an okay pick," "We really got {Name}?!"
+                    // Icing a crew member lowers trust by - 70. Can Ice multiple crew members at a time to increase cash.
+                // Courage Factor (0.1 - 1.0), courage is added to the skill by
+                    // (((Courage Factor * Skill) / 10) + Skill Level).RoundUp() = Skill Level for Heist
+                // Each crew member gets a random ASCII face
+
+            // Level Select
+                // View of ASCII city skyline
+                // Display for how much money you've currently stolen
+                // Have option to check on crew, see their stats, ice someone, or recruit new people
+                // With heading underneath say choose a location to rob
+                    // 1. Annoying Neighbors house...
+                    // Selecting any location will take you to the big view of the ASCII art for that location
+                    // With a summary about it, telling you what to expect
+                        // Current Status: sentence about what it appears to look like (a hint for current difficulty)
+                        // Ability to stake out to see if the situtation will change
+                        // Option to Rob the place
+                        // Option to return to City view 
+                
+            // Heist
+                // New ascii art??
+                // Show everyone's name and face?
+                // IF Successfull
+                    // Run trust check for each criminal to see if they're turn
+                    // Show how much total cash you got, then everyone's cut
+                // IF Failure
+                    // Chance based on a skill check roll for if any crew members died in the cross-fire/got arrested
+                        // instead of you
+                    // If no one else was arrested chance for you to be arrested and the game over
+                    // 10% chance of everyone getting away okay
 
             // If the sum of their skills is greater than the locations's difficulty
                 // display a success message (ASCII of bag of money) - say how much $$ was stolen
-                // Say how much the split is on how much you get
                 // Go back to the location select screen, but with the last place removed
-
-            // If failed, display someone behind bars
-                // Your crew got caught, but at least you didn't
-                // Good thing you do all the planning.
-                // and give the total amount of money stolen
-                // Then your cut, divided by
-            // Play again??
-
-            // The criminals you hire will need to have random skill values
-            // Their courage also needs to be random and multiple their skills
         }
 
         static void DisplayCriminalRoster(List<Criminal> roster)
