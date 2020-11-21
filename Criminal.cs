@@ -25,13 +25,12 @@ namespace heist
             _isPlayer = false;
         }
 
-        public void Player(string name)
+        public Criminal(string name)
         {
             Name = name;
             SkillLevel = new Random().Next(1, 51);
             CourageFactor = new Random().NextDouble();
             _isPlayer = true;
-
         }
     }
 }

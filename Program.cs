@@ -89,6 +89,7 @@ namespace heist
 {c.Name}
  skill level: {c.SkillLevel}
  courage factor: {c.CourageFactor}
+ trust: {c.Trust}
 "));         
         }
 
@@ -97,6 +98,17 @@ namespace heist
             bool recruiting = true;
             // Instantiate empty list of criminals
             List<Criminal> CriminalRoster = new List<Criminal>();
+
+            // Create the player and add them first to the roster
+            CriminalRoster.Add(CreatePlayer());
+
+            // Have option to go solo or hire a crew
+
+                        Console.WriteLine(@"
+ █▄█ █ █▀▄ ██▀   ▄▀▀ █▀▄ ██▀ █   █
+ █ █ █ █▀▄ █▄▄   ▀▄▄ █▀▄ █▄▄ ▀▄▀▄▀                   
+");
+            Console.WriteLine("");
 
             // While we are recruiting, prompt user to continue recruiting
             // display current amount of criminals recruited
@@ -135,6 +147,7 @@ namespace heist
 {newCriminal.Name} recruited!
  skill level: {newCriminal.SkillLevel}
  courage factor: {newCriminal.CourageFactor}
+ trust: {newCriminal.Trust}
 ");
 
             return newCriminal;
@@ -142,7 +155,14 @@ namespace heist
 
         static Criminal CreatePlayer()
         {
-            Criminal player = new Criminal("Name", 30, 30.5);
+            Console.WriteLine(@"
+█   █ █▄█ ▄▀▄   ▄▀▄ █▀▄ ██▀   ▀▄▀ ▄▀▄ █ █
+▀▄▀▄▀ █ █ ▀▄▀   █▀█ █▀▄ █▄▄    █  ▀▄▀ ▀▄█                  
+");
+            Console.Write("Enter your name: ");
+
+            string playerName = Console.ReadLine();
+            Criminal player = new Criminal(playerName);
             return player;
         }
 
@@ -237,16 +257,6 @@ namespace heist
 
 ---------------------------------------------------------------------------------------------------------
 ");
-            Console.WriteLine(@"
- █▄█ █ █▀▄ ██▀   ▄▀▀ █▀▄ ██▀ █   █
- █ █ █ █▀▄ █▄▄   ▀▄▄ █▀▄ █▄▄ ▀▄▀▄▀                   
-");
-            Console.Write("Press any key to begin recruiting: ");
-            Console.ReadLine();
-            Console.WriteLine("");
         }
     }
 }
-
-//  █   █ █▄█ ▄▀▄   ▄▀▄ █▀▄ ██▀   ▀▄▀ ▄▀▄ █ █
-//  ▀▄▀▄▀ █ █ ▀▄▀   █▀█ █▀▄ █▄▄    █  ▀▄▀ ▀▄█
