@@ -100,22 +100,31 @@ namespace heist
             DisplayCrewSkills(crew);
             Console.WriteLine(art.DisplayNashville());
             Console.WriteLine("1) manage crew");
-            int selection = MenuInput(1);
-            // SWITCH based on what someone selected
+            Console.WriteLine("2) search for heist locations");
+            int selection = MenuInput(2);
+
             switch (selection)
             {
                 case 1:
                     ManageCrew(crew);
-                    return;
+                    break;
+                case 2:
+                    Console.WriteLine("SEARCHING");
+                    break;
             }
         }
 
         static void ManageCrew(List<Criminal> crew)
         {
             Console.Clear();
-            DisplayCurrentCrew(crew);
+
+            List<Criminal> updatedCrew = crew;
+
+            DisplayCurrentCrew(updatedCrew);
                 // Display their face, name, and the how they're doing text based on trust
-            while(true)
+
+            bool selected = true;
+            while(selected)
             {
                 Console.WriteLine("1) recruit crew member");
                 Console.WriteLine("2) ice crew member");
@@ -126,16 +135,21 @@ namespace heist
                 switch (input)
                 {
                     case 1:
-                        ManageCrew(CreateCrew(crew));
+                        updatedCrew = CreateCrew(updatedCrew);
+                        ManageCrew(updatedCrew);
+                        selected = false;
                         break;
                     case 2:
-                        ManageCrew(IceCrewMember(crew));
+                        updatedCrew = IceCrewMember(updatedCrew);
+                        ManageCrew(updatedCrew);
+                        selected = false;
                         break;
                     case 3:
-                        LevelSelect(crew);
+                        selected = false;
                         break;
                 }
             }
+            LevelSelect(updatedCrew);
         }
 
         static List<Criminal> IceCrewMember(List<Criminal> crew)
