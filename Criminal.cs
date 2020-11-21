@@ -16,12 +16,16 @@ namespace heist
 
         private bool _isPlayer;
 
+        public string Face;
+
         public Criminal(string name,int skill, double courage)
         {
+            ASCII ASCII = new ASCII();
             Name = name;
             SkillLevel = skill;
             CourageFactor = courage;
             Trust = new Random().Next(20, 61);
+            Face = ASCII.DisplayCriminalFace();
             _isPlayer = false;
         }
 

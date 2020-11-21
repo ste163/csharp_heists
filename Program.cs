@@ -86,6 +86,7 @@ namespace heist
  ▀█▀ █▄█ ██▀   ▄▀▀ █▀▄ ██▀ █   █
   █  █ █ █▄▄   ▀▄▄ █▀▄ █▄▄ ▀▄▀▄▀");
             roster.ForEach(c => Console.WriteLine($@"
+{c.Face}
 {c.Name}
  skill level: {c.SkillLevel}
  courage factor: {c.CourageFactor}

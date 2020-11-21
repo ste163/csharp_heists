@@ -4,72 +4,38 @@ namespace heist
 {
     public class ASCII
     {
-        public void DisplayCriminalFace()
+        public string DisplayCriminalFace()
         {
-            // Create a random number
-            // Switch on the numbers
-            // Then show the matching face
-            Console.WriteLine(@"");
-        }
+            // Create a random number 1 - 7
+            int r = new Random().Next(1, 4);
+            string face = "";
 
-        public void DisplayMoney()
-        {
-            Console.WriteLine(@"
---------------------------------------------------------------------.
-| .--                    FEDERAL RESERVE NOTE                    .-- |
-| |_       ......    THE UNTIED STATES OF AMERICA                |_  |
-| __)    ``````````             ______            B93810455B     __) |
-|      2        ___            /      \                     2        |
-|              /|~\\          /  _-\\  \           __ _ _ _  __      |
-|             | |-< |        |  //   \  |         |_  | | | |_       |
-|              \|_//         | |-  o o| |         |   | `.' |__      |
-|               ~~~          | |\   b.' |                            |
-|       B83910455B           |  \ '~~|  |                            |
-| .--  2                      \_/ ```__/    ....            2    .-- |
-| |_        ///// ///// ////   \__\'`\/      ``  //// / ////     |_  |
-| __)                   M A J O R  D O L L A R S                   __) |
-`--------------------------------------------------------------------'
-");
-// Thank you for visiting https://asciiart.website/
-// This ASCII pic can be found at
-// https://asciiart.website/index.php?art=objects/money
-
-        }
-
-        public void DisplayArrested()
-        {
-            Console.WriteLine(@"
-================================
-||     ||<(.)>||<(.)>||     || 
-||    _||     ||     ||_    || 
-||   (__D     ||     C__)   || 
-||   (__D     ||     C__)   ||
-||   (__D     ||     C__)   ||
-||   (__D     ||     C__)   ||
-||     ||     ||     ||     ||
-================================    
-");
-        }
-    }
-}
-
-//  \\\\\\\|
-//  | _   _ |       
-// ( (o) (o) )     
-//  |  . .  |           
-//   \  _  /         
-//    \___/
-
-//    |||||   
-//  {. @ @ .} 
-//   |  o  |        
-//    \_U_/
-
-//   .xxxx. 
-//  |(o)(o)|
-// (  (__)  )
-//   | __ |
-//    \__/ 
+            switch(r)
+            {
+                case 1:
+                    face = @"
+  \\\\\\\|
+ | _   _ |       
+( (o) (o) )     
+ |  . .  |           
+  \  _  /         
+   \___/";
+                    break;
+                case 2:
+                    face = @"
+  |||||   
+{. @ @ .} 
+ |  o  |        
+  \_U_/";
+                    break;
+                case 3:
+                    face = @"
+  .xxxx. 
+ |(o)(o)|
+(  (__)  )
+  | __ |
+   \__/ ";
+                    break;
         
 
 //      _____
@@ -117,6 +83,55 @@ namespace heist
 // |/\/` \/`._.'
 // /` |/`/ |  '
 // \//| /
+
+            }
+
+            return face;
+        }
+
+        public void DisplayMoney()
+        {
+            Console.WriteLine(@"
+--------------------------------------------------------------------.
+| .--                    FEDERAL RESERVE NOTE                    .-- |
+| |_       ......    THE UNTIED STATES OF AMERICA                |_  |
+| __)    ``````````             ______            B93810455B     __) |
+|      2        ___            /      \                     2        |
+|              /|~\\          /  _-\\  \           __ _ _ _  __      |
+|             | |-< |        |  //   \  |         |_  | | | |_       |
+|              \|_//         | |-  o o| |         |   | `.' |__      |
+|               ~~~          | |\   b.' |                            |
+|       B83910455B           |  \ '~~|  |                            |
+| .--  2                      \_/ ```__/    ....            2    .-- |
+| |_        ///// ///// ////   \__\'`\/      ``  //// / ////     |_  |
+| __)                   M A J O R  D O L L A R S                   __) |
+`--------------------------------------------------------------------'
+");
+// Thank you for visiting https://asciiart.website/
+// This ASCII pic can be found at
+// https://asciiart.website/index.php?art=objects/money
+
+        }
+
+        public void DisplayArrested()
+        {
+            Console.WriteLine(@"
+================================
+||     ||<(.)>||<(.)>||     || 
+||    _||     ||     ||_    || 
+||   (__D     ||     C__)   || 
+||   (__D     ||     C__)   ||
+||   (__D     ||     C__)   ||
+||   (__D     ||     C__)   ||
+||     ||     ||     ||     ||
+================================    
+");
+        }
+    }
+}
+
+
+
 
 // Thank you for visiting https://asciiart.website/
 // This ASCII pic can be found at
