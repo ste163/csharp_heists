@@ -11,14 +11,26 @@ namespace heist
             DisplayIntro();
             List<Criminal> CurrentRoster = CreateCriminalRoster();
             DisplayCriminalRoster(CurrentRoster);
+
+            // While there are still levels not yet completed
+                // continue the select & related scripts
+                // Need to create a Level/Heist class with a property of completed
+    
             LevelSelect();
 
             // Show different locations with ASCII art to rob
-                // Annoying Neighbor's House (dif 0 - 50) ($0 - $100,000)
-                // 7-Eleven (dif 0 - 150) ($50 - $1,000)
-                // Chucky E Cheese (dif 0 - 200) ($100 - $2,000)
-                // Nashville Software School (dif 0 - infinity) ($0-$30)
+                // Annoying Neighbor's House (dif 0 - 50) ($100 - $100,000)
+                    // Summary: My neighbor is almost always outside and wants to talk. Luckily
+                                // my neighbor talks about hating banks. Maybe there is money in the house.
+                // 7-Eleven (dif 0 - 100) ($50 - $1,000)
+                    // Summary: {Random Crew Member, if we have a crew} works part-time here. Usually cash in the register.
+                        // Should be an easy heist. 
+                        // We can get some snacks, too.
+                // LOCATION? (dif 0 - 300) ($100 - $2,000)
+                // Nashville Software School (dif 0 - 300) ($50-$2,000)
+                    // They've probably got some computers. Bunch of nerds.
                 // Bank of America (dif 300 - 900) ($5,000 - $10,000)
+                    // {NAME} has cased the place. This will be the toughest job, but banks have all the money, right?
 
             // Crew Select
                 // User types names
@@ -60,6 +72,8 @@ namespace heist
                         // Option to return to City view 
                 
             // Heist
+                // DISPLAYs sum of the crew's skills
+                    // Difficulty of the location
                 // New ascii art??
                 // Show everyone's name and face?
                 // IF Successfull
@@ -201,6 +215,14 @@ You: {c.Name}
 
             string playerName = Console.ReadLine();
             Criminal player = new Criminal(playerName, true);
+
+            Console.WriteLine($@"
+{player.Face}
+
+{player.Name}
+ skill level: {player.SkillLevel} / 100
+ courage factor: {player.CourageFactor} / 1.0
+");
             return player;
         }
 
