@@ -121,35 +121,28 @@ namespace heist
             List<Criminal> updatedCrew = crew;
 
             DisplayCurrentCrew(updatedCrew);
-                // Display their face, name, and the how they're doing text based on trust
+            // Display their face, name, and the how they're doing text based on trust
+   
+            Console.WriteLine("1) recruit crew member");
+            Console.WriteLine("2) ice crew member");
+            Console.WriteLine("3) return to planning");
 
-            bool selected = true;
-            while(selected)
+            int input = MenuInput(3);
+
+            switch (input)
             {
-                Console.WriteLine("1) recruit crew member");
-                Console.WriteLine("2) ice crew member");
-                Console.WriteLine("3) return to planning");
-
-                int input = MenuInput(3);
-
-                switch (input)
-                {
-                    case 1:
-                        updatedCrew = CreateCrew(updatedCrew);
-                        ManageCrew(updatedCrew);
-                        selected = false;
-                        break;
-                    case 2:
-                        updatedCrew = IceCrewMember(updatedCrew);
-                        ManageCrew(updatedCrew);
-                        selected = false;
-                        break;
-                    case 3:
-                        selected = false;
-                        break;
-                }
+                case 1:
+                    updatedCrew = CreateCrew(updatedCrew);
+                    ManageCrew(updatedCrew);
+                    break;
+                case 2:
+                    updatedCrew = IceCrewMember(updatedCrew);
+                    ManageCrew(updatedCrew);           
+                    break;
+                case 3:
+                    LevelSelect(updatedCrew);
+                    break;
             }
-            LevelSelect(updatedCrew);
         }
 
         static List<Criminal> IceCrewMember(List<Criminal> crew)
