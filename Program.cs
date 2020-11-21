@@ -8,15 +8,15 @@ namespace heist
     {
         static void Main(string[] args)
         {
+            Console.Clear();
             DisplayIntro();
-            List<Criminal> CurrentRoster = CreateCriminalRoster();
-            DisplayCriminalRoster(CurrentRoster);
+            List<Criminal> currentCrew = CreateCrew();
 
             // While there are still levels not yet completed
                 // continue the select & related scripts
                 // Need to create a Level/Heist class with a property of completed
     
-            LevelSelect();
+            LevelSelect(currentCrew);
 
             // Show different locations with ASCII art to rob
                 // Annoying Neighbor's House (dif 0 - 50) ($100 - $100,000)
@@ -90,20 +90,47 @@ namespace heist
                 // Go back to the location select screen, but with the last place removed
         }
 
-        static void LevelSelect()
+        static void LevelSelect(List<Criminal> crew)
         {
+            Console.Clear();
             // Only allowed to select the levels you HAVEN'T already robbed
             ASCII art = new ASCII();
             Console.WriteLine(art.DisplayNashville());
-            Console.WriteLine("Enter number to perform action: ");
-            Console.WriteLine("");
             Console.WriteLine("1) manage crew");
-            int selection = MenuInput();
+            int selection = MenuInput(1);
             // SWITCH based on what someone selected
-            ManageCrew();
+            switch (selection)
+            {
+                case 1:
+                    ManageCrew(crew);
+                    return;
+            }
         }
 
-        static int MenuInput()
+        static void ManageCrew(List<Criminal> crew)
+        {
+            Console.Clear();
+            DisplayCurrentCrew(crew);
+                // Display their face, name, and the how they're doing text based on trust
+            Console.WriteLine("1) recruit crew member");
+            Console.WriteLine("2) ice crew member");
+            Console.WriteLine("3) return to planning menu");
+
+            int input = MenuInput(3);
+
+            switch (input)
+            {
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    LevelSelect(crew);
+                    break;
+            }
+        }
+
+        static int MenuInput(int maxOptions)
         {
 
             // Declares variable we will be re-assigning 
@@ -120,7 +147,7 @@ namespace heist
                 catch {}
             }
             // After user has entered a number, if it is less than or equal to 0, user must re-enter number
-            while(entered <= 0 || entered > 1)
+            while(entered <= 0 || entered > maxOptions)
             {
                 try
                 {
@@ -133,19 +160,13 @@ namespace heist
             return entered;
         }
 
-        static void ManageCrew()
-        {
-            
-         
-        }
-
-        static void DisplayCriminalRoster(List<Criminal> roster)
+        static void DisplayCurrentCrew(List<Criminal> crew)
         {
             ASCII art = new ASCII();
 
             // Get the entire crew's skills
             List<int> TotalSkills = new List<int>();
-            roster.ForEach(c =>
+            crew.ForEach(c =>
             {
                 TotalSkills.Add(c.SkillLevel);
             });
@@ -155,7 +176,7 @@ namespace heist
 
             Console.WriteLine(art.DisplayCrewHeading());
             Console.WriteLine($"Crew skill level: {CrewSkill} / {MaxCrewSkill}");
-            roster.ForEach(c => {
+            crew.ForEach(c => {
                 if (c.IsPlayer)
                 {
                     Console.WriteLine($@"
@@ -180,7 +201,7 @@ You: {c.Name}
             });         
         }
 
-        static List<Criminal> CreateCriminalRoster()
+        static List<Criminal> CreateCrew()
         {
             ASCII art = new ASCII();
             bool recruiting = true;
@@ -193,6 +214,8 @@ You: {c.Name}
             // OPTION TO GO SOLO OR HIRE CREW
             Console.WriteLine("Go solo or hire a crew? [solo/hire]: ");
             string solo = Console.ReadLine().ToLower();
+
+            Console.Clear();
 
             while(solo != "solo" && solo != "hire")
             {
