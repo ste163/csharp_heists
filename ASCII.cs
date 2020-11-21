@@ -105,14 +105,21 @@ namespace heist
             return face;
         }
 
-        public string DisplayNashville()
+        public string DisplayPlanning()
         {
-
-return @"
+          return @"
 --------------------------------
 █▀▄ █   ▄▀▄ █▄ █ █▄ █ █ █▄ █ ▄▀ 
 █▀  █▄▄ █▀█ █ ▀█ █ ▀█ █ █ ▀█ ▀▄█
 --------------------------------
+";  
+        }
+
+        public string DisplayNashville()
+        {
+
+return @"
+
 
       \  |              |             _)  |  |       
        \ |  _` |   __|  __ \  \ \   /  |  |  |   _ \ 

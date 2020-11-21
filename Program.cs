@@ -95,6 +95,9 @@ namespace heist
             Console.Clear();
             // Only allowed to select the levels you HAVEN'T already robbed
             ASCII art = new ASCII();
+            Console.Write(art.DisplayPlanning());
+            Console.WriteLine($@"Total crew members: {crew.Count()}");
+            DisplayCrewSkills(crew);
             Console.WriteLine(art.DisplayNashville());
             Console.WriteLine("1) manage crew");
             int selection = MenuInput(1);
@@ -175,12 +178,11 @@ namespace heist
             return entered;
         }
 
-        static void DisplayCurrentCrew(List<Criminal> crew)
+        static void DisplayCrewSkills(List<Criminal> crew)
         {
-            ASCII art = new ASCII();
-
             // Get the entire crew's skills
             List<int> TotalSkills = new List<int>();
+
             crew.ForEach(c =>
             {
                 TotalSkills.Add(c.SkillLevel);
@@ -188,9 +190,15 @@ namespace heist
 
             int CrewSkill = TotalSkills.Sum();
             int MaxCrewSkill = (TotalSkills.Count() * 100);
+            Console.WriteLine($"Crew skill level: {CrewSkill} / {MaxCrewSkill}");
+        }
+
+        static void DisplayCurrentCrew(List<Criminal> crew)
+        {
+            ASCII art = new ASCII();
 
             Console.WriteLine(art.DisplayCrewHeading());
-            Console.WriteLine($"Crew skill level: {CrewSkill} / {MaxCrewSkill}");
+            DisplayCrewSkills(crew);
             crew.ForEach(c => {
                 if (c.IsPlayer)
                 {
