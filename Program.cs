@@ -116,7 +116,7 @@ namespace heist
             {
                 Console.WriteLine("1) recruit crew member");
                 Console.WriteLine("2) ice crew member");
-                Console.WriteLine("3) return to planning menu");
+                Console.WriteLine("3) return to planning");
 
                 int input = MenuInput(3);
 
@@ -126,12 +126,23 @@ namespace heist
                         ManageCrew(CreateCrew(crew));
                         break;
                     case 2:
+                        ManageCrew(IceCrewMember(crew));
                         break;
                     case 3:
                         LevelSelect(crew);
                         break;
                 }
             }
+        }
+
+        static List<Criminal> IceCrewMember(List<Criminal> crew)
+        {
+            Console.Write("Enter the name of the person you'd like to ice: ");
+            string name = Console.ReadLine();
+
+            List<Criminal> newCrew = crew.Where(c => c.Name != name || c.IsPlayer == true).ToList();
+
+            return newCrew;
         }
 
         static int MenuInput(int maxOptions)
