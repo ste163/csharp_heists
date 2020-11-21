@@ -17,19 +17,23 @@ namespace heist
                 // Chucky E Cheese (dif 0 - 200) ($100 - $2,000)
                 // Nashville Software School (dif 0 - infinity) ($0-$30)
                 // Bank of America (dif 300 - 900) ($5,000 - $10,000)
+
             // Tell your criminals to go rob the bank
+
             // If the sum of their skills is greater than the locations's difficulty
                 // display a success message (ASCII of bag of money) - say how much $$ was stolen
+                // Say how much the split is on how much you get
                 // Go back to the location select screen, but with the last place removed
+
             // If failed, display someone behind bars
+                // Your crew got caught, but at least you didn't
+                // Good thing you do all the planning.
                 // and give the total amount of money stolen
-            // Every time you suceed, display amount of cash stolen
+                // Then your cut, divided by
+            // Play again??
 
             // The criminals you hire will need to have random skill values
             // Their courage also needs to be random and multiple their skills
-
-            // CREATE AN ASCII art class
-            // and display different art in the functions
         }
 
         static void DisplayCriminalRoster(List<Criminal> roster)
