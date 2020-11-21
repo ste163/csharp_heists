@@ -21,11 +21,10 @@ namespace heist
         public Criminal(string name, bool player)
         {
             ASCII ASCII = new ASCII();
-
+            
             Name = name;
-            SkillLevel = new Random().Next(1, 51);;
-            CourageFactor = new Random().NextDouble();;
-            Trust = new Random().Next(20, 61);
+            SkillLevel = new Random().Next(1, 51);
+            CourageFactor = new Random().NextDouble();
             Face = ASCII.DisplayCriminalFace();
             if (player)
             {
@@ -34,6 +33,7 @@ namespace heist
             else
             {
                 IsPlayer = false;
+                Trust = new Random().Next(20, 61);
             }
         }
     }

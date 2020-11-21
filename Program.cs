@@ -90,14 +90,29 @@ namespace heist
 ▀█▀ █▄█ ██▀   ▄▀▀ █▀▄ ██▀ █   █
  █  █ █ █▄▄   ▀▄▄ █▀▄ █▄▄ ▀▄▀▄▀
 -------------------------------");
-            roster.ForEach(c => Console.WriteLine($@"
+            roster.ForEach(c => {
+                if (c.IsPlayer)
+                {
+                    Console.WriteLine($@"
+{c.Face}
+
+You: {c.Name}
+ skill level: {c.SkillLevel} / 100
+ courage factor: {c.CourageFactor} / 1.0
+");
+                }
+                else
+                {
+                    Console.WriteLine($@"
 {c.Face}
 
 {c.Name}
- skill level: {c.SkillLevel}
- courage factor: {c.CourageFactor}
+ skill level: {c.SkillLevel} / 100
+ courage factor: {c.CourageFactor} / 1.0
  trust: {c.Trust}
-"));         
+");
+                }
+            });         
         }
 
         static List<Criminal> CreateCriminalRoster()
@@ -167,8 +182,8 @@ namespace heist
 {newCriminal.Face}
 
 {newCriminal.Name} recruited!
- skill level: {newCriminal.SkillLevel}
- courage factor: {newCriminal.CourageFactor}
+ skill level: {newCriminal.SkillLevel} / 100
+ courage factor: {newCriminal.CourageFactor} / 1.0
  trust: {newCriminal.Trust}
 ");
 
@@ -189,8 +204,33 @@ namespace heist
             return player;
         }
 
+        static void DisplayIntro()
+        {
+            Console.WriteLine(@"
 
 
+  ______    __  __        __    __          __            __              
+ /      \  |  \|  \      |  \  |  \        |  \          |  \             
+|  ▓▓▓▓▓▓\_| ▓▓| ▓▓_     | ▓▓  | ▓▓ ______  \▓▓ _______ _| ▓▓_    _______ 
+| ▓▓   \▓▓   ▓▓  ▓▓ \    | ▓▓__| ▓▓/      \|  \/       \   ▓▓ \  /       \
+| ▓▓      \▓▓▓▓▓▓▓▓▓▓    | ▓▓    ▓▓  ▓▓▓▓▓▓\ ▓▓  ▓▓▓▓▓▓▓\▓▓▓▓▓▓ |  ▓▓▓▓▓▓▓
+| ▓▓   __|   ▓▓  ▓▓ \    | ▓▓▓▓▓▓▓▓ ▓▓    ▓▓ ▓▓\▓▓    \  | ▓▓ __ \▓▓    \ 
+| ▓▓__/  \\▓▓▓▓▓▓▓▓▓▓    | ▓▓  | ▓▓ ▓▓▓▓▓▓▓▓ ▓▓_\▓▓▓▓▓▓\ | ▓▓|  \_\▓▓▓▓▓▓\
+ \▓▓    ▓▓ | ▓▓| ▓▓      | ▓▓  | ▓▓\▓▓     \ ▓▓       ▓▓  \▓▓  ▓▓       ▓▓
+  \▓▓▓▓▓▓   \▓▓ \▓▓       \▓▓   \▓▓ \▓▓▓▓▓▓▓\▓▓\▓▓▓▓▓▓▓    \▓▓▓▓ \▓▓▓▓▓▓▓                                                                                     
+
+
+ ▄▀▄ █▄ █ ██▀   █▀▄ ▄▀▄ ▀▄▀     █▀ █ █ █ ██▀   █▄█ ██▀ █ ▄▀▀ ▀█▀ ▄▀▀     ▄▀▄ █▄ █ ██▀   ▄▀▀ █▀▄ █   █ ▀█▀
+ ▀▄▀ █ ▀█ █▄▄   █▄▀ █▀█  █  █   █▀ █ ▀▄▀ █▄▄   █ █ █▄▄ █ ▄██  █  ▄██ █   ▀▄▀ █ ▀█ █▄▄   ▄██ █▀  █▄▄ █  █ 
+
+---------------------------------------------------------------------------------------------------------
+");
+        }
+    }
+}
+
+// INPUTS FOR PUTTING IN YOUR OWN SKILL OR COURAGE
+    // THIS WAS BEFORE THEY BECAME RANDOMIZED
         // static int InputSkill()
         // {
         //     // Declares variable we will be re-assigning 
@@ -259,29 +299,3 @@ namespace heist
 
         //     return entered;
         // }
-
-        static void DisplayIntro()
-        {
-            Console.WriteLine(@"
-
-
-
-  ______    __  __        __    __          __            __              
- /      \  |  \|  \      |  \  |  \        |  \          |  \             
-|  ▓▓▓▓▓▓\_| ▓▓| ▓▓_     | ▓▓  | ▓▓ ______  \▓▓ _______ _| ▓▓_    _______ 
-| ▓▓   \▓▓   ▓▓  ▓▓ \    | ▓▓__| ▓▓/      \|  \/       \   ▓▓ \  /       \
-| ▓▓      \▓▓▓▓▓▓▓▓▓▓    | ▓▓    ▓▓  ▓▓▓▓▓▓\ ▓▓  ▓▓▓▓▓▓▓\▓▓▓▓▓▓ |  ▓▓▓▓▓▓▓
-| ▓▓   __|   ▓▓  ▓▓ \    | ▓▓▓▓▓▓▓▓ ▓▓    ▓▓ ▓▓\▓▓    \  | ▓▓ __ \▓▓    \ 
-| ▓▓__/  \\▓▓▓▓▓▓▓▓▓▓    | ▓▓  | ▓▓ ▓▓▓▓▓▓▓▓ ▓▓_\▓▓▓▓▓▓\ | ▓▓|  \_\▓▓▓▓▓▓\
- \▓▓    ▓▓ | ▓▓| ▓▓      | ▓▓  | ▓▓\▓▓     \ ▓▓       ▓▓  \▓▓  ▓▓       ▓▓
-  \▓▓▓▓▓▓   \▓▓ \▓▓       \▓▓   \▓▓ \▓▓▓▓▓▓▓\▓▓\▓▓▓▓▓▓▓    \▓▓▓▓ \▓▓▓▓▓▓▓                                                                                     
-
-
- ▄▀▄ █▄ █ ██▀   █▀▄ ▄▀▄ ▀▄▀     █▀ █ █ █ ██▀   █▄█ ██▀ █ ▄▀▀ ▀█▀ ▄▀▀     ▄▀▄ █▄ █ ██▀   ▄▀▀ █▀▄ █   █ ▀█▀
- ▀▄▀ █ ▀█ █▄▄   █▄▀ █▀█  █  █   █▀ █ ▀▄▀ █▄▄   █ █ █▄▄ █ ▄██  █  ▄██ █   ▀▄▀ █ ▀█ █▄▄   ▄██ █▀  █▄▄ █  █ 
-
----------------------------------------------------------------------------------------------------------
-");
-        }
-    }
-}
