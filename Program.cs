@@ -9,7 +9,8 @@ namespace heist
         static void Main(string[] args)
         {
             DisplayIntro();
-            DisplayCriminalRoster(CreateCriminalRoster());
+            List<Criminal> CurrentRoster = CreateCriminalRoster();
+            DisplayCriminalRoster(CurrentRoster);
 
             // Show different locations with ASCII art to rob
                 // Annoying Neighbor's House (dif 0 - 50) ($0 - $100,000)
@@ -137,6 +138,12 @@ namespace heist
 ");
 
             return newCriminal;
+        }
+
+        static Criminal CreatePlayer()
+        {
+            Criminal player = new Criminal("Name", 30, 30.5);
+            return player;
         }
 
         static int InputSkill()
