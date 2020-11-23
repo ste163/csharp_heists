@@ -123,9 +123,16 @@ namespace heist
             DisplayCurrentCrew(updatedCrew);
             // Display their face, name, and the how they're doing text based on trust
    
-            Console.WriteLine("1) recruit crew member");
-            Console.WriteLine("2) ice crew member");
-            Console.WriteLine("3) return to planning");
+            if (crew.Count() > 1)
+            {
+                Console.WriteLine("1) recruit crew member");
+                Console.WriteLine("2) ice crew member");
+                Console.WriteLine("3) return to planning");
+            } else
+            {
+                Console.WriteLine("1) recruit crew member");
+                Console.WriteLine("3) return to planning");                
+            }
 
             int input = MenuInput(3);
 
