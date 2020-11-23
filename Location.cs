@@ -39,7 +39,7 @@ namespace heist
             int houseCash = (new Random().Next(10_000, 200_000));
 
             string gasName = "Corner 7-Eleven";
-            string gasSummary = @"Need to fill up the van and get some snacks. Might as well get some cash, too.";
+            string gasSummary = @"Need to fill up the van and get some snacks. Might as well take their cash, too.";
             int gasDiff = (new Random().Next(50, 200));
             int gasCash = (new Random().Next(10, 3_000));
 

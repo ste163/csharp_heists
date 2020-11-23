@@ -112,16 +112,16 @@ namespace heist
                     break;
                 case 2:
                     // Annoying Neighbor
-                    ReconnoiterLocation(crew, locations, 2);
+                    StakeOutLocation(crew, locations, 2);
                     break;
                 case 3:
                     // 7-Eleven
-                    ReconnoiterLocation(crew, locations, 3);
+                    StakeOutLocation(crew, locations, 3);
                     break;
             }
         }
 
-        static void ReconnoiterLocation(List<Criminal> crew, List<Location> locations, int userSelected)
+        static void StakeOutLocation(List<Criminal> crew, List<Location> locations, int userSelected)
         // Must always return the current crew and the current locations
         // LocationInfo names MUST match those in Location.cs
         {
@@ -143,7 +143,13 @@ namespace heist
         {
             Console.Clear();
             List<Location> loc = locations.Where(l => l.Name == locName).ToList();
-            // EACH LOCATION NEEDS THE HEADER TEXT
+
+            Console.WriteLine(@"
+-------------------------------
+▄▀▀ ▀█▀ ▄▀▄ █▄▀ ██▀ ▄▀▄ █ █ ▀█▀
+▄██  █  █▀█ █ █ █▄▄ ▀▄▀ ▀▄█  █ 
+-------------------------------");
+
             DisplayCrewInfo(crew);
             loc.ForEach(l => Console.WriteLine($@"
 {l.Image}
