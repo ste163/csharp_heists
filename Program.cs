@@ -10,13 +10,15 @@ namespace heist
         {
             Console.Clear();
             DisplayIntro();
+            Location getLocations = new Location(); 
+            List<Location> Locations = getLocations.GenerateAllLocations();
             List<Criminal> currentCrew = CreateCrew(new List<Criminal>());
 
             // While there are still levels not yet completed
                 // continue the select & related scripts
                 // Need to create a Level/Heist class with a property of completed
     
-            LevelSelect(currentCrew);
+            LevelSelect(currentCrew, Locations);
 
             // Show different locations with ASCII art to rob
                 // Annoying Neighbor's House (dif 0 - 50) ($100 - $100,000)
@@ -90,7 +92,7 @@ namespace heist
                 // Go back to the location select screen, but with the last place removed
         }
 
-        static void LevelSelect(List<Criminal> crew)
+        static void LevelSelect(List<Criminal> crew, List<Location> locations)
         {
             Console.Clear();
             // Only allowed to select the levels you HAVEN'T already robbed
@@ -100,21 +102,29 @@ namespace heist
             DisplayCrewSkills(crew);
             Console.WriteLine(art.DisplayNashville());
             Console.WriteLine("1) manage crew");
-            Console.WriteLine("2) search for heist locations");
+            Console.WriteLine("2) view heist locations");
             int selection = MenuInput(2);
 
             switch (selection)
             {
                 case 1:
-                    ManageCrew(crew);
+                    ManageCrew(crew, locations);
                     break;
                 case 2:
-                    Console.WriteLine("SEARCHING");
+                    LocationList(crew, locations);
                     break;
             }
         }
 
-        static void ManageCrew(List<Criminal> crew)
+        static void LocationList(List<Criminal> crew, List<Location> locations)
+        // Must always return the current crew and the current locations
+        {
+            Console.Clear();
+            locations.ForEach(l => Console.WriteLine(l.Name));
+        }
+
+        static void ManageCrew(List<Criminal> crew, List<Location> locations)
+        // Must always return the current crew and the current locations
         {
             Console.Clear();
 
@@ -140,14 +150,14 @@ namespace heist
             {
                 case 1:
                     updatedCrew = CreateCrew(updatedCrew);
-                    ManageCrew(updatedCrew);
+                    ManageCrew(updatedCrew, locations);
                     break;
                 case 2:
                     updatedCrew = IceCrewMember(updatedCrew);
-                    ManageCrew(updatedCrew);           
+                    ManageCrew(updatedCrew, locations);           
                     break;
                 case 3:
-                    LevelSelect(updatedCrew);
+                    LevelSelect(updatedCrew, locations);
                     break;
             }
         }
