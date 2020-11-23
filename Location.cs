@@ -32,18 +32,24 @@ namespace heist
 
             List<Location> Locations = new List<Location>();
 
-            // Store values for the house location
+            // Store values for locations
             string houseName = "Annoying Neighbor's House";
-            string houseSummary = @"My neighbor is so annoying and almost always outside, wanting to talk. Luckily
-my neighbor always mentions hating banks. I know there's money in there. Probably in the mattress.";
+            string houseSummary = @"He always talks about hating banks and keeping money in the guest room mattress.";
             int houseDiff = (new Random().Next(1, 100));
             int houseCash = (new Random().Next(10_000, 200_000));
 
-            // Instantiate house location
+            string gasName = "Corner 7-Eleven";
+            string gasSummary = @"Need gas and to fill up the van. Might as well get some cash, too.";
+            int gasDiff = (new Random().Next(50, 200));
+            int gasCash = (new Random().Next(10, 3_000));
+
+            // Instantiate locations
             Location houseLocation = new Location(ASCII.DisplayHouse(), houseName, houseSummary, houseDiff, houseCash); 
+            Location gasLocation = new Location(ASCII.Display711(), gasName, gasSummary, gasDiff, gasCash); 
 
             // Add locations to list
             Locations.Add(houseLocation);
+            Locations.Add(gasLocation);
 
             return Locations;
         }

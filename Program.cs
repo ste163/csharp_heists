@@ -102,8 +102,9 @@ namespace heist
             DisplayCrewSkills(crew);
             Console.WriteLine(art.DisplayNashville());
             Console.WriteLine("1) manage crew");
-            Console.WriteLine("2) view heist locations");
-            int selection = MenuInput(2);
+            Console.WriteLine("2) recon Annoying Neighbor's House");
+            Console.WriteLine("3) recon corner 7-Eleven");
+            int selection = MenuInput(3);
 
             switch (selection)
             {
@@ -111,16 +112,42 @@ namespace heist
                     ManageCrew(crew, locations);
                     break;
                 case 2:
-                    LocationList(crew, locations);
+                    // Annoying Neighbor
+                    ReconnoiterLocation(crew, locations, 2);
+                    break;
+                case 3:
+                    // 7-Eleven
+                    ReconnoiterLocation(crew, locations, 3);
                     break;
             }
         }
 
-        static void LocationList(List<Criminal> crew, List<Location> locations)
+        static void ReconnoiterLocation(List<Criminal> crew, List<Location> locations, int userSelected)
         // Must always return the current crew and the current locations
+        // LocationInfo names MUST match those in Location.cs
         {
             Console.Clear();
-            locations.ForEach(l => Console.WriteLine(l.Name));
+            switch (userSelected)
+            {
+                case 2:
+                    LocationInfo(locations, "Annoying Neighbor's House");
+                    break;
+                case 3:
+                    LocationInfo(locations, "Corner 7-Eleven");
+                    break;
+            }
+        }
+
+        static void LocationInfo(List<Location> locations, string locName)
+        {
+            List<Location> loc = locations.Where(l => l.Name == locName).ToList();
+            loc.ForEach(l => Console.WriteLine($@"
+{l.Image}
+
+{l.Name}
+{l.Summary}
+DIFFICULTY:{l.Difficulty}
+${l.Cash}"));
         }
 
         static void ManageCrew(List<Criminal> crew, List<Location> locations)
