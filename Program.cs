@@ -98,8 +98,7 @@ namespace heist
             // Only allowed to select the levels you HAVEN'T already robbed
             ASCII art = new ASCII();
             Console.Write(art.DisplayPlanning());
-            Console.WriteLine($@"Total crew members: {crew.Count()}");
-            DisplayCrewSkills(crew);
+            DisplayCrewInfo(crew);
             Console.WriteLine(art.DisplayNashville());
             Console.WriteLine("1) manage crew");
             Console.WriteLine("2) recon Annoying Neighbor's House");
@@ -130,12 +129,14 @@ namespace heist
             switch (userSelected)
             {
                 case 2:
+                    DisplayCrewInfo(crew);
                     LocationInfo(locations, "Annoying Neighbor's House");
-                    LocationMenu();
+                    LocationMenu(crew, locations);
                     break;
                 case 3:
+                    DisplayCrewInfo(crew);
                     LocationInfo(locations, "Corner 7-Eleven");
-                    LocationMenu();
+                    LocationMenu(crew, locations);
                     break;
             }
         }
@@ -152,12 +153,25 @@ DIFFICULTY:{l.Difficulty}
 ${l.Cash}"));
         }
 
-        static void LocationMenu()
+        static void LocationMenu(List<Criminal> crew, List<Location> locations)
         {
             Console.WriteLine("1) stay in van and watch location.");
             Console.WriteLine("2) begin heist");
             Console.WriteLine("3) return to planning");
             int selection = MenuInput(3);
+
+            switch (selection)
+            {
+                case 1:
+                    Console.WriteLine("WAITING");
+                    break;
+                case 2:
+                    Console.WriteLine("BEGIN");
+                    break;
+                case 3:
+                    LevelSelect(crew, locations);
+                    break;
+            }
         }
 
         static void ManageCrew(List<Criminal> crew, List<Location> locations)
@@ -255,7 +269,7 @@ ${l.Cash}"));
             return entered;
         }
 
-        static void DisplayCrewSkills(List<Criminal> crew)
+        static void DisplayCrewInfo(List<Criminal> crew)
         {
             // Get the entire crew's skills
             List<int> TotalSkills = new List<int>();
@@ -267,6 +281,7 @@ ${l.Cash}"));
 
             int CrewSkill = TotalSkills.Sum();
             int MaxCrewSkill = (TotalSkills.Count() * 100);
+            Console.WriteLine($@"Total crew members: {crew.Count()}");
             Console.WriteLine($"Crew skill level: {CrewSkill} / {MaxCrewSkill}");
         }
 
@@ -275,7 +290,7 @@ ${l.Cash}"));
             ASCII art = new ASCII();
 
             Console.WriteLine(art.DisplayCrewHeading());
-            DisplayCrewSkills(crew);
+            DisplayCrewInfo(crew);
             crew.ForEach(c => {
                 if (c.IsPlayer)
                 {
