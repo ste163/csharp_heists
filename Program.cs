@@ -129,21 +129,21 @@ namespace heist
             switch (userSelected)
             {
                 case 2:
-                    DisplayCrewInfo(crew);
-                    LocationInfo(locations, "Annoying Neighbor's House");
-                    LocationMenu(crew, locations);
+                    string houseSelected = "Annoying Neighbor's House";
+                    LocationInfo(locations, houseSelected, crew);
                     break;
                 case 3:
-                    DisplayCrewInfo(crew);
-                    LocationInfo(locations, "Corner 7-Eleven");
-                    LocationMenu(crew, locations);
+                    string gasSelected = "Corner 7-Eleven";
+                    LocationInfo(locations, gasSelected, crew);
                     break;
             }
         }
 
-        static void LocationInfo(List<Location> locations, string locName)
+        static void LocationInfo(List<Location> locations, string locName, List<Criminal> crew)
         {
             List<Location> loc = locations.Where(l => l.Name == locName).ToList();
+            // EACH LOCATION NEEDS THE HEADER TEXT
+            DisplayCrewInfo(crew);
             loc.ForEach(l => Console.WriteLine($@"
 {l.Image}
 
@@ -151,10 +151,7 @@ namespace heist
 {l.Summary}
 DIFFICULTY:{l.Difficulty}
 ${l.Cash}"));
-        }
 
-        static void LocationMenu(List<Criminal> crew, List<Location> locations)
-        {
             Console.WriteLine("1) stay in van and watch location.");
             Console.WriteLine("2) begin heist");
             Console.WriteLine("3) return to planning");
@@ -163,6 +160,11 @@ ${l.Cash}"));
             switch (selection)
             {
                 case 1:
+                // Get the currently selected location
+                // Generate a random number between 50 and 100 to add or subtract
+                // from the difficulty
+                // Update the locations to a new variable
+                // Final step is to move the location into the LocationInfo()
                     Console.WriteLine("WAITING");
                     break;
                 case 2:
