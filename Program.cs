@@ -101,7 +101,7 @@ namespace heist
             DisplayCrewInfo(crew);
             Console.WriteLine(art.DisplayNashville());
             Console.WriteLine("1) manage crew");
-            Console.WriteLine("2) recon Annoying Neighbor's House");
+            Console.WriteLine("2) stakeout Annoying Neighbor's House");
             Console.WriteLine("3) stock-up at corner 7-Eleven");
             int selection = MenuInput(3);
 
@@ -155,11 +155,14 @@ namespace heist
 {l.Image}
 
 {l.Name}
+
 {l.Summary}
+
+VISIBLE FOR TESTING:
 DIFFICULTY:{l.Difficulty}
 ${l.Cash}"));
 
-            Console.WriteLine("1) watch location from van");
+            Console.WriteLine("1) keep watching from van");
             Console.WriteLine("2) begin heist");
             Console.WriteLine("3) return to planning");
             int selection = MenuInput(3);
@@ -173,6 +176,8 @@ ${l.Cash}"));
                 {
                     if (l.Name == locName)
                     {
+                        // NEED TO ENSURE DIFFICULTY CAN NEVER BE BELOW THE MIN FOR THAT LOCATION
+                        // PROBABLY NEED A CALCULATE/COMPUTATED PROPERTY?
                         l.Difficulty = l.Difficulty + r;
                     }
                     return l;
@@ -229,28 +234,37 @@ ${l.Cash}"));
 
         static List<Criminal> IceCrewMember(List<Criminal> crew)
         {
-            Console.Write("Enter the name of the person you'd like to ice: ");
+            Console.Write("Enter name of who you will ice [leave blank to cancel]: ");
             string name = Console.ReadLine();
 
             int subtractTrust = new Random().Next(1, 31);
 
             List<Criminal> iceMember = crew.Where(c => c.Name != name || c.IsPlayer == true).ToList();
 
-            List<Criminal> newCrew = iceMember.Select(c =>
+            // Only lower trust if we have iced a crew member
+            if (iceMember.Count() < crew.Count()) 
             {
-                int loweredTrust = c.Trust - subtractTrust;
-                if (loweredTrust < 0)
+                List<Criminal> newCrew = iceMember.Select(c =>
                 {
-                    c.Trust = 0;
-                }
-                else
-                {
-                    c.Trust = loweredTrust;
-                }
-                return c;
-            }).ToList();
+                    int loweredTrust = c.Trust - subtractTrust;
+                    if (loweredTrust < 0)
+                    {
+                        c.Trust = 0;
+                    }
+                    else
+                    {
+                        c.Trust = loweredTrust;
+                    }
+                    return c;
+                }).ToList();
 
-            return newCrew;
+                return newCrew;
+            }
+            else
+            {
+                return iceMember;
+            }
+
         }
 
         static int MenuInput(int maxOptions)
@@ -285,7 +299,7 @@ ${l.Cash}"));
 
         static void DisplayCrewInfo(List<Criminal> crew)
         {
-            // Get the entire crew's skills
+            // Get entire crew's skills
             List<int> TotalSkills = new List<int>();
 
             crew.ForEach(c =>
@@ -334,9 +348,9 @@ You: {c.Name}
         {
             ASCII art = new ASCII();
             bool recruiting = true;
-            // Instantiate empty list of criminals
             List<Criminal> newCrew = new List<Criminal>();
 
+            // After player created, can only add new criminals (this is for manage crew view)
             if (crew.Count != 0)
             {
                 Console.WriteLine("");
@@ -348,7 +362,6 @@ You: {c.Name}
                 // Create the player and add them first to the roster
                 newCrew.Add(CreatePlayer());
                 Console.WriteLine("Go solo or hire a crew? [solo/hire]: ");
-                // OPTION TO GO SOLO OR HIRE CREW
                 string solo = Console.ReadLine().ToLower();
 
                 Console.Clear();
@@ -368,7 +381,6 @@ You: {c.Name}
                     Console.WriteLine(art.DisplayCrewHire());
 
                     // While we are recruiting, prompt user to continue recruiting
-                    // display current amount of criminals recruited
                     while(recruiting)
                     {
                         newCrew.Add(RecruitNewCriminal());
@@ -396,7 +408,6 @@ You: {c.Name}
         static Criminal RecruitNewCriminal()
         {
             Console.Write("Enter new criminal's nickname: ");
-            // User can enter any string, including a string of numbers
             string enteredName = Console.ReadLine();
             Criminal newCriminal = new Criminal(enteredName, false);
 
