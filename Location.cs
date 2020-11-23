@@ -10,6 +10,7 @@ namespace heist
         public string Summary { get; set; }
         public int Difficulty { get; set; }
         public int Cash { get; set; }
+        public bool Completed{ get; set; } = false;
 
         public Location()
         {

@@ -14,20 +14,21 @@ namespace heist
             List<Location> Locations = getLocations.GenerateAllLocations();
             List<Criminal> currentCrew = CreateCrew(new List<Criminal>());
 
-            // While there are still levels not yet completed
-                // continue the select & related scripts
-                // Need to create a Level/Heist class with a property of completed
-    
-            LevelSelect(currentCrew, Locations);
+            // While there are levels not yet completed, allow user to continue selecting levels
+            List<Location> LocationsLeftToRob = Locations.Where(l => l.Completed == false).ToList();
+
+            while (LocationsLeftToRob.Count() > 0)
+            {
+                LevelSelect(currentCrew, LocationsLeftToRob);
+
+                LocationsLeftToRob = Locations.Where(l => l.Completed == false).ToList();
+            }
+
+            // TAKE USER TO SPLIT THE CASH MENU
+
+
 
             // Show different locations with ASCII art to rob
-                // Annoying Neighbor's House (dif 0 - 50) ($100 - $100,000)
-                    // Summary: My neighbor is almost always outside and wants to talk. Luckily
-                                // my neighbor talks about hating banks. Maybe there is money in the house.
-                // 7-Eleven (dif 0 - 100) ($50 - $1,000)
-                    // Summary: {Random Crew Member, if we have a crew} works part-time here. Usually cash in the register.
-                        // Should be an easy heist. 
-                        // We can get some snacks, too.
                 // LOCATION? (dif 0 - 300) ($100 - $2,000)
                 // Nashville Software School (dif 0 - 300) ($50-$2,000)
                     // They've probably got some computers. Bunch of nerds.
@@ -35,23 +36,9 @@ namespace heist
                     // {NAME} has cased the place. This will be the toughest job, but banks have all the money, right?
 
             // Crew Select
-                // User types names
-                // Skill is randomly generated from 1 - 50 (max of 100)
                 // Trust random from 10 - 50 (max of 100)
                     // After every succesful heist, do a trust check for each crew member
                     // IF any criminal DOES turn, it lowers everyone's trust by -20
-                    // The Trust level is shown to user as a sentence about how the member is feeling
-                        // Trust 1 - 10 - always try to shoot another member and take their money
-                        // Trust 11 - 20 - high chance of shooting another member and taking their money
-                        // Trust 21 - 30 - low chance of turning on crew
-                        // Trust 30 - 40 - very low chance of turning on crew, 0.1 Courage
-                        // Trust 41 - 49 - almost no chance of turning on crew, 0.2 Courage
-                        // Trust 50 - 59 - no chance of turning, 0.3 courage
-                        // Trust 60 - 69 - 0.4 Courage
-                        // Trust 70 -79 - 0.5 Courage
-                        // Trust 80 - 89 - 0.7 Courage
-                        // Trust 90 - 99 - 0.9 Courage
-                        // Trust 100 - 1.0 Courage
                     // INCREASES after every successful heist by +30
                     // ADDING a new crew member after a heist randomizes trust for members by -30 to + 30
                         // The crew will say either "Screw the new guy," "Seems like an okay pick," "We really got {Name}?!"
@@ -304,7 +291,7 @@ ${l.Cash}"));
 
             crew.ForEach(c =>
             {
-                TotalSkills.Add(c.SkillLevel);
+                TotalSkills.Add(c.BaseSkill);
             });
 
             int CrewSkill = TotalSkills.Sum();
@@ -326,7 +313,8 @@ ${l.Cash}"));
 {c.Face}
 
 You: {c.Name}
- skill level: {c.SkillLevel} / 100
+ base skill: {c.BaseSkill} / 100
+ heist skill {c.SkillLevel}
  courage factor: {c.CourageFactor} / 1.0
 ");
                 }
@@ -336,7 +324,7 @@ You: {c.Name}
 {c.Face}
 
 {c.Name}
- skill level: {c.SkillLevel} / 100
+ skill level: {c.BaseSkill} / 100
  courage factor: {c.CourageFactor} / 1.0
  trust: {c.Trust}
 ");
@@ -415,7 +403,8 @@ You: {c.Name}
 {newCriminal.Face}
 
 {newCriminal.Name} recruited!
- skill level: {newCriminal.SkillLevel} / 100
+ base skill: {newCriminal.BaseSkill} / 100
+ heist skill {newCriminal.SkillLevel}
  courage factor: {newCriminal.CourageFactor} / 1.0
  trust: {newCriminal.Trust}
 ");
@@ -439,7 +428,7 @@ You: {c.Name}
 {player.Face}
 
 {player.Name}
- skill level: {player.SkillLevel} / 100
+ skill level: {player.BaseSkill} / 100
  courage factor: {player.CourageFactor} / 1.0
 ");
             return player;
