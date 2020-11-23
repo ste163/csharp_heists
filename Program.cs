@@ -24,8 +24,13 @@ namespace heist
                 LocationsLeftToRob = Locations.Where(l => l.Completed == false).ToList();
             }
 
+            Console.WriteLine("ALL HEISTS COMPLETED");
+
             // TAKE USER TO SPLIT THE CASH MENU
 
+            // PLAYER NEEDS A COUNTER FOR HOW MANY CRIMINALS PLAYER CAN HIRE
+            // LIke start at 10, have a counter that tells you how many more criminals you can hire
+            // So that way you can't kill and hire infinitely
 
 
             // Show different locations with ASCII art to rob
@@ -87,9 +92,21 @@ namespace heist
             Console.Write(art.DisplayPlanning());
             DisplayCrewInfo(crew);
             Console.WriteLine(art.DisplayNashville());
+
             Console.WriteLine("1) manage crew");
-            Console.WriteLine("2) stakeout Annoying Neighbor's House");
-            Console.WriteLine("3) stock-up at corner 7-Eleven");
+
+            // Iterate through locations, for those that are not completed,
+                // Check if it's name has been completed, if not, show that option
+            locations.ForEach(l =>
+            {
+                if (!l.Completed)
+                {
+                    if (l.Name == "Annoying Neighbor's House") Console.WriteLine("2) stakeout Annoying Neighbor's House");
+                    if (l.Name == "Corner 7-Eleven") Console.WriteLine("3) stock-up at corner 7-Eleven");;
+                }
+                else {}
+            });
+            
             int selection = MenuInput(3);
 
             switch (selection)
@@ -113,15 +130,29 @@ namespace heist
         // LocationInfo names MUST match those in Location.cs
         {
             Console.Clear();
+
             switch (userSelected)
             {
                 case 2:
                     string houseSelected = "Annoying Neighbor's House";
-                    LocationInfo(locations, houseSelected, crew);
+                    // If the house hasn't been completed, add it to list
+                    List<Location> isHouseCompleted = locations.Where(l => l.Name == houseSelected && !l.Completed).ToList();
+
+                    if (isHouseCompleted.Count() == 1)
+                    {
+                        LocationInfo(locations, houseSelected, crew);
+                    }
+
                     break;
                 case 3:
                     string gasSelected = "Corner 7-Eleven";
-                    LocationInfo(locations, gasSelected, crew);
+
+                    List<Location> isGasCompleted = locations.Where(l => l.Name == gasSelected && !l.Completed).ToList();
+
+                    if (isGasCompleted.Count() == 1)
+                    {
+                        LocationInfo(locations, gasSelected, crew);
+                    }
                     break;
             }
         }
