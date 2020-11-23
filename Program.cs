@@ -103,7 +103,7 @@ namespace heist
             Console.WriteLine(art.DisplayNashville());
             Console.WriteLine("1) manage crew");
             Console.WriteLine("2) recon Annoying Neighbor's House");
-            Console.WriteLine("3) recon corner 7-Eleven");
+            Console.WriteLine("3) stock-up at corner 7-Eleven");
             int selection = MenuInput(3);
 
             switch (selection)
@@ -131,9 +131,11 @@ namespace heist
             {
                 case 2:
                     LocationInfo(locations, "Annoying Neighbor's House");
+                    LocationMenu();
                     break;
                 case 3:
                     LocationInfo(locations, "Corner 7-Eleven");
+                    LocationMenu();
                     break;
             }
         }
@@ -148,6 +150,14 @@ namespace heist
 {l.Summary}
 DIFFICULTY:{l.Difficulty}
 ${l.Cash}"));
+        }
+
+        static void LocationMenu()
+        {
+            Console.WriteLine("1) stay in van and watch location.");
+            Console.WriteLine("2) begin heist");
+            Console.WriteLine("3) return to planning");
+            int selection = MenuInput(3);
         }
 
         static void ManageCrew(List<Criminal> crew, List<Location> locations)
@@ -216,8 +226,8 @@ ${l.Cash}"));
         }
 
         static int MenuInput(int maxOptions)
+        // Ensures user can only enter a number between 1 and maxOptions for this menu
         {
-
             // Declares variable we will be re-assigning 
             int entered;
             // When user first enters the skill input, ensure they type only a number
