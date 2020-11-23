@@ -157,7 +157,23 @@ namespace heist
             Console.Write("Enter the name of the person you'd like to ice: ");
             string name = Console.ReadLine();
 
-            List<Criminal> newCrew = crew.Where(c => c.Name != name || c.IsPlayer == true).ToList();
+            int subtractTrust = new Random().Next(1, 31);
+
+            List<Criminal> iceMember = crew.Where(c => c.Name != name || c.IsPlayer == true).ToList();
+
+            List<Criminal> newCrew = iceMember.Select(c =>
+            {
+                int loweredTrust = c.Trust - subtractTrust;
+                if (loweredTrust < 0)
+                {
+                    c.Trust = 0;
+                }
+                else
+                {
+                    c.Trust = loweredTrust;
+                }
+                return c;
+            }).ToList();
 
             return newCrew;
         }
