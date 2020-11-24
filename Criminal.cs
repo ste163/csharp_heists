@@ -14,6 +14,8 @@ namespace heist
         // Courage Factor must be 0.1 - 1.0
         public double CourageFactor { get; set; }
 
+        public int CrewTotalCash { get; set; } = 0;
+
         public bool IsPlayer;
 
         public string Face;

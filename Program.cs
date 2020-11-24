@@ -204,11 +204,48 @@ ${l.Cash}"));
                     break;
                 case 2:
                     Console.WriteLine("BEGIN");
+                    BeginHeist(crew, locations, locName);
                     break;
                 case 3:
                     LevelSelect(crew, locations);
                     break;
             }
+        }
+
+        static void BeginHeist(List<Criminal> crew, List<Location> locations, string locName)
+        {
+            List<Criminal> crewSuccess = crew;
+
+            List<Location> updatedLocations = locations.Select(l =>
+            {
+                if (l.Name == locName)
+                {
+                    // When we have the current location
+                    // Compare the location's difficulty with the crew's max skills
+                    double crewTotalSkill = crew.Sum(c => c.SkillLevel);
+                    
+                    // If the crew succeeds, add the total cash to each crew member
+                        // This is to save the cash, it will be split later
+                    if (l.Difficulty < crewTotalSkill)
+                    {
+                        crewSuccess = crew.Select(c => 
+                        {
+                            c.CrewTotalCash = l.Cash;
+                            return c;
+                        }).ToList();
+
+                        l.Completed = true;
+                    }
+
+                    return l;
+                }
+                else
+                {
+                    return l;
+                }
+            }).ToList();
+
+            LevelSelect(crewSuccess, updatedLocations);
         }
 
         static void ManageCrew(List<Criminal> crew, List<Location> locations)
