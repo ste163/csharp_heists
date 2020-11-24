@@ -104,7 +104,6 @@ namespace heist
                     if (l.Name == "Annoying Neighbor's House") Console.WriteLine("2) stakeout Annoying Neighbor's House");
                     if (l.Name == "Corner 7-Eleven") Console.WriteLine("3) stock-up at corner 7-Eleven");;
                 }
-                else {}
             });
             
             int selection = MenuInput(3);
@@ -142,7 +141,10 @@ namespace heist
                     {
                         LocationInfo(locations, houseSelected, crew);
                     }
-
+                    else
+                    {
+                        LevelSelect(crew, locations);
+                    }
                     break;
                 case 3:
                     string gasSelected = "Corner 7-Eleven";
@@ -152,6 +154,10 @@ namespace heist
                     if (isGasCompleted.Count() == 1)
                     {
                         LocationInfo(locations, gasSelected, crew);
+                    }
+                    else
+                    {
+                        LevelSelect(crew, locations);
                     }
                     break;
             }
