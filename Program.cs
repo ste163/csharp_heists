@@ -363,13 +363,15 @@ ${l.Cash}"));
             // Get entire crew's skills
             List<int> TotalSkills = new List<int>();
             // Get crew's cash
-            int TotalCash = 0;
+            int TotalCash;
 
             crew.ForEach(c =>
             {
                 TotalSkills.Add(c.BaseSkill);
-                TotalCash = c.CrewTotalCash;
             });
+
+            Criminal player = crew.Find(c => c.IsPlayer);
+            TotalCash = player.CrewTotalCash;
 
             int CurrentSplit = (TotalCash / crew.Count());
 
