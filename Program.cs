@@ -356,16 +356,24 @@ ${l.Cash}"));
         {
             // Get entire crew's skills
             List<int> TotalSkills = new List<int>();
+            // Get crew's cash
+            int TotalCash = 0;
 
             crew.ForEach(c =>
             {
                 TotalSkills.Add(c.BaseSkill);
+                TotalCash = c.CrewTotalCash;
             });
+
+            int CurrentSplit = (TotalCash / crew.Count());
 
             int CrewSkill = TotalSkills.Sum();
             int MaxCrewSkill = (TotalSkills.Count() * 100);
             Console.WriteLine($@"Total crew members: {crew.Count()}");
             Console.WriteLine($"Crew skill level: {CrewSkill} / {MaxCrewSkill}");
+            Console.WriteLine("");
+            Console.WriteLine($"Cash: ${TotalCash}");
+            Console.WriteLine($"the cut: ${CurrentSplit}");
         }
 
         static void DisplayCurrentCrew(List<Criminal> crew)
