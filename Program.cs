@@ -70,6 +70,7 @@ namespace heist
             Location getLocations = new Location(); 
             List<Location> locations = getLocations.GenerateAllLocations();
             List<Criminal> currentCrew = CreateCrew(new List<Criminal>());
+            ShowCrewCreatedMsg(currentCrew);
             LevelSelect(currentCrew, locations);
 
             Console.WriteLine("ALL HEISTS COMPLETED/ATTEMPTED");
@@ -636,6 +637,34 @@ You: {c.Name}
                     return newCrew;
                 }
             }
+        }
+
+        static void ShowCrewCreatedMsg(List<Criminal> crew)
+        {
+            ASCII ASCII = new ASCII();
+            Console.Clear();
+            Console.WriteLine(ASCII.DisplayCrewCreated());
+            crew.ForEach(c =>
+            {
+                if (crew.Count() <= 3) Console.WriteLine($@"{c.Face}
+                ");
+                if (c.IsPlayer == true)
+                {
+                    Console.WriteLine($@"You: {c.Name}");
+                    Console.WriteLine($" base skill level: {c.BaseSkill} / 100");
+                } 
+                
+                if (c.IsPlayer == false)
+                {
+                    Console.WriteLine($@"{c.Name}");
+                    Console.WriteLine($@" {c.TrustDescription}
+ base skill level: {c.BaseSkill} / 100");
+                }
+                Console.WriteLine("");
+            });
+            
+            Console.Write("Press any key to begin planning heists");
+            Console.ReadLine();
         }
 
         static Criminal RecruitNewCriminal()
