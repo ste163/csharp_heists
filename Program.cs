@@ -2,6 +2,63 @@
 using System.Collections.Generic;
 using System.Linq;
 
+// TAKE USER TO SPLIT THE CASH MENU
+
+// PLAYER NEEDS A COUNTER FOR HOW MANY CRIMINALS PLAYER CAN HIRE
+// LIke start at 10, have a counter that tells you how many more criminals you can hire
+// So that way you can't kill and hire infinitely
+
+
+// Show different locations with ASCII art to rob
+    // LOCATION? (dif 0 - 300) ($100 - $2,000)
+    // Nashville Software School (dif 0 - 300) ($50-$2,000)
+        // They've probably got some computers. Bunch of nerds.
+    // Bank of America (dif 300 - 900) ($5,000 - $10,000)
+        // {NAME} has cased the place. This will be the toughest job, but banks have all the money, right?
+
+// Crew Select
+    // Trust random from 10 - 50 (max of 100)
+        // After every succesful heist, do a trust check for each crew member
+        // IF any criminal DOES turn, it lowers everyone's trust by -20
+        // INCREASES after every successful heist by +30
+        // ADDING a new crew member after a heist randomizes trust for members by -30 to + 30
+            // The crew will say either "Screw the new guy," "Seems like an okay pick," "We really got {Name}?!"
+        // Icing a crew member lowers trust by - 70. Can Ice multiple crew members at a time to increase cash.
+    // Courage Factor (0.1 - 1.0), courage is added to the skill by
+        // (((Courage Factor * Skill) / 10) + Skill Level).RoundUp() = Skill Level for Heist
+    // Each crew member gets a random ASCII face
+
+// Level Select
+    // View of ASCII city skyline
+    // Display for how much money you've currently stolen
+    // Have option to check on crew, see their stats, ice someone, or recruit new people
+    // With heading underneath say choose a location to rob
+        // 1. Annoying Neighbors house...
+        // Selecting any location will take you to the big view of the ASCII art for that location
+        // With a summary about it, telling you what to expect
+            // Current Status: sentence about what it appears to look like (a hint for current difficulty)
+            // Ability to stake out to see if the situtation will change
+            // Option to Rob the place
+            // Option to return to City view 
+    
+// Heist
+    // DISPLAYs sum of the crew's skills
+        // Difficulty of the location
+    // New ascii art??
+    // Show everyone's name and face?
+    // IF Successfull
+        // Run trust check for each criminal to see if they're turn
+        // Show how much total cash you got, then everyone's cut
+    // IF Failure
+        // Chance based on a skill check roll for if any crew members died in the cross-fire/got arrested
+            // instead of you
+        // If no one else was arrested chance for you to be arrested and the game over
+        // 10% chance of everyone getting away okay
+
+// If the sum of their skills is greater than the locations's difficulty
+    // display a success message (ASCII of bag of money) - say how much $$ was stolen
+    // Go back to the location select screen, but with the last place removed
+
 namespace heist
 {
     class Program
@@ -17,6 +74,7 @@ namespace heist
             // While there are levels not yet completed, allow user to continue selecting levels
             List<Location> LocationsLeftToRob = Locations.Where(l => l.Completed == false).ToList();
 
+            // Put while loop instide the LevelSelect function. 
             while (LocationsLeftToRob.Count() > 0)
             {
                 LevelSelect(currentCrew, LocationsLeftToRob);
@@ -25,63 +83,6 @@ namespace heist
             }
 
             Console.WriteLine("ALL HEISTS COMPLETED");
-
-            // TAKE USER TO SPLIT THE CASH MENU
-
-            // PLAYER NEEDS A COUNTER FOR HOW MANY CRIMINALS PLAYER CAN HIRE
-            // LIke start at 10, have a counter that tells you how many more criminals you can hire
-            // So that way you can't kill and hire infinitely
-
-
-            // Show different locations with ASCII art to rob
-                // LOCATION? (dif 0 - 300) ($100 - $2,000)
-                // Nashville Software School (dif 0 - 300) ($50-$2,000)
-                    // They've probably got some computers. Bunch of nerds.
-                // Bank of America (dif 300 - 900) ($5,000 - $10,000)
-                    // {NAME} has cased the place. This will be the toughest job, but banks have all the money, right?
-
-            // Crew Select
-                // Trust random from 10 - 50 (max of 100)
-                    // After every succesful heist, do a trust check for each crew member
-                    // IF any criminal DOES turn, it lowers everyone's trust by -20
-                    // INCREASES after every successful heist by +30
-                    // ADDING a new crew member after a heist randomizes trust for members by -30 to + 30
-                        // The crew will say either "Screw the new guy," "Seems like an okay pick," "We really got {Name}?!"
-                    // Icing a crew member lowers trust by - 70. Can Ice multiple crew members at a time to increase cash.
-                // Courage Factor (0.1 - 1.0), courage is added to the skill by
-                    // (((Courage Factor * Skill) / 10) + Skill Level).RoundUp() = Skill Level for Heist
-                // Each crew member gets a random ASCII face
-
-            // Level Select
-                // View of ASCII city skyline
-                // Display for how much money you've currently stolen
-                // Have option to check on crew, see their stats, ice someone, or recruit new people
-                // With heading underneath say choose a location to rob
-                    // 1. Annoying Neighbors house...
-                    // Selecting any location will take you to the big view of the ASCII art for that location
-                    // With a summary about it, telling you what to expect
-                        // Current Status: sentence about what it appears to look like (a hint for current difficulty)
-                        // Ability to stake out to see if the situtation will change
-                        // Option to Rob the place
-                        // Option to return to City view 
-                
-            // Heist
-                // DISPLAYs sum of the crew's skills
-                    // Difficulty of the location
-                // New ascii art??
-                // Show everyone's name and face?
-                // IF Successfull
-                    // Run trust check for each criminal to see if they're turn
-                    // Show how much total cash you got, then everyone's cut
-                // IF Failure
-                    // Chance based on a skill check roll for if any crew members died in the cross-fire/got arrested
-                        // instead of you
-                    // If no one else was arrested chance for you to be arrested and the game over
-                    // 10% chance of everyone getting away okay
-
-            // If the sum of their skills is greater than the locations's difficulty
-                // display a success message (ASCII of bag of money) - say how much $$ was stolen
-                // Go back to the location select screen, but with the last place removed
         }
 
         static void LevelSelect(List<Criminal> crew, List<Location> locations)
@@ -236,7 +237,7 @@ ${l.Cash}"));
                     {
                         crewSuccess = crew.Select(c => 
                         {
-                            c.CrewTotalCash = l.Cash;
+                            c.CrewTotalCash = c.CrewTotalCash + l.Cash;
                             return c;
                         }).ToList();
 
@@ -566,73 +567,38 @@ You: {c.Name}
     }
 }
 
-// INPUTS FOR PUTTING IN YOUR OWN SKILL OR COURAGE
-    // THIS WAS BEFORE THEY BECAME RANDOMIZED
-        // static int InputSkill()
-        // {
-        //     // Declares variable we will be re-assigning 
-        //     int entered;
-        //     // When user first enters the skill input, ensure they type only a number
-        //     while(true)
-        //     {
-        //         try
-        //         {
-        //             Console.Write("Enter new criminal's skill level: ");
-        //             entered = int.Parse(Console.ReadLine());
-        //             break;
-        //         }
-        //         catch
-        //         {
-        //             Console.WriteLine("Must enter a whole number.");
-        //         }
-        //     }
-        //     // After user has entered a number, if it is less than or equal to 0, user must re-enter number
-        //     while(entered <= 0)
-        //     {
-        //         try
-        //         {
-        //             Console.Write("Enter whole number greater than zero: ");
-        //             entered = int.Parse(Console.ReadLine());
-        //         }
-        //         catch(FormatException)
-        //         {
-        //             Console.WriteLine("Must enter a whole number.");
-        //         }
-        //     }
 
-        //     return entered;
-        // }
+// static int InputSkill()
+// {
+//     // Declares variable we will be re-assigning 
+//     int entered;
+//     // When user first enters the skill input, ensure they type only a number
+//     while(true)
+//     {
+//         try
+//         {
+//             Console.Write("Enter new criminal's skill level: ");
+//             entered = int.Parse(Console.ReadLine());
+//             break;
+//         }
+//         catch
+//         {
+//             Console.WriteLine("Must enter a whole number.");
+//         }
+//     }
+//     // After user has entered a number, if it is less than or equal to 0, user must re-enter number
+//     while(entered <= 0)
+//     {
+//         try
+//         {
+//             Console.Write("Enter whole number greater than zero: ");
+//             entered = int.Parse(Console.ReadLine());
+//         }
+//         catch(FormatException)
+//         {
+//             Console.WriteLine("Must enter a whole number.");
+//         }
+//     }
 
-        // static double InputCourage()
-        // {
-        //     double entered;
-
-        //     while(true)
-        //     {
-        //         try
-        //         {
-        //             Console.Write("Enter new criminal's courage (0.0 - 2.0): ");
-        //             entered = double.Parse(Console.ReadLine());
-        //             break;
-        //         }
-        //         catch
-        //         {
-        //             Console.WriteLine("Must enter number.");
-        //         }
-        //     }
-
-        //     while(entered < 0.0 || entered > 2.0)
-        //     {
-        //         try
-        //         {
-        //             Console.Write("Enter number between 0.0 - 2.0: ");
-        //             entered = double.Parse(Console.ReadLine());
-        //         }
-        //         catch(FormatException)
-        //         {
-        //             Console.WriteLine("Must enter a number.");
-        //         }
-        //     }
-
-        //     return entered;
-        // }
+//     return entered;
+// }
