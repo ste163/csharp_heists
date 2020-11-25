@@ -18,6 +18,8 @@ namespace heist
 
         public bool IsPlayer;
 
+        public int PlayerCrewCount { get; set; }
+
         public string Face;
 
         public double CourageLevel
@@ -71,10 +73,12 @@ namespace heist
             if (player)
             {
                 IsPlayer = true;
+                PlayerCrewCount = 6;
             }
             else
             {
                 IsPlayer = false;
+                PlayerCrewCount = 0;
                 Trust = new Random().Next(20, 61);
             }
         }

@@ -421,18 +421,45 @@ You: {c.Name}
             ASCII art = new ASCII();
             bool recruiting = true;
             List<Criminal> newCrew = new List<Criminal>();
+            int playerCrewLeft;
 
             // After player created, can only add new criminals (this is for manage crew view)
             if (crew.Count != 0)
             {
-                Console.WriteLine("");
-                crew.Add(RecruitNewCriminal());
-                return crew;
+                // We need to do ALL of this inside a select on the crew
+                // Where we modify the player dirrectly. Currently modifying a player 
+                // that is not the one in the crew
+                List<Criminal> updatedCrew = new List<Criminal>();
+
+                List<Criminal> holder = crew.Select(c =>
+                {
+                    playerCrewLeft = c.PlayerCrewCount;
+                    if (c.IsPlayer && playerCrewLeft > 0)
+                    {
+                        Console.WriteLine("");
+                        Console.WriteLine($"{playerCrewLeft} criminals you know left to contact.");
+                        updatedCrew.Add(c);
+                        updatedCrew.Add(RecruitNewCriminal());
+                        c.PlayerCrewCount = --playerCrewLeft;
+                        return c;
+                    }
+                    else 
+                    {
+                        updatedCrew.Add(c);
+                        return c;
+                    }
+                }).ToList();
+
+                return updatedCrew;
             }
             else
             {
                 // Create the player and add them first to the roster
                 newCrew.Add(CreatePlayer());
+
+                Criminal player = newCrew.Find(c => c.IsPlayer);
+                playerCrewLeft = player.PlayerCrewCount;
+
                 Console.WriteLine("Go solo or hire a crew? [solo/hire]: ");
                 string solo = Console.ReadLine().ToLower();
 
@@ -453,11 +480,14 @@ You: {c.Name}
                     Console.WriteLine(art.DisplayCrewHire());
 
                     // While we are recruiting, prompt user to continue recruiting
-                    while(recruiting)
+                    // AND the player still has criminals available
+                    while(recruiting && playerCrewLeft > 0)
                     {
+                        // WRAP in a similar select to save the playerCrewLeaving info
                         newCrew.Add(RecruitNewCriminal());
-
+                        playerCrewLeft = --playerCrewLeft;
                         Console.WriteLine($"{newCrew.Count()} criminals in crew.");
+                        Console.WriteLine($"{playerCrewLeft} criminals you know left to contact.");
                         
                         Console.Write("Continue recruiting? [y/n]: ");
                         string response = Console.ReadLine().ToLower();
@@ -474,7 +504,6 @@ You: {c.Name}
                     return newCrew;
                 }
             }
-
         }
 
         static Criminal RecruitNewCriminal()
