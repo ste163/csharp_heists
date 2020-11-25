@@ -10,6 +10,26 @@ namespace heist
 
         // 1 -100
         public int Trust { get; set; }
+        public string TrustDescription
+        {
+            get
+            {
+                string d = "";
+
+                if (Trust <= 9) d = "*Eyes keep shifting from the van window to the cash.*";
+                if (Trust >= 10 && Trust <= 19) d = "'You're the worst.'";
+                if (Trust >= 20 && Trust <= 29) d = "'You better know what you're doing, or else.'";
+                if (Trust >= 30 && Trust <= 39) d = "'Things aren't great right now.'";
+                if (Trust >= 40 && Trust <= 49) d = "'Could be going better.'";
+                if (Trust >= 50 && Trust <= 59) d = "'Doing okay.'";
+                if (Trust >= 60 && Trust <= 69) d = "'Going well, boss.'";
+                if (Trust >= 70 && Trust <= 79) d = "'Great work so far, boss!'";
+                if (Trust >= 80 && Trust <= 89) d = "'Let's keep going! We're on a roll!'";
+                if (Trust >= 90 && Trust <= 100) d = "'I've got your back, boss, through anything.'";
+
+                return d;
+            }
+        }
         
         // Courage Factor must be 0.1 - 1.0
         public double CourageFactor { get; set; }
@@ -32,10 +52,6 @@ namespace heist
                 // CONTINUE THROUGH THIS
                 if (Trust <= 10) return newCourage = 0.1;
                 if (Trust >= 11 || Trust <= 20) return newCourage = 0.2;
-                
-                // Need another property
-                // That checks all the trust values and returns a string
-                // based on what your trust is
 
                     // The Trust level is shown to user as a sentence about how the member is feeling
                         // Trust 1 - 10 - always try to shoot another member and take their money

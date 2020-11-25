@@ -9,6 +9,21 @@ namespace heist
         public string Name { get; set; }
         public string Summary { get; set; }
         public int Difficulty { get; set; }
+        public string DifficultyDescription
+        {
+            get
+            {
+                string d = "";
+
+                if (Difficulty <= 30) d = "Looks like no one is around. [~30 skill level required]";
+                if (Difficulty >= 31 && Difficulty <= 80) d = "Saw movement, maybe one or two people inside. [~30-80 skill level required]";
+                if (Difficulty >= 81 && Difficulty <= 150) d = "Definitely people inside, can't see how tough they might be. [~80-150 skill level required]";
+                if (Difficulty >= 151 && Difficulty <= 250) d = "Mean looking people inside, going to be hard. [~150-250 skill level required]";
+                if (Difficulty >= 251) d = "People outside, people inside, everyone looks like a badass. This will be difficult [+250 skill level required]";
+
+                return d;
+            }
+        }
         public int Cash { get; set; }
         public bool Completed{ get; set; } = false;
 

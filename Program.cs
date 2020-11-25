@@ -103,7 +103,7 @@ namespace heist
                 if (!l.Completed)
                 {
                     if (l.Name == "Annoying Neighbor's House") Console.WriteLine("2) stakeout Annoying Neighbor's House");
-                    if (l.Name == "Corner 7-Eleven") Console.WriteLine("3) stock-up at corner 7-Eleven");
+                    if (l.Name == "Corner 7-Eleven") Console.WriteLine("3) stock-up at Corner 7-Eleven");
                 }
             });
             
@@ -180,12 +180,10 @@ namespace heist
 {l.Image}
 
 {l.Name}
-
+-----
 {l.Summary}
-
-VISIBLE FOR TESTING:
-DIFFICULTY:{l.Difficulty}
-${l.Cash}"));
+{l.DifficultyDescription}
+"));
 
             Console.WriteLine("1) keep watching from van");
             Console.WriteLine("2) begin heist");
@@ -372,11 +370,11 @@ ${l.Cash}"));
             int CrewSkill = TotalSkills.Sum();
             int MaxCrewSkill = (TotalSkills.Count() * 100);
             if (player.PlayerContactCount > 0) Console.WriteLine($"Total associates available to hire: {player.PlayerContactCount}");
-            Console.WriteLine($@"Total crew members: {crew.Count()}");
+            Console.WriteLine($@"Total associates in crew: {crew.Count()}");
             Console.WriteLine($"Crew skill level: {CrewSkill} / {MaxCrewSkill}");
             Console.WriteLine("");
             Console.WriteLine($"Cash: ${TotalCash}");
-            Console.WriteLine($"the cut: ${CurrentSplit}");
+            if (crew.Count() > 1) Console.WriteLine($"current cut: ${CurrentSplit}");
         }
 
         static void DisplayCurrentCrew(List<Criminal> crew)
@@ -394,7 +392,6 @@ ${l.Cash}"));
 You: {c.Name}
  base skill: {c.BaseSkill} / 100
  heist skill {c.SkillLevel}
- courage factor: {c.CourageFactor} / 1.0
 ");
                 }
                 else
@@ -403,9 +400,10 @@ You: {c.Name}
 {c.Face}
 
 {c.Name}
+ {c.TrustDescription}
+
  skill level: {c.BaseSkill} / 100
  heist skill {c.SkillLevel}
- courage factor: {c.CourageFactor} / 1.0
  trust: {c.Trust}
 ");
                 }
@@ -538,8 +536,6 @@ You: {c.Name}
 {newCriminal.Name} recruited!
  base skill: {newCriminal.BaseSkill} / 100
  heist skill {newCriminal.SkillLevel}
- courage factor: {newCriminal.CourageFactor} / 1.0
- trust: {newCriminal.Trust}
 ");
 
             return newCriminal;
