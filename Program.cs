@@ -285,39 +285,42 @@ namespace heist
 
         static List<Criminal> IceCrewMember(List<Criminal> crew)
         {
-            ASCII ASCII = new ASCII();
-            Console.WriteLine(ASCII.DisplayGun());
-            Console.Write("Enter name of who you will ice [leave blank to cancel]: ");
-            string name = Console.ReadLine();
-
-            int subtractTrust = new Random().Next(1, 31);
-
-            List<Criminal> iceMember = crew.Where(c => c.Name != name || c.IsPlayer == true).ToList();
-
-            // Only lower trust if we have iced a crew member
-            if (iceMember.Count() < crew.Count()) 
+            if (crew.Count() > 1)
             {
-                List<Criminal> newCrew = iceMember.Select(c =>
+                ASCII ASCII = new ASCII();
+                Console.WriteLine(ASCII.DisplayGun());
+                Console.Write("Enter name of who you will ice [leave blank to cancel]: ");
+                string name = Console.ReadLine();
+
+                int subtractTrust = new Random().Next(1, 31);
+
+                List<Criminal> iceMember = crew.Where(c => c.Name != name || c.IsPlayer == true).ToList();
+
+                // Only lower trust if we have iced a crew member
+                if (iceMember.Count() < crew.Count()) 
                 {
-                    int loweredTrust = c.Trust - subtractTrust;
-                    if (loweredTrust < 0)
+                    List<Criminal> newCrew = iceMember.Select(c =>
                     {
-                        c.Trust = 0;
-                    }
-                    else
-                    {
-                        c.Trust = loweredTrust;
-                    }
-                    return c;
-                }).ToList();
+                        int loweredTrust = c.Trust - subtractTrust;
+                        if (loweredTrust < 0)
+                        {
+                            c.Trust = 0;
+                        }
+                        else
+                        {
+                            c.Trust = loweredTrust;
+                        }
+                        return c;
+                    }).ToList();
 
-                return newCrew;
+                    return newCrew;
+                }
+                else
+                {
+                    return iceMember;
+                }
             }
-            else
-            {
-                return iceMember;
-            }
-
+            else return crew;
         }
 
         static int MenuInput(int maxOptions)
