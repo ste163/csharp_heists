@@ -226,13 +226,20 @@ namespace heist
                     // Compare the location's difficulty with the crew's max skills
                     double crewTotalSkill = crew.Sum(c => c.SkillLevel);
                     
+                    
                     // If the crew succeeds, add the total cash to each crew member
                         // This is to save the cash, it will be split later
                     if (l.Difficulty < crewTotalSkill)
                     {
                         crewSuccess = crew.Select(c => 
                         {
+                            // Every crew member gets a random skill+
+                            int skillIncrease = new Random().Next(8, 38);
+                            int trustIncrease = new Random().Next(10, 40);
+
                             c.CrewTotalCash = c.CrewTotalCash + l.Cash;
+                            c.BaseSkill = c.BaseSkill + skillIncrease;
+                            c.Trust = c.Trust + trustIncrease;
                             return c;
                         }).ToList();
 

@@ -25,7 +25,7 @@ namespace heist
                 if (Trust >= 60 && Trust <= 69) d = "'Going well, boss.'";
                 if (Trust >= 70 && Trust <= 79) d = "'Great work so far, boss!'";
                 if (Trust >= 80 && Trust <= 89) d = "'Let's keep going! We're on a roll!'";
-                if (Trust >= 90 && Trust <= 100) d = "'I've got your back, boss, through anything.'";
+                if (Trust >= 90) d = "'I've got your back, boss, through anything.'";
 
                 return d;
             }
