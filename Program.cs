@@ -262,19 +262,12 @@ ${l.Cash}"));
             List<Criminal> updatedCrew = crew;
 
             DisplayCurrentCrew(updatedCrew);
-            // Display their face, name, and the how they're doing text based on trust
    
-            if (crew.Count() > 1)
-            {
-                Console.WriteLine("1) recruit crew member");
-                Console.WriteLine("2) ice crew member");
-                Console.WriteLine("3) return to planning");
-            } else
-            {
-                Console.WriteLine("1) recruit crew member");
-                Console.WriteLine("3) return to planning");                
-            }
-
+            Criminal player = crew.Find(c => c.IsPlayer);
+            if (player.PlayerCrewCount > 0) Console.WriteLine("1) recruit crew member");
+            if (crew.Count() > 1) Console.WriteLine("2) ice crew member");
+            Console.WriteLine("3) return to planning");           
+            
             int input = MenuInput(3);
 
             switch (input)
@@ -377,6 +370,7 @@ ${l.Cash}"));
 
             int CrewSkill = TotalSkills.Sum();
             int MaxCrewSkill = (TotalSkills.Count() * 100);
+            if (player.PlayerCrewCount > 0) Console.WriteLine($"Total associates left to hire: {player.PlayerCrewCount}");
             Console.WriteLine($@"Total crew members: {crew.Count()}");
             Console.WriteLine($"Crew skill level: {CrewSkill} / {MaxCrewSkill}");
             Console.WriteLine("");
@@ -437,7 +431,7 @@ You: {c.Name}
                     if (c.IsPlayer && playerCrewLeft > 0)
                     {
                         Console.WriteLine("");
-                        Console.WriteLine($"{playerCrewLeft} criminals you know left to contact.");
+                        Console.WriteLine($"{playerCrewLeft} associates left to contact.");
                         updatedCrew.Add(c);
                         updatedCrew.Add(RecruitNewCriminal());
                         c.PlayerCrewCount = --playerCrewLeft;

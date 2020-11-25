@@ -73,7 +73,7 @@ namespace heist
             if (player)
             {
                 IsPlayer = true;
-                PlayerCrewCount = 6;
+                PlayerCrewCount = 4;
             }
             else
             {
