@@ -216,10 +216,12 @@ namespace heist
 
         static void BeginHeist(List<Criminal> crew, List<Location> locations, string locName)
         {
+            bool heistSuccess = false;
             List<Criminal> crewSuccess = crew;
 
             List<Location> updatedLocations = locations.Select(l =>
             {
+                // find the selected location
                 if (l.Name == locName)
                 {
                     // When we have the current location
@@ -229,7 +231,7 @@ namespace heist
                     
                     // If the crew succeeds, add the total cash to each crew member
                         // This is to save the cash, it will be split later
-                    if (l.Difficulty < crewTotalSkill)
+                    if (l.Difficulty <= crewTotalSkill)
                     {
                         crewSuccess = crew.Select(c => 
                         {
@@ -244,17 +246,61 @@ namespace heist
                         }).ToList();
 
                         l.Completed = true;
+                        heistSuccess = true;
+                    }
+                    else 
+                    {
+                        heistSuccess = false;
                     }
 
                     return l;
                 }
                 else
+                // location is not the selected one, so return it to the location list
                 {
                     return l;
                 }
             }).ToList();
+            if (heistSuccess == true)
+            {
+                HeistSuccess();
+            }
+            else
+            {
+                HeistFailure();
+            }
+            // based on sucess or failure, go to the correct view
+            // LevelSelect(crewSuccess, updatedLocations);
+        }
 
-            LevelSelect(crewSuccess, updatedLocations);
+        static void HeistSuccess()
+        {
+            Console.Clear();
+            ASCII ASCII = new ASCII();
+            Console.WriteLine(ASCII.DisplayHeistSuccess());
+            Console.WriteLine(ASCII.DisplaySuccessOveriew());
+            Console.ReadLine();
+        }
+
+        static void HeistFailure()
+        {
+            Console.Clear();
+            string msg = "Press any key to continue";
+            int r = new Random().Next(1, 3);
+            ASCII ASCII = new ASCII();
+            Console.WriteLine(ASCII.DisplayHeistFailure());
+            if (r == 1)
+            {
+                Console.WriteLine(ASCII.DisplayArrestedMessage());
+                Console.WriteLine(ASCII.DisplayArrested());
+            }
+            else if (r == 2)
+            {
+                Console.WriteLine(ASCII.DisplayEscaped());
+                Console.WriteLine(ASCII.DisplayPoliceCar());
+            }
+            Console.Write(msg);
+            Console.ReadLine();
         }
 
         static void ManageCrew(List<Criminal> crew, List<Location> locations)
