@@ -167,12 +167,11 @@ namespace heist
         static void LocationInfo(List<Location> locations, string locName, List<Criminal> crew)
         {
             Console.Clear();
+            ASCII ASCII = new ASCII();
+
             List<Location> loc = locations.Where(l => l.Name == locName).ToList();
 
-            Console.WriteLine(@"-------------------------------
-▄▀▀ ▀█▀ ▄▀▄ █▄▀ ██▀ ▄▀▄ █ █ ▀█▀
-▄██  █  █▀█ █ █ █▄▄ ▀▄▀ ▀▄█  █ 
--------------------------------");
+            Console.WriteLine(ASCII.DisplayStakeout());
 
             DisplayCrewInfo(crew);
             loc.ForEach(l => Console.WriteLine($@"
@@ -538,10 +537,8 @@ You: {c.Name}
 
         static Criminal CreatePlayer()
         {
-            Console.WriteLine(@"-----------------------------------------
-█   █ █▄█ ▄▀▄   ▄▀▄ █▀▄ ██▀   ▀▄▀ ▄▀▄ █ █
-▀▄▀▄▀ █ █ ▀▄▀   █▀█ █▀▄ █▄▄    █  ▀▄▀ ▀▄█
------------------------------------------");
+            ASCII ASCII = new ASCII();
+            Console.WriteLine(ASCII.DisplayWhoAreYou());
             Console.Write("Enter your name: ");
 
             string playerName = Console.ReadLine();
@@ -558,30 +555,11 @@ You: {c.Name}
 
         static void DisplayIntro()
         {
-            Console.WriteLine(@"
-
-
-  ______    __  __        __    __          __            __              
- /      \  |  \|  \      |  \  |  \        |  \          |  \             
-|  ▓▓▓▓▓▓\_| ▓▓| ▓▓_     | ▓▓  | ▓▓ ______  \▓▓ _______ _| ▓▓_    _______ 
-| ▓▓   \▓▓   ▓▓  ▓▓ \    | ▓▓__| ▓▓/      \|  \/       \   ▓▓ \  /       \
-| ▓▓      \▓▓▓▓▓▓▓▓▓▓    | ▓▓    ▓▓  ▓▓▓▓▓▓\ ▓▓  ▓▓▓▓▓▓▓\▓▓▓▓▓▓ |  ▓▓▓▓▓▓▓
-| ▓▓   __|   ▓▓  ▓▓ \    | ▓▓▓▓▓▓▓▓ ▓▓    ▓▓ ▓▓\▓▓    \  | ▓▓ __ \▓▓    \ 
-| ▓▓__/  \\▓▓▓▓▓▓▓▓▓▓    | ▓▓  | ▓▓ ▓▓▓▓▓▓▓▓ ▓▓_\▓▓▓▓▓▓\ | ▓▓|  \_\▓▓▓▓▓▓\
- \▓▓    ▓▓ | ▓▓| ▓▓      | ▓▓  | ▓▓\▓▓     \ ▓▓       ▓▓  \▓▓  ▓▓       ▓▓
-  \▓▓▓▓▓▓   \▓▓ \▓▓       \▓▓   \▓▓ \▓▓▓▓▓▓▓\▓▓\▓▓▓▓▓▓▓    \▓▓▓▓ \▓▓▓▓▓▓▓                                                                                     
-
-
- ▄▀▄ █▄ █ ██▀   █▀▄ ▄▀▄ ▀▄▀     █▀ █ █ █ ██▀   █▄█ ██▀ █ ▄▀▀ ▀█▀ ▄▀▀     ▄▀▄ █▄ █ ██▀   ▄▀▀ █▀▄ █   █ ▀█▀
- ▀▄▀ █ ▀█ █▄▄   █▄▀ █▀█  █  █   █▀ █ ▀▄▀ █▄▄   █ █ █▄▄ █ ▄██  █  ▄██ █   ▀▄▀ █ ▀█ █▄▄   ▄██ █▀  █▄▄ █  █ 
-
----------------------------------------------------------------------------------------------------------
-");
+            ASCII ASCII = new ASCII();
+            Console.WriteLine(ASCII.DisplayTitle());
         }
     }
 }
-
-
 // static int InputSkill()
 // {
 //     // Declares variable we will be re-assigning 
