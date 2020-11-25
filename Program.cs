@@ -68,61 +68,60 @@ namespace heist
             Console.Clear();
             DisplayIntro();
             Location getLocations = new Location(); 
-            List<Location> Locations = getLocations.GenerateAllLocations();
+            List<Location> locations = getLocations.GenerateAllLocations();
             List<Criminal> currentCrew = CreateCrew(new List<Criminal>());
+            LevelSelect(currentCrew, locations);
 
-            // While there are levels not yet completed, allow user to continue selecting levels
-            List<Location> LocationsLeftToRob = Locations.Where(l => l.Completed == false).ToList();
-
-            // Put while loop instide the LevelSelect function. 
-            while (LocationsLeftToRob.Count() > 0)
-            {
-                LevelSelect(currentCrew, LocationsLeftToRob);
-
-                LocationsLeftToRob = Locations.Where(l => l.Completed == false).ToList();
-            }
-
-            Console.WriteLine("ALL HEISTS COMPLETED");
+            Console.WriteLine("ALL HEISTS COMPLETED/ATTEMPTED");
+            Console.WriteLine("GO TO THE SPLIT THE MONEY VIEW");
         }
 
         static void LevelSelect(List<Criminal> crew, List<Location> locations)
         {
-            Console.Clear();
-            // Only allowed to select the levels you HAVEN'T already robbed
-            ASCII art = new ASCII();
-            Console.Write(art.DisplayPlanning());
-            DisplayCrewInfo(crew);
-            Console.WriteLine(art.DisplayNashville());
+            // While there are levels not yet completed, allow user to continue selecting levels
+            List<Location> locationsLeftToRob = locations.Where(l => l.Completed == false).ToList();
 
-            Console.WriteLine("1) manage crew");
-
-            // Iterate through locations, for those that are not completed,
-                // Check if it's name has been completed, if not, show that option
-            locations.ForEach(l =>
+            while (locationsLeftToRob.Count() > 0)
             {
-                if (!l.Completed)
+                Console.Clear();
+                // Only allowed to select the levels you HAVEN'T attempted
+                ASCII art = new ASCII();
+                Console.Write(art.DisplayPlanning());
+                DisplayCrewInfo(crew);
+                Console.WriteLine(art.DisplayNashville());
+
+                Console.WriteLine("1) manage crew");
+
+                // Iterate through locations, for those that are not completed,
+                    // Check if it's name has been completed, if not, show that option
+                locations.ForEach(l =>
                 {
-                    if (l.Name == "Annoying Neighbor's House") Console.WriteLine("2) stakeout Annoying Neighbor's House");
-                    if (l.Name == "Corner 7-Eleven") Console.WriteLine("3) stock-up at Corner 7-Eleven");
-                }
-            });
-            
-            int selection = MenuInput(3);
+                    if (!l.Completed)
+                    {
+                        if (l.Name == "Annoying Neighbor's House") Console.WriteLine("2) stakeout Annoying Neighbor's House");
+                        if (l.Name == "Corner 7-Eleven") Console.WriteLine("3) stock-up at Corner 7-Eleven");
+                    }
+                });
+                
+                int selection = MenuInput(3);
 
-            switch (selection)
-            {
-                case 1:
-                    ManageCrew(crew, locations);
-                    break;
-                case 2:
-                    // Annoying Neighbor
-                    StakeOutLocation(crew, locations, 2);
-                    break;
-                case 3:
-                    // 7-Eleven
-                    StakeOutLocation(crew, locations, 3);
-                    break;
-            }
+                switch (selection)
+                {
+                    case 1:
+                        ManageCrew(crew, locations);
+                        break;
+                    case 2:
+                        // Annoying Neighbor
+                        StakeOutLocation(crew, locations, 2);
+                        break;
+                    case 3:
+                        // 7-Eleven
+                        StakeOutLocation(crew, locations, 3);
+                        break;
+                }
+
+                locationsLeftToRob = locations.Where(l => l.Completed == false).ToList();
+            }            
         }
 
         static void StakeOutLocation(List<Criminal> crew, List<Location> locations, int userSelected)
@@ -305,26 +304,41 @@ namespace heist
         {
             Console.Clear();
             string msg = "Press any key to continue";
+            string moraleMsg = "Crew morale decreased";
             int r = new Random().Next(1, 3);
             ASCII ASCII = new ASCII();
            
             if (r == 1)
             {
-                Console.WriteLine(ASCII.DisplayAssociateArrested());
-                Console.WriteLine(ASCII.DisplayArrestedMessage());
+                // If it's only the player, arrest the player
+                // and show the game over message
+                // If it's more than the player
+                // arrest a random crew member
+                    // get the count for the crew
+                    // then a random index value from
+                    // r = new Random().Next(2, (crew.Count() + 1))
+                // Display the person's name and picture at index R
+                    // crew.Remove([whoever is at index[r]])
+                // Lower everyone's trust by 10, 30
+                Console.WriteLine(ASCII.DisplayHeadingArrested());
+                Console.WriteLine(ASCII.DisplaySubheadingArrested());
                 Console.WriteLine(ASCII.DisplayArrested());
+                if (crew.Count() > 1) Console.WriteLine(moraleMsg);
                 Console.Write(msg);
                 Console.ReadLine();
+                LevelSelect(crew, locations);
             }
             else if (r == 2)
             {
-                Console.WriteLine(ASCII.DisplayCrewEscaped());
-                Console.WriteLine(ASCII.DisplayEscaped());
+                // Lower everyone's trust 10, 20
+                Console.WriteLine(ASCII.DisplayHeadingEscaped());
+                Console.WriteLine(ASCII.DisplaySubheadingEscaped());
                 Console.WriteLine(ASCII.DisplayPoliceCar());
+                if (crew.Count() > 1) Console.WriteLine(moraleMsg);
                 Console.Write(msg);
                 Console.ReadLine();
+                LevelSelect(crew, locations);
             }
-
         }
 
         static void ManageCrew(List<Criminal> crew, List<Location> locations)
