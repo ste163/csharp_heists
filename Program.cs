@@ -379,38 +379,60 @@ namespace heist
         {
             if (crew.Count() > 1)
             {
-                ASCII ASCII = new ASCII();
-                Console.WriteLine(ASCII.DisplayGun());
-                Console.Write("Enter name of who you will ice [leave blank to cancel]: ");
-                string name = Console.ReadLine();
+                string name = "not empty";
 
-                int subtractTrust = new Random().Next(1, 31);
+                List<Criminal> updatedCrew = new List<Criminal>();
 
-                List<Criminal> iceMember = crew.Where(c => c.Name != name || c.IsPlayer == true).ToList();
-
-                // Only lower trust if we have iced a crew member
-                if (iceMember.Count() < crew.Count()) 
+                while (name != "" && crew.Count() > 1)
                 {
-                    List<Criminal> newCrew = iceMember.Select(c =>
+                    Console.Clear();
+                    ASCII ASCII = new ASCII();
+                    Console.WriteLine(ASCII.DisplayIce());
+                    Console.WriteLine("Icing a crew member will probably upset the rest of the crew.");
+                    Console.WriteLine(ASCII.DisplayGun());
+
+                    crew.ForEach(c =>
                     {
-                        int loweredTrust = c.Trust - subtractTrust;
-                        if (loweredTrust < 0)
+                        if (c.IsPlayer == false)
                         {
-                            c.Trust = 0;
+                            Console.WriteLine($"{c.Name} - {c.TrustDescription}");
                         }
-                        else
-                        {
-                            c.Trust = loweredTrust;
-                        }
-                        return c;
-                    }).ToList();
+                    });
+                    Console.WriteLine();
+                    Console.Write("Enter name of who you will ice [leave blank to cancel]: ");
+                    name = Console.ReadLine();
 
-                    return newCrew;
+                    // Make a new list of criminals WITHOUT the iced crew member
+                    List<Criminal> iceMember = crew.Where(c => c.Name != name || c.IsPlayer == true).ToList();
+
+                    // Only lower trust if we have iced a crew member
+                    if (iceMember.Count() < crew.Count()) 
+                    {
+                        List<Criminal> newCrew = iceMember.Select(c =>
+                        {
+                            int subtractTrust = new Random().Next(1, 31);
+
+                            int loweredTrust = c.Trust - subtractTrust;
+                            if (loweredTrust < 0)
+                            {
+                                c.Trust = 0;
+                            }
+                            else
+                            {
+                                c.Trust = loweredTrust;
+                            }
+                            return c;
+                        }).ToList();
+
+                        crew = newCrew;
+                        
+                    }
+                    else
+                    {
+                        crew = iceMember;
+                    }
                 }
-                else
-                {
-                    return iceMember;
-                }
+                return crew;
             }
             else return crew;
         }

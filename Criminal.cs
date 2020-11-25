@@ -16,7 +16,7 @@ namespace heist
             {
                 string d = "";
 
-                if (Trust <= 9) d = "*Eyes keep shifting from the van window to the cash.*";
+                if (Trust <= 9) d = "*Eyes keep shifting from the back door of the van to the cash.*";
                 if (Trust >= 10 && Trust <= 19) d = "'You're the worst.'";
                 if (Trust >= 20 && Trust <= 29) d = "'You better know what you're doing, or else.'";
                 if (Trust >= 30 && Trust <= 39) d = "'Things aren't great right now.'";
