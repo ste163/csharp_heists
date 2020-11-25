@@ -586,7 +586,7 @@ You: {c.Name}
                                 // Check based on if the player wants to continue hiring
                                 if (playerContactsLeft > 0)
                                 {
-                                    Console.WriteLine($"{newCrew.Count()} criminals in crew.");
+                                    if (updatedCrew.Count() > 1)Console.WriteLine($"{updatedCrew.Count()} criminals in crew.");
                                     Console.Write(recruitingMessage);
                                     string response = Console.ReadLine().ToLower();
 
