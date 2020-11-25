@@ -103,7 +103,7 @@ namespace heist
                 if (!l.Completed)
                 {
                     if (l.Name == "Annoying Neighbor's House") Console.WriteLine("2) stakeout Annoying Neighbor's House");
-                    if (l.Name == "Corner 7-Eleven") Console.WriteLine("3) stock-up at corner 7-Eleven");;
+                    if (l.Name == "Corner 7-Eleven") Console.WriteLine("3) stock-up at corner 7-Eleven");
                 }
             });
             
@@ -210,7 +210,6 @@ ${l.Cash}"));
                     LocationInfo(updatedLocations, locName, crew);
                     break;
                 case 2:
-                    Console.WriteLine("BEGIN");
                     BeginHeist(crew, locations, locName);
                     break;
                 case 3:
@@ -265,7 +264,7 @@ ${l.Cash}"));
             DisplayCurrentCrew(updatedCrew);
    
             Criminal player = crew.Find(c => c.IsPlayer);
-            if (player.PlayerCrewCount > 0) Console.WriteLine("1) recruit crew member");
+            if (player.PlayerContactCount > 0) Console.WriteLine("1) recruit crew member");
             if (crew.Count() > 1) Console.WriteLine("2) ice crew member");
             Console.WriteLine("3) return to planning");           
             
@@ -327,12 +326,13 @@ ${l.Cash}"));
         {
             // Declares variable we will be re-assigning 
             int entered;
+            string message = "Enter number to perform action: ";
             // When user first enters the skill input, ensure they type only a number
             while(true)
             {
                 try
                 {
-                    Console.Write("Enter number to perform action: ");
+                    Console.Write(message);
                     entered = int.Parse(Console.ReadLine());
                     break;
                 }
@@ -343,7 +343,7 @@ ${l.Cash}"));
             {
                 try
                 {
-                    Console.Write("Enter number to perform action: ");
+                    Console.Write(message);
                     entered = int.Parse(Console.ReadLine());
                 }
                 catch {}
@@ -371,7 +371,7 @@ ${l.Cash}"));
 
             int CrewSkill = TotalSkills.Sum();
             int MaxCrewSkill = (TotalSkills.Count() * 100);
-            if (player.PlayerCrewCount > 0) Console.WriteLine($"Total associates left to hire: {player.PlayerCrewCount}");
+            if (player.PlayerContactCount > 0) Console.WriteLine($"Total associates available to hire: {player.PlayerContactCount}");
             Console.WriteLine($@"Total crew members: {crew.Count()}");
             Console.WriteLine($"Crew skill level: {CrewSkill} / {MaxCrewSkill}");
             Console.WriteLine("");
@@ -404,6 +404,7 @@ You: {c.Name}
 
 {c.Name}
  skill level: {c.BaseSkill} / 100
+ heist skill {c.SkillLevel}
  courage factor: {c.CourageFactor} / 1.0
  trust: {c.Trust}
 ");
@@ -416,34 +417,32 @@ You: {c.Name}
             ASCII art = new ASCII();
             bool recruiting = true;
             List<Criminal> newCrew = new List<Criminal>();
-            int playerCrewLeft;
+            int playerContactsLeft;
 
             // After player created, can only add new criminals (this is for manage crew view)
             if (crew.Count != 0)
             {
-                // We need to do ALL of this inside a select on the crew
-                // Where we modify the player dirrectly. Currently modifying a player 
-                // that is not the one in the crew
                 List<Criminal> updatedCrew = new List<Criminal>();
 
-                List<Criminal> holder = crew.Select(c =>
+                // To save the playerContactsLeft count, must loop through
+                // the incoming crew, update the player, then resave everyone to
+                // a new array
+                crew.ForEach(c =>
                 {
-                    playerCrewLeft = c.PlayerCrewCount;
-                    if (c.IsPlayer && playerCrewLeft > 0)
+                    playerContactsLeft = c.PlayerContactCount;
+                    if (c.IsPlayer && playerContactsLeft > 0)
                     {
                         Console.WriteLine("");
-                        Console.WriteLine($"{playerCrewLeft} associates left to contact.");
+                        Console.WriteLine($"{playerContactsLeft} associates left to hire.");
                         updatedCrew.Add(c);
                         updatedCrew.Add(RecruitNewCriminal());
-                        c.PlayerCrewCount = --playerCrewLeft;
-                        return c;
+                        c.PlayerContactCount = --playerContactsLeft;
                     }
                     else 
                     {
                         updatedCrew.Add(c);
-                        return c;
                     }
-                }).ToList();
+                });
 
                 return updatedCrew;
             }
@@ -452,17 +451,16 @@ You: {c.Name}
                 // Create the player and add them first to the roster
                 newCrew.Add(CreatePlayer());
 
-                Criminal player = newCrew.Find(c => c.IsPlayer);
-                playerCrewLeft = player.PlayerCrewCount;
+                string hireMessage = "Go solo or hire a crew? [solo/hire]: ";
 
-                Console.WriteLine("Go solo or hire a crew? [solo/hire]: ");
+                Console.WriteLine(hireMessage);
                 string solo = Console.ReadLine().ToLower();
 
                 Console.Clear();
 
                 while(solo != "solo" && solo != "hire")
                 {
-                    Console.Write("Go solo or hire a crew? [solo/hire]: ");
+                    Console.Write(hireMessage);
                     solo = Console.ReadLine().ToLower();
                 }
 
@@ -475,26 +473,53 @@ You: {c.Name}
                     Console.WriteLine(art.DisplayCrewHire());
 
                     // While we are recruiting, prompt user to continue recruiting
-                    // AND the player still has criminals available
-                    while(recruiting && playerCrewLeft > 0)
+                    while(recruiting)
                     {
-                        // WRAP in a similar select to save the playerCrewLeaving info
-                        newCrew.Add(RecruitNewCriminal());
-                        playerCrewLeft = --playerCrewLeft;
-                        Console.WriteLine($"{newCrew.Count()} criminals in crew.");
-                        Console.WriteLine($"{playerCrewLeft} criminals you know left to contact.");
-                        
-                        Console.Write("Continue recruiting? [y/n]: ");
-                        string response = Console.ReadLine().ToLower();
-                        Console.WriteLine("");
-
-                        while(response != "y" && response != "n")
+                        string recruitingMessage = "Continue recruiting? [y/n]: ";
+                        // Loop through the newCrew, checking how many
+                        // Criminals the player has left to contact
+                        List<Criminal> updatedCrew = new List<Criminal>();
+                       
+                        // Loop over the new criminal list 
+                        newCrew.ForEach(c =>
                         {
-                            Console.Write("Continue recruiting? [y/n]: ");
-                            response = Console.ReadLine().ToLower();
-                        }
+                            playerContactsLeft = c.PlayerContactCount;
+                            if (c.IsPlayer && playerContactsLeft > 0)
+                            {
+                                updatedCrew.Add(c);
+                                updatedCrew.Add(RecruitNewCriminal());
+                                c.PlayerContactCount = --playerContactsLeft;
+                               
+                                Console.WriteLine($"{playerContactsLeft} associates available to contact.");
+                                
+                                // Check based on if the player wants to continue hiring
+                                if (playerContactsLeft > 0)
+                                {
+                                    Console.WriteLine($"{newCrew.Count()} criminals in crew.");
+                                    Console.Write(recruitingMessage);
+                                    string response = Console.ReadLine().ToLower();
+                                    Console.WriteLine("");
 
-                        recruiting = response == "y" ? true : false;
+                                    while(response != "y" && response != "n")
+                                    {
+                                        Console.Write(recruitingMessage);
+                                        response = Console.ReadLine().ToLower();
+                                    }
+
+                                    recruiting = response == "y" ? true : false;
+                                }
+
+                                if (playerContactsLeft == 0) recruiting = false;
+
+                                newCrew = updatedCrew;
+                            }
+                            else
+                            {
+                                updatedCrew.Add(c);
+
+                                newCrew = updatedCrew;
+                            } 
+                        });
                     }
                     return newCrew;
                 }

@@ -18,7 +18,7 @@ namespace heist
 
         public bool IsPlayer;
 
-        public int PlayerCrewCount { get; set; }
+        public int PlayerContactCount { get; set; }
 
         public string Face;
 
@@ -73,12 +73,12 @@ namespace heist
             if (player)
             {
                 IsPlayer = true;
-                PlayerCrewCount = 4;
+                PlayerContactCount = 4;
             }
             else
             {
                 IsPlayer = false;
-                PlayerCrewCount = 0;
+                PlayerContactCount = 0;
                 Trust = new Random().Next(20, 61);
             }
         }
