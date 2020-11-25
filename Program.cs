@@ -2,62 +2,39 @@
 using System.Collections.Generic;
 using System.Linq;
 
-// TAKE USER TO SPLIT THE CASH MENU
-
-// PLAYER NEEDS A COUNTER FOR HOW MANY CRIMINALS PLAYER CAN HIRE
-// LIke start at 10, have a counter that tells you how many more criminals you can hire
-// So that way you can't kill and hire infinitely
-
-
-// Show different locations with ASCII art to rob
+// Locations
+    // Nashville Software School (dif 0 - 500) ($50-$2,000)
+        // Probably have a lot of computers
     // LOCATION? (dif 0 - 300) ($100 - $2,000)
-    // Nashville Software School (dif 0 - 300) ($50-$2,000)
-        // They've probably got some computers. Bunch of nerds.
-    // Bank of America (dif 300 - 900) ($5,000 - $10,000)
+    // Bank of America (dif 500 - 1000) ($5,000 - $10,000)
         // {NAME} has cased the place. This will be the toughest job, but banks have all the money, right?
 
 // Crew Select
     // Trust random from 10 - 50 (max of 100)
-        // After every succesful heist, do a trust check for each crew member
+        // After every succesful heist OR a failure, do a trust check for each crew member
         // IF any criminal DOES turn, it lowers everyone's trust by -20
-        // INCREASES after every successful heist by +30
         // ADDING a new crew member after a heist randomizes trust for members by -30 to + 30
             // The crew will say either "Screw the new guy," "Seems like an okay pick," "We really got {Name}?!"
-        // Icing a crew member lowers trust by - 70. Can Ice multiple crew members at a time to increase cash.
     // Courage Factor (0.1 - 1.0), courage is added to the skill by
         // (((Courage Factor * Skill) / 10) + Skill Level).RoundUp() = Skill Level for Heist
-    // Each crew member gets a random ASCII face
-
-// Level Select
-    // View of ASCII city skyline
-    // Display for how much money you've currently stolen
-    // Have option to check on crew, see their stats, ice someone, or recruit new people
-    // With heading underneath say choose a location to rob
-        // 1. Annoying Neighbors house...
-        // Selecting any location will take you to the big view of the ASCII art for that location
-        // With a summary about it, telling you what to expect
-            // Current Status: sentence about what it appears to look like (a hint for current difficulty)
-            // Ability to stake out to see if the situtation will change
-            // Option to Rob the place
-            // Option to return to City view 
     
 // Heist
-    // DISPLAYs sum of the crew's skills
-        // Difficulty of the location
-    // New ascii art??
-    // Show everyone's name and face?
     // IF Successfull
-        // Run trust check for each criminal to see if they're turn
-        // Show how much total cash you got, then everyone's cut
+        // Run trust check for each criminal to see if they're turn on crew
+            // If they turn, no money earned for this location
     // IF Failure
-        // Chance based on a skill check roll for if any crew members died in the cross-fire/got arrested
-            // instead of you
-        // If no one else was arrested chance for you to be arrested and the game over
-        // 10% chance of everyone getting away okay
+        // And arrested - GAME OVER screen
 
-// If the sum of their skills is greater than the locations's difficulty
-    // display a success message (ASCII of bag of money) - say how much $$ was stolen
-    // Go back to the location select screen, but with the last place removed
+// Splitting the cash view
+    // after all heists attempted, go to new view with a list of all criminals
+    // Say how much they've earned, and how much everyone's cut is
+    // Player can decide to either ICE a crew member, or split the money evenly
+        // IF player ices a crew member, then do a trust check to see if anyone is going to turn
+            // Turning at this point means shooting another crew member
+            // If a crew member shoots another crew member, display a message that this occured
+            // then give the player control to decide whether to ice another crew member or split the cash
+            // THERE IS A RANDOM CHANCE PLAYER WILL BE SHOT AND DIES
+            // REPEAT until game over 
 
 namespace heist
 {
