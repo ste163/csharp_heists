@@ -250,6 +250,7 @@ namespace heist
                     }
                     else 
                     {
+                        l.Completed = true;
                         heistSuccess = false;
                     }
 
@@ -261,46 +262,69 @@ namespace heist
                     return l;
                 }
             }).ToList();
-            if (heistSuccess == true)
-            {
-                HeistSuccess();
-            }
-            else
-            {
-                HeistFailure();
-            }
-            // based on sucess or failure, go to the correct view
-            // LevelSelect(crewSuccess, updatedLocations);
+            
+            if (heistSuccess) HeistSuccess(crewSuccess, updatedLocations, locName);
+            else HeistFailure(crewSuccess, updatedLocations);
         }
 
-        static void HeistSuccess()
+        static void HeistSuccess(List<Criminal> crew, List<Location> locations, string locName)
         {
             Console.Clear();
             ASCII ASCII = new ASCII();
             Console.WriteLine(ASCII.DisplayHeistSuccess());
             Console.WriteLine(ASCII.DisplaySuccessOveriew());
+
+            Location currentLocation = locations.Find(l => l.Name == locName);
+            Criminal player = crew.Find(c => c.IsPlayer);
+            int cashEarned = player.CrewTotalCash;
+
+            // Display how much money we earned from location
+            Console.WriteLine($"Crew stole: ${currentLocation.Cash}");
+            // earned total
+            if (cashEarned != currentLocation.Cash) Console.WriteLine($"Total cash: ${cashEarned}");
+            // how much the current split will be if it's more than one crew member
+            if (crew.Count() > 1)
+            {
+                Console.WriteLine("----");
+                Console.WriteLine($"The split will be: ${cashEarned / crew.Count()}");
+                Console.WriteLine("----");
+                Console.WriteLine("Crew skill increased");
+                Console.WriteLine("Crew morale increased");
+            }
+            else if (crew.Count() == 1)
+            {
+                Console.WriteLine("Your skill increased");
+            }
+            Console.WriteLine("---------------------");
+            Console.Write("Press any key to continue");
             Console.ReadLine();
+            LevelSelect(crew, locations);
         }
 
-        static void HeistFailure()
+        static void HeistFailure(List<Criminal> crew, List<Location> locations)
         {
             Console.Clear();
             string msg = "Press any key to continue";
             int r = new Random().Next(1, 3);
             ASCII ASCII = new ASCII();
-            Console.WriteLine(ASCII.DisplayHeistFailure());
+           
             if (r == 1)
             {
+                Console.WriteLine(ASCII.DisplayAssociateArrested());
                 Console.WriteLine(ASCII.DisplayArrestedMessage());
                 Console.WriteLine(ASCII.DisplayArrested());
+                Console.Write(msg);
+                Console.ReadLine();
             }
             else if (r == 2)
             {
+                Console.WriteLine(ASCII.DisplayCrewEscaped());
                 Console.WriteLine(ASCII.DisplayEscaped());
                 Console.WriteLine(ASCII.DisplayPoliceCar());
+                Console.Write(msg);
+                Console.ReadLine();
             }
-            Console.Write(msg);
-            Console.ReadLine();
+
         }
 
         static void ManageCrew(List<Criminal> crew, List<Location> locations)
