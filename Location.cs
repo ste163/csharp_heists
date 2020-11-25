@@ -52,7 +52,7 @@ namespace heist
             string houseName = "Annoying Neighbor's House";
             string houseSummary = @"He always talks about hating banks and keeping money in the guest room mattress.";
             int houseDiff = (new Random().Next(1, 100));
-            int houseCash = (new Random().Next(10_000, 200_000));
+            int houseCash = (new Random().Next(2_000, 150_000));
 
             string gasName = "Corner 7-Eleven";
             string gasSummary = @"Need to fill up the van and get some snacks. Might as well take their cash, too.";

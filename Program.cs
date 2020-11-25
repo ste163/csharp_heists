@@ -169,8 +169,7 @@ namespace heist
             Console.Clear();
             List<Location> loc = locations.Where(l => l.Name == locName).ToList();
 
-            Console.WriteLine(@"
--------------------------------
+            Console.WriteLine(@"-------------------------------
 ▄▀▀ ▀█▀ ▄▀▄ █▄▀ ██▀ ▄▀▄ █ █ ▀█▀
 ▄██  █  █▀█ █ █ █▄▄ ▀▄▀ ▀▄█  █ 
 -------------------------------");
@@ -262,6 +261,7 @@ namespace heist
             DisplayCurrentCrew(updatedCrew);
    
             Criminal player = crew.Find(c => c.IsPlayer);
+            Console.WriteLine();
             if (player.PlayerContactCount > 0) Console.WriteLine("1) recruit crew member");
             if (crew.Count() > 1) Console.WriteLine("2) ice crew member");
             Console.WriteLine("3) return to planning");           
@@ -386,26 +386,22 @@ namespace heist
             crew.ForEach(c => {
                 if (c.IsPlayer)
                 {
-                    Console.WriteLine($@"
-{c.Face}
+                    Console.WriteLine($@"{c.Face}
 
 You: {c.Name}
+------------
  base skill: {c.BaseSkill} / 100
- heist skill {c.SkillLevel}
-");
+ bonus skill: {c.SkillLevel}");
                 }
                 else
                 {
-                    Console.WriteLine($@"
-{c.Face}
+                    Console.WriteLine($@"{c.Face}
 
 {c.Name}
- {c.TrustDescription}
-
- skill level: {c.BaseSkill} / 100
- heist skill {c.SkillLevel}
- trust: {c.Trust}
-");
+{c.TrustDescription}
+------------
+ base skill: {c.BaseSkill} / 100
+ bonus skill: {c.SkillLevel}");
                 }
             });         
         }
@@ -473,6 +469,7 @@ You: {c.Name}
                     // While we are recruiting, prompt user to continue recruiting
                     while(recruiting)
                     {
+                        Console.WriteLine("");
                         string recruitingMessage = "Continue recruiting? [y/n]: ";
                         // Loop through the newCrew, checking how many
                         // Criminals the player has left to contact
@@ -487,7 +484,7 @@ You: {c.Name}
                                 updatedCrew.Add(c);
                                 updatedCrew.Add(RecruitNewCriminal());
                                 c.PlayerContactCount = --playerContactsLeft;
-                               
+                                Console.WriteLine("");
                                 Console.WriteLine($"{playerContactsLeft} associates available to contact.");
                                 
                                 // Check based on if the player wants to continue hiring
@@ -496,7 +493,6 @@ You: {c.Name}
                                     Console.WriteLine($"{newCrew.Count()} criminals in crew.");
                                     Console.Write(recruitingMessage);
                                     string response = Console.ReadLine().ToLower();
-                                    Console.WriteLine("");
 
                                     while(response != "y" && response != "n")
                                     {
@@ -530,21 +526,19 @@ You: {c.Name}
             string enteredName = Console.ReadLine();
             Criminal newCriminal = new Criminal(enteredName, false);
 
-            Console.WriteLine($@"
-{newCriminal.Face}
+            Console.WriteLine($@"{newCriminal.Face}
 
 {newCriminal.Name} recruited!
+------------
  base skill: {newCriminal.BaseSkill} / 100
- heist skill {newCriminal.SkillLevel}
-");
+ heist skill {newCriminal.SkillLevel}");
 
             return newCriminal;
         }
 
         static Criminal CreatePlayer()
         {
-            Console.WriteLine(@"
------------------------------------------
+            Console.WriteLine(@"-----------------------------------------
 █   █ █▄█ ▄▀▄   ▄▀▄ █▀▄ ██▀   ▀▄▀ ▄▀▄ █ █
 ▀▄▀▄▀ █ █ ▀▄▀   █▀█ █▀▄ █▄▄    █  ▀▄▀ ▀▄█
 -----------------------------------------");
@@ -553,13 +547,12 @@ You: {c.Name}
             string playerName = Console.ReadLine();
             Criminal player = new Criminal(playerName, true);
 
-            Console.WriteLine($@"
-{player.Face}
+            Console.WriteLine($@"{player.Face}
 
 {player.Name}
+------------
  skill level: {player.BaseSkill} / 100
- courage factor: {player.CourageFactor} / 1.0
-");
+ ");
             return player;
         }
 
