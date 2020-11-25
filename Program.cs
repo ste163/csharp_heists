@@ -285,6 +285,8 @@ namespace heist
 
         static List<Criminal> IceCrewMember(List<Criminal> crew)
         {
+            ASCII ASCII = new ASCII();
+            Console.WriteLine(ASCII.DisplayGun());
             Console.Write("Enter name of who you will ice [leave blank to cancel]: ");
             string name = Console.ReadLine();
 
