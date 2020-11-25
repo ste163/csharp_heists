@@ -271,6 +271,7 @@ namespace heist
             Console.Clear();
             ASCII ASCII = new ASCII();
             Console.WriteLine(ASCII.DisplayHeistSuccess());
+            Console.WriteLine(ASCII.DisplayMoney());
             Console.WriteLine(ASCII.DisplaySuccessOveriew());
 
             Location currentLocation = locations.Find(l => l.Name == locName);
