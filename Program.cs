@@ -15,8 +15,6 @@ using System.Linq;
         // IF any criminal DOES turn, it lowers everyone's trust by -20
         // ADDING a new crew member after a heist randomizes trust for members by -30 to + 30
             // The crew will say either "Screw the new guy," "Seems like an okay pick," "We really got {Name}?!"
-    // Courage Factor (0.1 - 1.0), courage is added to the skill by
-        // (((Courage Factor * Skill) / 10) + Skill Level).RoundUp() = Skill Level for Heist
     
 // Heist
     // IF Successfull
@@ -203,7 +201,7 @@ namespace heist
                 {
                     // When we have the current location
                     // Compare the location's difficulty with the crew's max skills
-                    double crewTotalSkill = crew.Sum(c => c.SkillLevel);
+                    int crewTotalSkill = crew.Sum(c => c.TotalSkillLevel);
                     
                     
                     // If the crew succeeds, add the total cash to each crew member
@@ -214,11 +212,11 @@ namespace heist
                         {
                             // Every crew member gets a random skill+
                             int skillIncrease = new Random().Next(8, 38);
-                            int trustIncrease = new Random().Next(10, 40);
+                            int moraleIncrease = new Random().Next(10, 40);
 
                             c.CrewTotalCash = c.CrewTotalCash + l.Cash;
                             c.BaseSkill = c.BaseSkill + skillIncrease;
-                            c.Trust = c.Trust + trustIncrease;
+                            c.Morale = c.Morale + moraleIncrease;
                             return c;
                         }).ToList();
 
@@ -263,7 +261,6 @@ namespace heist
             // how much the current split will be if it's more than one crew member
             if (crew.Count() > 1)
             {
-                Console.WriteLine("----");
                 Console.WriteLine($"The split will be: ${cashEarned / crew.Count()}");
                 Console.WriteLine("----");
                 Console.WriteLine("Crew skill increased");
@@ -366,38 +363,43 @@ namespace heist
                     Console.Clear();
                     ASCII ASCII = new ASCII();
                     Console.WriteLine(ASCII.DisplayIce());
+                    DisplayCrewInfo(crew);
+                    Console.WriteLine("");
                     Console.WriteLine("Icing a crew member will probably upset the rest of the crew.");
                     Console.WriteLine(ASCII.DisplayGun());
 
+                    Console.WriteLine("Crew members");
+                    Console.WriteLine("------------------");
                     crew.ForEach(c =>
                     {
                         if (c.IsPlayer == false)
                         {
-                            Console.WriteLine($"{c.Name} - {c.TrustDescription}");
+                            Console.WriteLine($"{c.Name} - {c.MoraleDescription}");
                         }
                     });
-                    Console.WriteLine();
+                    Console.WriteLine("");
+
                     Console.Write("Enter name of who you will ice [leave blank to cancel]: ");
                     name = Console.ReadLine();
 
                     // Make a new list of criminals WITHOUT the iced crew member
                     List<Criminal> iceMember = crew.Where(c => c.Name != name || c.IsPlayer == true).ToList();
 
-                    // Only lower trust if we have iced a crew member
+                    // Only lower morale if we have iced a crew member
                     if (iceMember.Count() < crew.Count()) 
                     {
                         List<Criminal> newCrew = iceMember.Select(c =>
                         {
-                            int subtractTrust = new Random().Next(1, 31);
+                            int subtractMorale = new Random().Next(4, 31);
 
-                            int loweredTrust = c.Trust - subtractTrust;
-                            if (loweredTrust < 0)
+                            int loweredMorale = c.Morale - subtractMorale;
+                            if (loweredMorale < 0)
                             {
-                                c.Trust = 0;
+                                c.Morale = 0;
                             }
                             else
                             {
-                                c.Trust = loweredTrust;
+                                c.Morale = loweredMorale;
                             }
                             return c;
                         }).ToList();
@@ -448,14 +450,17 @@ namespace heist
 
         static void DisplayCrewInfo(List<Criminal> crew)
         {
-            // Get entire crew's skills
+            // Get crew's skills
             List<int> TotalSkills = new List<int>();
+            // Get morale skill bonus
+            List<int> MoraleSkillBonus = new List<int>();
             // Get crew's cash
             int TotalCash;
 
             crew.ForEach(c =>
             {
                 TotalSkills.Add(c.BaseSkill);
+                MoraleSkillBonus.Add(c.MoraleSkillBonus);
             });
 
             Criminal player = crew.Find(c => c.IsPlayer);
@@ -467,10 +472,12 @@ namespace heist
             int MaxCrewSkill = (TotalSkills.Count() * 100);
             if (player.PlayerContactCount > 0) Console.WriteLine($"Total associates available to hire: {player.PlayerContactCount}");
             Console.WriteLine($@"Total associates in crew: {crew.Count()}");
-            Console.WriteLine($"Crew skill level: {CrewSkill} / {MaxCrewSkill}");
-            Console.WriteLine("");
+            Console.WriteLine($"Crew's base skill level: {CrewSkill} / {MaxCrewSkill}");
+            if (crew.Count() > 1) Console.WriteLine($"Morale bonus to skill: {MoraleSkillBonus.Sum()}");
+            Console.WriteLine("--------");
             Console.WriteLine($"Cash: ${TotalCash}");
             if (crew.Count() > 1) Console.WriteLine($"current cut: ${CurrentSplit}");
+            Console.WriteLine("--------");
         }
 
         static void DisplayCurrentCrew(List<Criminal> crew)
@@ -486,18 +493,16 @@ namespace heist
 
 You: {c.Name}
 ------------
- base skill: {c.BaseSkill} / 100
- bonus skill: {c.SkillLevel}");
+ base skill: {c.BaseSkill} / 100");
                 }
                 else
                 {
                     Console.WriteLine($@"{c.Face}
 
 {c.Name}
-{c.TrustDescription}
+{c.MoraleDescription}
 ------------
- base skill: {c.BaseSkill} / 100
- bonus skill: {c.SkillLevel}");
+ base skill: {c.BaseSkill} / 100");
                 }
             });         
         }
@@ -634,7 +639,7 @@ You: {c.Name}
                 if (c.IsPlayer == false)
                 {
                     Console.WriteLine($@"{c.Name}");
-                    Console.WriteLine($@" {c.TrustDescription}
+                    Console.WriteLine($@" {c.MoraleDescription}
  base skill level: {c.BaseSkill} / 100");
                 }
                 Console.WriteLine("");
@@ -655,8 +660,7 @@ You: {c.Name}
 {newCriminal.Name} recruited!
 ------------
  base skill: {newCriminal.BaseSkill} / 100
- heist skill {newCriminal.SkillLevel}");
-
+ ");
             return newCriminal;
         }
 

@@ -5,27 +5,48 @@ namespace heist
     public class Criminal
     {
         public string Name { get; set; }
-        // Skill level must be 1 - 100
+
+        // 1 - 100
         public int BaseSkill { get; set; }
 
         // 1 -100
-        public int Trust { get; set; }
-        public string TrustDescription
+        public int Morale { get; set; }
+        public int MoraleSkillBonus
+        {
+            get {
+                int bonus = 0;
+
+                if (Morale <= 9) return bonus = -30;
+                if (Morale >= 10 && Morale <= 19) return bonus = -20;
+                if (Morale >= 20 && Morale <= 29) return bonus = -10;
+                if (Morale >= 30 && Morale <= 39) return bonus =  0;
+                if (Morale >= 40 && Morale <= 49) return bonus =  10;
+                if (Morale >= 50 && Morale <= 59) return bonus =  20;
+                if (Morale >= 60 && Morale <= 69) return bonus =  30;
+                if (Morale >= 70 && Morale <= 79) return bonus =  40;
+                if (Morale >= 80 && Morale <= 89) return bonus =  50;
+                if (Morale >= 90 && Morale <= 99) return bonus =  60;
+                if (Morale >= 100) return bonus = 70;
+
+                return bonus;
+                }
+        }
+        public string MoraleDescription
         {
             get
             {
                 string d = "";
 
-                if (Trust <= 9) d = "*Eyes keep shifting from the back door of the van to the cash.*";
-                if (Trust >= 10 && Trust <= 19) d = "'You're the worst.'";
-                if (Trust >= 20 && Trust <= 29) d = "'You better know what you're doing, or else.'";
-                if (Trust >= 30 && Trust <= 39) d = "'Things aren't great right now.'";
-                if (Trust >= 40 && Trust <= 49) d = "'Could be going better.'";
-                if (Trust >= 50 && Trust <= 59) d = "'Doing okay.'";
-                if (Trust >= 60 && Trust <= 69) d = "'Going well, boss.'";
-                if (Trust >= 70 && Trust <= 79) d = "'Great work so far, boss!'";
-                if (Trust >= 80 && Trust <= 89) d = "'Let's keep going! We're on a roll!'";
-                if (Trust >= 90) d = "'I've got your back, boss, through anything.'";
+                if (Morale <= 9) d = "*Eyes keep shifting from the back door of the van to the cash.*";
+                if (Morale >= 10 && Morale <= 19) d = "'You're the worst.'";
+                if (Morale >= 20 && Morale <= 29) d = "'You better know what you're doing, or else.'";
+                if (Morale >= 30 && Morale <= 39) d = "'Things aren't great right now.'";
+                if (Morale >= 40 && Morale <= 49) d = "'Could be going better.'";
+                if (Morale >= 50 && Morale <= 59) d = "'Doing okay.'";
+                if (Morale >= 60 && Morale <= 69) d = "'Going well, boss.'";
+                if (Morale >= 70 && Morale <= 79) d = "'Great work so far, boss!'";
+                if (Morale >= 80 && Morale <= 89) d = "'Let's keep going! We're on a roll!'";
+                if (Morale >= 90) d = "'I've got your back, boss, through anything.'";
 
                 return d;
             }
@@ -42,42 +63,13 @@ namespace heist
 
         public string Face;
 
-        public double CourageLevel
-        // REPLACE COURAGE LEVEL WITH COURAGE FACTOR. COURAGE IS
-        // DIRECTLY RELATED TO TRUST. MORE TRUST, MORE COURAGE
-        {
-            get {
-                double newCourage = CourageFactor;
-
-                // CONTINUE THROUGH THIS
-                if (Trust <= 10) return newCourage = 0.1;
-                if (Trust >= 11 || Trust <= 20) return newCourage = 0.2;
-
-                    // The Trust level is shown to user as a sentence about how the member is feeling
-                        // Trust 1 - 10 - always try to shoot another member and take their money
-                        // Trust 11 - 20 - high chance of shooting another member and taking their money
-                        // Trust 21 - 30 - low chance of turning on crew
-                        // Trust 30 - 40 - very low chance of turning on crew, 0.1 Courage
-                        // Trust 41 - 49 - almost no chance of turning on crew, 0.2 Courage
-                        // Trust 50 - 59 - no chance of turning, 0.3 courage
-                        // Trust 60 - 69 - 0.4 Courage
-                        // Trust 70 -79 - 0.5 Courage
-                        // Trust 80 - 89 - 0.7 Courage
-                        // Trust 90 - 99 - 0.9 Courage
-                        // Trust 100 - 1.0 Courage
-
-                return newCourage;
-                }
-        }
-
-        public double SkillLevel 
+        public int TotalSkillLevel 
         {
             get 
             {
-               return (((CourageFactor * BaseSkill) / 5) + BaseSkill);
+               return MoraleSkillBonus + BaseSkill;
             }
         }
-
         public Criminal(string name, bool player)
         {
             ASCII ASCII = new ASCII();
@@ -90,12 +82,13 @@ namespace heist
             {
                 IsPlayer = true;
                 PlayerContactCount = 4;
+                Morale = 35;
             }
             else
             {
                 IsPlayer = false;
                 PlayerContactCount = 0;
-                Trust = new Random().Next(20, 61);
+                Morale = new Random().Next(25, 61);
             }
         }
     }
