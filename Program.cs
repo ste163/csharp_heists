@@ -3,31 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 
 // Locations
-    // Nashville Software School (dif 0 - 500) ($50-$2,000)
-        // Probably have a lot of computers
-    // LOCATION? (dif 0 - 300) ($100 - $2,000)
-    // Bank of America (dif 500 - 1000) ($5,000 - $10,000)
+    // Wells Fargo (dif 100 - 300) ($100,000-$500,000)
+        // {crew member} staked this place out earlier. Tame security and somewhat run-down. 
+    // Pinnacle National Bank? (dif 400 - 800) ($100,000 - $500,000)
+    // Bank of America (dif 600 - 1000) ($100,000-$500,000)
         // {NAME} has cased the place. This will be the toughest job, but banks have all the money, right?
 
 // Crew Select
-    // Trust random from 10 - 50 (max of 100)
-        // After every succesful heist OR a failure, do a trust check for each crew member
-        // IF any criminal DOES turn, it lowers everyone's trust by -20
-        // ADDING a new crew member after a heist randomizes trust for members by -30 to + 30
-            // The crew will say either "Screw the new guy," "Seems like an okay pick," "We really got {Name}?!"
+    // Morale random from 10 - 50 (max of 100)
+        // After every succesful heist OR a failure, do a morale check for each crew member
+        // IF any criminal DOES turn, it lowers everyone's morale by -20
     
 // Heist
     // IF Successfull
-        // Run trust check for each criminal to see if they're turn on crew
-            // If they turn, no money earned for this location
-    // IF Failure
-        // And arrested - GAME OVER screen
+        // Run morale check for each criminal to see if they're turn on crew
+            // If they turn, no money earned for this location, everyone's morale lowers
+            // If they don't turn, increase everyone's morale
 
 // Splitting the cash view
     // after all heists attempted, go to new view with a list of all criminals
     // Say how much they've earned, and how much everyone's cut is
     // Player can decide to either ICE a crew member, or split the money evenly
-        // IF player ices a crew member, then do a trust check to see if anyone is going to turn
+        // IF player ices a crew member, then do a morale check to see if anyone is going to turn
             // Turning at this point means shooting another crew member
             // If a crew member shoots another crew member, display a message that this occured
             // then give the player control to decide whether to ice another crew member or split the cash
