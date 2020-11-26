@@ -47,9 +47,7 @@ namespace heist
             List<Criminal> currentCrew = CreateCrew(new List<Criminal>());
             ShowCrewCreatedMsg(currentCrew);
             LevelSelect(currentCrew, locations);
-
-            Console.WriteLine("ALL HEISTS COMPLETED/ATTEMPTED");
-            Console.WriteLine("GO TO THE SPLIT THE MONEY VIEW");
+            // From level select, go to the split money view, then game over
         }
 
         static void LevelSelect(List<Criminal> crew, List<Location> locations)
@@ -97,7 +95,11 @@ namespace heist
                 }
 
                 locationsLeftToRob = locations.Where(l => l.Completed == false).ToList();
-            }            
+            }
+
+            // Console.WriteLine("ALL HEISTS COMPLETED/ATTEMPTED");
+            // Console.WriteLine("GO TO THE SPLIT THE MONEY VIEW");
+            GameOver(crew, locations);      
         }
 
         static void StakeOutLocation(List<Criminal> crew, List<Location> locations, int userSelected)
@@ -270,7 +272,7 @@ namespace heist
             {
                 Console.WriteLine("Your skill increased");
             }
-            Console.WriteLine("---------------------");
+            Console.WriteLine("");
             Console.Write("Press any key to continue");
             Console.ReadLine();
             LevelSelect(crew, locations);
@@ -281,7 +283,7 @@ namespace heist
             Console.Clear();
             string msg = "Press any key to continue";
             string moraleMsg = "Crew morale decreased";
-            int r = new Random().Next(1, 3);
+            int r = new Random().Next(2, 3);
             ASCII ASCII = new ASCII();
            
             // Arrested
@@ -292,12 +294,12 @@ namespace heist
                 Console.WriteLine(ASCII.DisplaySubheadingArrested());
                 Console.WriteLine(ASCII.DisplayArrested());
                 if (crew.Count() > 1) Console.WriteLine(moraleMsg);
-                Console.Write(msg);
-                Console.ReadLine();
-
+                
                 // If only player is in crew
                 if (crew.Count == 1)
                 {
+                    Console.Write(msg);
+                    Console.ReadLine();
                     Console.WriteLine();
                     GameOver(crew, locations);
                 }
@@ -305,26 +307,45 @@ namespace heist
                 else if (crew.Count > 1)
                 {
                     // arrest a random crew member
-                        // get the count for the crew
-                        // then a random index value from
-                        // r = new Random().Next(2, (crew.Count() + 1))
-                    // Display the person's name and picture at index R
-                        // crew.Remove([whoever is at index[r]])
-                    // Lower everyone's morale by 40, 70
+                    int crewSize = crew.Count();
+                    int randomCrewMember = new Random().Next(1, crewSize);
+
+                    Criminal arrestedMember = crew.ElementAt(randomCrewMember);
+                    Console.WriteLine("");
+                    Console.WriteLine($"{arrestedMember.Face}");
+                    Console.WriteLine("");
+                    Console.WriteLine($"The cops got {arrestedMember.Name}!");
+                    Console.WriteLine("");
+                    Console.Write(msg);
+                    Console.ReadLine();
+
+                    crew.RemoveAt(randomCrewMember);
+                    // Randomly lower every non-player's morale
+                    crew.ForEach(c =>
+                    {
+                        if (c.IsPlayer == false) c.Morale = c.Morale - new Random().Next(25, 54);
+                    });
+                    // Return to level select menu
                     LevelSelect(crew, locations);
                 }
             }
             // Escaped
             else if (r == 2)
             {
-                // Lower everyone's morale 20, 50
-                // And do a trust check
+                // Randomly lower every non-player's morale
+                crew.ForEach(c =>
+                {
+                    if (c.IsPlayer == false) c.Morale = c.Morale - new Random().Next(15, 35);
+                });
+                // Display escaped summary
                 Console.WriteLine(ASCII.DisplayHeadingEscaped());
                 Console.WriteLine(ASCII.DisplaySubheadingEscaped());
                 Console.WriteLine(ASCII.DisplayPoliceCar());
                 if (crew.Count() > 1) Console.WriteLine(moraleMsg);
+                Console.WriteLine("");
                 Console.Write(msg);
                 Console.ReadLine();
+                // Return to level select menu
                 LevelSelect(crew, locations);
             }
         }
@@ -351,8 +372,8 @@ namespace heist
 
             if (player.PlayerContactCount > 0) Console.WriteLine($"Associates you could have hired: {player.PlayerContactCount}");
             
-            Console.Write("");
-            Console.Write("Press any key to close the game");
+            Console.WriteLine("");
+            Console.Write("Press any key to close the game ");
             Console.ReadLine();
         }
 

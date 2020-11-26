@@ -75,7 +75,7 @@ namespace heist
             ASCII ASCII = new ASCII();
             
             Name = name;
-            BaseSkill = new Random().Next(20, 75);
+            BaseSkill = new Random().Next(20, 50);
             CourageFactor = new Random().NextDouble();
             Face = ASCII.DisplayCriminalFace();
             if (player)
