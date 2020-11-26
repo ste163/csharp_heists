@@ -283,6 +283,7 @@ namespace heist
             Console.Clear();
             string msg = "Press any key to continue";
             string moraleMsg = "Crew morale decreased";
+            // 50-50 chance for arrested or escaped
             int r = new Random().Next(2, 3);
             ASCII ASCII = new ASCII();
            
@@ -373,7 +374,7 @@ namespace heist
             if (player.PlayerContactCount > 0) Console.WriteLine($"Associates you could have hired: {player.PlayerContactCount}");
             
             Console.WriteLine("");
-            Console.Write("Press any key to close the game ");
+            Console.Write("Press any key multiple times to close the game ");
             Console.ReadLine();
         }
 
@@ -425,7 +426,7 @@ namespace heist
                     Console.WriteLine(ASCII.DisplayIce());
                     DisplayCrewInfo(crew);
                     Console.WriteLine("");
-                    Console.WriteLine("Icing a crew member will probably upset the rest of the crew.");
+                    Console.WriteLine("Icing a crew member will upset the rest of the crew.");
                     Console.WriteLine(ASCII.DisplayGun());
 
                     Console.WriteLine("Crew members");
@@ -482,6 +483,7 @@ namespace heist
         {
             // Declares variable we will be re-assigning 
             int entered;
+            Console.WriteLine("");
             string message = "Enter number to perform action: ";
             // When user first enters the skill input, ensure they type only a number
             while(true)
@@ -688,7 +690,7 @@ You: {c.Name}
             Console.WriteLine(ASCII.DisplayCrewCreated());
             crew.ForEach(c =>
             {
-                if (crew.Count() <= 3) Console.WriteLine($@"{c.Face}
+                if (crew.Count() <= 2) Console.WriteLine($@"{c.Face}
                 ");
                 if (c.IsPlayer == true)
                 {
