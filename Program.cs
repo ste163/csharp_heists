@@ -8,17 +8,18 @@ using System.Linq;
     // Pinnacle National Bank? (dif 400 - 800) ($100,000 - $500,000)
     // Bank of America (dif 600 - 1000) ($100,000-$500,000)
         // {NAME} has cased the place. This will be the toughest job, but banks have all the money, right?
-
-// Crew Select
-    // Morale random from 10 - 50 (max of 100)
-        // After every succesful heist OR a failure, do a morale check for each crew member
-        // IF any criminal DOES turn, it lowers everyone's morale by -20
     
 // Heist
     // IF Successfull
         // Run morale check for each criminal to see if they're turn on crew
             // If they turn, no money earned for this location, everyone's morale lowers
             // If they don't turn, increase everyone's morale
+
+// Crew management
+    // IF player ices a crew member
+        // Run morale check to see if any crew member will turn
+            // If crew member turns, they take a large % of cash
+            // If there is no cash, then say the crew member ran in fear
 
 // Splitting the cash view
     // after all heists attempted, go to new view with a list of all criminals
@@ -373,6 +374,28 @@ namespace heist
             Console.WriteLine("");
             Console.Write("Press any key multiple times to close the game ");
             Console.ReadLine();
+        }
+
+        static void WillCrewMemberTurnAfterHeist(List<Criminal> crew, List<Location> locations, string locName)
+        {
+            // THIS check is ONLY for if they're going to turn on a heist
+                // Break out some of this functinality so it can be used on
+                // WillCrewMemberTurnAfterIce
+            // IF a heist is successful
+                // loop through each crew member
+                // if (morale is under 40 && l.StolenByCrewMember == false ) then:
+                    // Have a switch statement that checks a random number that is the percentage chance
+                    // of this turning to occur
+                    //  if (Morale >= 30 && Morale <= 40) 30% chance to turn;
+                    //  if (Morale >= 20 && Morale <= 29) 50% chance to turn;
+                    //  if (Morale >= 10 && Morale <= 19) 70% chance to turn;
+                    //  if (Morale <= 9) 100% chance to turn;
+                // Switch on if someone will turn
+                    // if they turn,
+                        // steal all money from this location & a random amount of the other cash
+                        // remove that crew member from the list
+                        // lower everyone's morale
+                        // return to levelSelect
         }
 
         static void ManageCrew(List<Criminal> crew, List<Location> locations)
