@@ -212,7 +212,7 @@ namespace heist
                         {
                             // Every crew member gets a random skill+
                             int skillIncrease = new Random().Next(8, 38);
-                            int moraleIncrease = new Random().Next(10, 40);
+                            int moraleIncrease = new Random().Next(7, 34);
 
                             c.CrewTotalCash = c.CrewTotalCash + l.Cash;
                             c.BaseSkill = c.BaseSkill + skillIncrease;
@@ -256,7 +256,7 @@ namespace heist
 
             // Display how much money we earned from location
             Console.WriteLine($"Crew stole: ${currentLocation.Cash}");
-            // earned total
+            // Total earned
             if (cashEarned != currentLocation.Cash) Console.WriteLine($"Total cash: ${cashEarned}");
             // how much the current split will be if it's more than one crew member
             if (crew.Count() > 1)
@@ -284,29 +284,41 @@ namespace heist
             int r = new Random().Next(1, 3);
             ASCII ASCII = new ASCII();
            
+            // Arrested
             if (r == 1)
             {
-                // If it's only the player, arrest the player
-                // and show the game over message
-                // If it's more than the player
-                // arrest a random crew member
-                    // get the count for the crew
-                    // then a random index value from
-                    // r = new Random().Next(2, (crew.Count() + 1))
-                // Display the person's name and picture at index R
-                    // crew.Remove([whoever is at index[r]])
-                // Lower everyone's trust by 10, 30
+                // Generate arrested summary
                 Console.WriteLine(ASCII.DisplayHeadingArrested());
                 Console.WriteLine(ASCII.DisplaySubheadingArrested());
                 Console.WriteLine(ASCII.DisplayArrested());
                 if (crew.Count() > 1) Console.WriteLine(moraleMsg);
                 Console.Write(msg);
                 Console.ReadLine();
-                LevelSelect(crew, locations);
+
+                // If only player is in crew
+                if (crew.Count == 1)
+                {
+                    Console.WriteLine();
+                    GameOver(crew, locations);
+                }
+                // If multiple crew members
+                else if (crew.Count > 1)
+                {
+                    // arrest a random crew member
+                        // get the count for the crew
+                        // then a random index value from
+                        // r = new Random().Next(2, (crew.Count() + 1))
+                    // Display the person's name and picture at index R
+                        // crew.Remove([whoever is at index[r]])
+                    // Lower everyone's morale by 40, 70
+                    LevelSelect(crew, locations);
+                }
             }
+            // Escaped
             else if (r == 2)
             {
-                // Lower everyone's trust 10, 20
+                // Lower everyone's morale 20, 50
+                // And do a trust check
                 Console.WriteLine(ASCII.DisplayHeadingEscaped());
                 Console.WriteLine(ASCII.DisplaySubheadingEscaped());
                 Console.WriteLine(ASCII.DisplayPoliceCar());
@@ -315,6 +327,33 @@ namespace heist
                 Console.ReadLine();
                 LevelSelect(crew, locations);
             }
+        }
+
+        static void GameOver(List<Criminal> crew, List<Location> locations)
+        {
+            ASCII ASCII = new ASCII();
+            
+            Criminal player = crew.Find(c => c.IsPlayer);
+            int cashStolen = player.CrewTotalCash;
+            int totalCashAvailable = 0;
+            locations.ForEach(l => totalCashAvailable = l.Cash + totalCashAvailable);
+
+            Console.Clear();
+            Console.WriteLine(ASCII.DisplayHeadingGameOver());
+            Console.WriteLine(ASCII.DisplaySubHeadingSummary());
+            Console.WriteLine($"Total cash stolen: ${cashStolen} / ${totalCashAvailable}");
+            
+            if (crew.Count() > 1)
+            {
+                Console.WriteLine($"Crew members survived: {crew.Count()}");
+                Console.WriteLine($"The cut per member: ${cashStolen / crew.Count()}");
+            }
+
+            if (player.PlayerContactCount > 0) Console.WriteLine($"Associates you could have hired: {player.PlayerContactCount}");
+            
+            Console.Write("");
+            Console.Write("Press any key to close the game");
+            Console.ReadLine();
         }
 
         static void ManageCrew(List<Criminal> crew, List<Location> locations)
