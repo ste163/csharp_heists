@@ -4,7 +4,7 @@ using System.Linq;
 
 // C# Heists
     // is a text-based heist adventure game created to learn the basics of C#.
-    // The disorganized code is because I had not learned proper C# project management.
+    // The disorganized code is because I had not learned proper C# project management at the time.
     // I am fully aware no project should ever be written in such a gigantic file.
 
 // BUGS
@@ -16,7 +16,15 @@ using System.Linq;
     // Instead of Y/N for continue recruting, do the leave blank like in iceCrewMember
 
 // TO DO
-    // Waiting in van
+
+    // Game Over
+        // View for when player gets iced at the split
+            // Will need property for IsPlayerIced
+            // Show player's iced face
+            // Show who all survived
+            // Say and show WHO shot you
+
+    // Waiting in van (5x only)
         // Min difficulty for each location
         // Max difficulty for each location
         // Limit the number of times you can wait in the van for any given location, display that on screen
@@ -24,16 +32,20 @@ using System.Linq;
                 // IF there are still other locations to heist
                 // Come back after attempting another heist. Waiting here longer will draw suspicion
             // Reset waits after every heist success/failure
-            
+
     // Morale Checks
         // Icing a crew member needs to have a big affect on everyone
         // Any morale under 70 should have a chance of turning
 
-        // If player ices a crew member in Crew Management
-            // Run morale check to see if crew members will turn
-                // If crew member turns, they take a large % of cash
-                // If there is no cash, then say the crew member ran in fear
-        // If player ices a crew member in Split Cash OR when player attempts to split cash
+        // Crew Management
+            // If player ices a crew member
+                // Run morale check to see if crew members will turn
+                    // If crew member turns, they take a large % of cash
+                    // If there is no cash, then say the crew member ran in fear
+
+        // Split Cash view
+            // Immediately lower everyone's morale by 20-30pts
+            // If player ices a crew member or when player attempts to split cash
             // Run morale checks to see if any crew member will turn
                 // If crew member turns, member shoots a random index value criminal, possibly the player
                 // If the player didn't die, then let the player choose options again, minus congrats
@@ -582,8 +594,10 @@ namespace heist
 
                     if (player.PlayerContactCount > 0) Console.WriteLine($"Number of associates left you could have hired: {player.PlayerContactCount}");               
                 }
-                // Display player died face
-                // Crime doesn't pay when you're dead.
+
+                Console.WriteLine(player.FaceIced);
+                Console.WriteLine("");
+                Console.WriteLine("Crime doesn't pay when you're dead.");
             }
             
             ExitGame();
@@ -786,8 +800,8 @@ namespace heist
             if (isSplitMenu == false) Console.WriteLine(@"You give a big speech complimenting the crew's skills.
 You promise everyone will get rich.");
 
-            if (isSplitMenu == true) Console.WriteLine(@"You give a big speech congratulating the crew's heist expertise.
-And talk about how much money you all have made as a team.");
+            if (isSplitMenu == true) Console.WriteLine(@"You give a big speech congratulating the crew's heist expertise
+and talk about how much money you all have made as a team.");
             Console.WriteLine("");
             Console.WriteLine("Crew morale increased.");
             Console.WriteLine("");
