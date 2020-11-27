@@ -16,10 +16,19 @@ using System.Linq;
     // Instead of Y/N for continue recruting, do the leave blank like in iceCrewMember
 
 // TO DO
+    // Waiting in van
+        // Min difficulty for each location
+        // Max difficulty for each location
+        // Limit the number of times you can wait in the van for any given location, display that on screen
+            // Remove the option to wait in van when you exceed this. Replace it with the message
+                // IF there are still other locations to heist
+                // Come back after attempting another heist. Waiting here longer will draw suspicion
+            // Reset waits after every heist success/failure
+            
     // Morale Checks
         // Icing a crew member needs to have a big affect on everyone
         // Any morale under 70 should have a chance of turning
-        
+
         // If player ices a crew member in Crew Management
             // Run morale check to see if crew members will turn
                 // If crew member turns, they take a large % of cash
