@@ -52,16 +52,15 @@ namespace heist
             }
         }
         
-        // Courage Factor must be 0.1 - 1.0
-        public double CourageFactor { get; set; }
-
         public int CrewTotalCash { get; set; } = 0;
 
-        public bool IsPlayer;
+        public bool IsPlayer { get; set; }
+        public bool IsPlayerArrested { get; set; } = false;
 
         public int PlayerContactCount { get; set; }
 
-        public string Face;
+        public string Face { get; set; }
+        public string FaceIced { get; set; }
 
         public int TotalSkillLevel 
         {
@@ -76,7 +75,13 @@ namespace heist
             
             Name = name;
             BaseSkill = new Random().Next(20, 50);
-            Face = ASCII.DisplayCriminalFace();
+
+            Random r = new Random();
+
+            int faceInt = r.Next(1, 8);
+
+            Face = ASCII.DisplayCriminalFace(faceInt);
+            FaceIced = ASCII.DisplayCriminalFaceIced(faceInt);
             if (player)
             {
                 IsPlayer = true;

@@ -61,9 +61,8 @@ namespace heist
             ";
         }
 
-        public string DisplayCriminalFace()
+        public string DisplayCriminalFace(int r)
         {
-            int r = new Random().Next(1, 8);
             string face = "";
 
             switch(r)
@@ -140,6 +139,97 @@ namespace heist
             return face;
         }
 
+        public string DisplayHeadingIced()
+        {
+            return @"
+
+██╗ ██████╗███████╗██████╗ 
+██║██╔════╝██╔════╝██╔══██╗
+██║██║     █████╗  ██║  ██║
+██║██║     ██╔══╝  ██║  ██║
+██║╚██████╗███████╗██████╔╝
+╚═╝ ╚═════╝╚══════╝╚═════╝ 
+";
+        }
+
+        public string DisplayCriminalFaceIced(int r)
+        {
+            string face = "";
+
+            switch(r)
+            {
+                case 1:
+                    face = @"
+  \\\\\\\|   
+ | _   _/ *      
+( (X)(X( *   * 
+ |  . . \ *          
+  \  o  /    *      
+   \___/";
+                    break;
+                case 2:
+                    face = @"
+  |||||/*   
+{. X X( * *
+ |  o  \ *       
+  \_O_/";
+                    break;
+                case 3:
+                    face = @"
+  .xxxx. 
+ |(X)(X/*
+(  (_( * *
+  | O \ *   *
+   \__/ ";
+                    break;
+                case 4:
+                    face = @"
+    _____
+  /`---'- \
+ (-    -  / *
+ `X / X  ( *  * 
+  \`-     \ * *
+   \ O   /\     *
+    `---'  ";
+                    break;
+                case 5:
+                    face = @"
+    ______
+ /  `     /
+| __   ~~/ * *
+\   \__ (* **
+( X( X)--\ *
+/  /     |  *
+\  O   / \     *
+(_____/   \";
+                    break;
+                case 6:
+                    face = @"
+   .-```'.   *
+  /     /* *
+ /   /  \* *
+| .'  _  \ *  * 
+\(\   X  X    *
+ | \   _\ |
+ |\    O  /
+   '.___.'";
+                    break;
+                case 7:
+                    face = @"
+      _.===.
+   _,/_ \\\ `\
+  /`/| /     /  *
+ // ` //////(*  *
+/`/` /| X  X(* *  
+\  \/\|    / \* *
+\`/` \/\  O  /    *
+|/\/` \/`._.'";
+                    break;
+            }
+
+            return face;
+        }
+
         public string DisplayNashville()
         {
 
@@ -182,7 +272,7 @@ return @"
 
         public string DisplayArrested()
         {
-            return @"================================
+            return @"==============================
 ||     ||<(.)>||<(.)>||     || 
 ||    _||     ||     ||_    || 
 ||   (__D     ||     C__)   || 
@@ -190,7 +280,7 @@ return @"
 ||   (__D     ||     C__)   ||
 ||   (__D     ||     C__)   ||
 ||     ||     ||     ||     ||
-================================
+==============================
 ";
         }
 

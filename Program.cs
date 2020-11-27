@@ -449,6 +449,7 @@ namespace heist
                 // If only player is in crew
                 if (crew.Count == 1)
                 {
+                    crew.ForEach(c => c.IsPlayerArrested = true);
                     Console.Write(msg);
                     Console.ReadLine();
                     Console.WriteLine();
@@ -516,6 +517,38 @@ namespace heist
             Console.WriteLine(ASCII.DisplaySubHeadingSummary());
             Console.WriteLine($"Total cash stolen: ${cashStolen} / ${totalCashAvailable}");
             
+            if (player.IsPlayerArrested == true)
+            {
+                // If we have a crew
+                if (crew.Count() > 1)
+                {
+                    // Minus you from crew.Count
+                    Console.WriteLine($"The cut per members not in jail: ${cashStolen / crew.Count()} - 1");
+
+                    Console.WriteLine($"Crew members who survived:");
+                    crew.ForEach(c =>
+                    {
+                        if (!c.IsPlayer)
+                        {
+                            Console.WriteLine($"  {c.Name}");
+                        }
+                    });     
+                }
+
+                if (player.PlayerContactCount > 0) Console.WriteLine($"Number of associates left you could have hired: {player.PlayerContactCount}");     
+                
+                Console.WriteLine("");
+                Console.WriteLine(ASCII.DisplayArrested());
+
+                Console.WriteLine("You should have known, crime never pays.");
+                // EXIT game lines copied up here
+                // So that they won't double up
+                Console.WriteLine("");
+                Console.Write("Press any key to close C# Heists ");
+                Console.ReadLine();
+                Environment.Exit(0);
+            }
+
             if (playerAlive)
             {
                 if (crew.Count() > 1)
@@ -535,12 +568,29 @@ namespace heist
                 }
                 
                 // Based on how much the playersCut was, display ending message
-                if (playersCut >= 0 && playersCut <= 10_000) Console.WriteLine(ASCII.DisplayEndingCamp());
+                if (playersCut > 0 && playersCut <= 10_000) Console.WriteLine(ASCII.DisplayEndingCamp());
                 if (playersCut >= 10_001 && playersCut <= 500_000) Console.WriteLine(ASCII.DisplayEndingRoad());
                 if (playersCut > 500_000) Console.WriteLine(ASCII.DisplayEndingBeach());
             }
-            else
+            else if (!playerAlive)
             {
+                // If there are any crew members left
+                if (crew.Count() > 1)
+                {
+                    // one less crew count because the player is dead
+                    Console.WriteLine($"The cut per member: ${cashStolen / crew.Count() - 1}");
+
+                    Console.WriteLine($"Crew members who survived:");
+                    crew.ForEach(c =>
+                    {
+                        if (!c.IsPlayer)
+                        {
+                            Console.WriteLine($"  {c.Name}");
+                        }
+                    });     
+
+                    if (player.PlayerContactCount > 0) Console.WriteLine($"Number of associates left you could have hired: {player.PlayerContactCount}");               
+                }
                 // Display player died face
                 // Crime doesn't pay when you're dead.
             }
@@ -762,7 +812,7 @@ namespace heist
                     Console.WriteLine(ASCII.DisplayIce());
                     DisplayCrewInfo(crew);
                     Console.WriteLine("");
-                    Console.WriteLine("Icing a crew member will upset the rest of the crew.");
+                    Console.WriteLine("Icing crew members upsets the rest of the crew.");
                     Console.WriteLine(ASCII.DisplayGun());
 
                     Console.WriteLine("Crew members");
@@ -778,6 +828,9 @@ namespace heist
 
                     Console.Write("Enter name of who you will ice [leave blank to cancel]: ");
                     name = Console.ReadLine();
+
+                    // Store the criminal who was iced for use in display
+                    Criminal whoWasIced = crew.Find(c => c.Name == name);
 
                     // Make a new list of criminals WITHOUT the iced crew member
                     List<Criminal> icedCrew = crew.Where(c => c.Name != name || c.IsPlayer == true).ToList();
@@ -801,9 +854,17 @@ namespace heist
                             return c;
                         }).ToList();
 
+                        // DISPLAY Who was iced, require a readline in that function to pause
+                        // method execution
+                        if (whoWasIced != null)
+                        {
+                            DisplayWhoWasIced(whoWasIced);
+                        }
+
                         crew = newCrew;
                         
                     }
+                    // We didn't time in a name
                     else
                     {
                         crew = icedCrew;
@@ -812,6 +873,28 @@ namespace heist
                 return crew;
             }
             else return crew;
+        }
+
+        static void DisplayWhoWasIced(Criminal whoWasIced)
+        {
+            Console.Clear();
+            ASCII art = new ASCII();
+            
+            // Display ASCII artwork for who was killed 
+            Console.WriteLine(art.DisplayHeadingIced());
+            Console.WriteLine($"{whoWasIced.FaceIced}");
+            Console.WriteLine("");
+
+            // Summary of events
+            Console.WriteLine($"You iced {whoWasIced.Name}!");
+            Console.WriteLine("");
+            Console.WriteLine("Crew morale DECREASED");
+            Console.WriteLine("Everyone's cut INCREASED");
+
+            // Player input to continue
+            Console.WriteLine("");
+            Console.Write("Press any key to return to crew management ");
+            Console.ReadLine();
         }
 
         static int MenuInput(int maxOptions)
