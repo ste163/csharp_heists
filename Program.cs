@@ -2,12 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
     
-// Heist
-    // IF Successfull
-        // Run morale check for each criminal to see if they're turn on crew
-            // If they turn, no money earned for this location, everyone's morale lowers
-            // If they don't turn, increase everyone's morale
-
 // Crew management
     // IF player ices a crew member
         // Run morale check to see if any crew member will turn
@@ -70,8 +64,17 @@ namespace heist
                         if (l.Name == "Bank of Amereeka") Console.WriteLine("6) stakeout Bank of Amereeka");
                     }
                 });
+
+                if (crew.Count() == 1)
+                {
+                    Console.WriteLine("7) end heist spree");
+                }
+                else
+                {
+                    Console.WriteLine("7) end heist spree and split cash");
+                }
                 
-                int selection = MenuInput(6);
+                int selection = MenuInput(7);
 
                 switch (selection)
                 {
@@ -98,14 +101,45 @@ namespace heist
                         // Amereeka
                         StakeOutLocation(crew, locations, 6);
                         break;
+                    case 7:
+                        // split
+                        SplitCash(crew,locations);
+                        break;
                 }
 
                 locationsLeftToRob = locations.Where(l => l.Completed == false).ToList();
             }
 
-            // Console.WriteLine("ALL HEISTS COMPLETED/ATTEMPTED");
-            // Console.WriteLine("GO TO THE SPLIT THE MONEY VIEW");
-            GameOver(crew, locations);      
+            SplitCash(crew,locations);     
+        }
+
+        static void SplitCash(List<Criminal> crew, List<Location> locations)
+        {
+            // If there is a crew, split cash. Else, end game
+            if (crew.Count() > 1)
+            {
+                Console.WriteLine("SPLIT THE CASH");
+                Console.ReadLine();
+                // HEADING split cash
+                // SUBHEADING - Part ways or open fire
+                // display current crew info
+                // IMAGE OF SOMETHING???
+                // display everyone's name and current morale description
+                // Options to
+                // 1) split money evenly - ENDS GAME
+                // 2) ice a crew member
+                // Iceing a crew member here lowers trust by 60
+                    // Run a check to see if any crew member will open fire
+                        // IF YES - randomly shoot an index value, including player
+                            // if player - message,the game over
+                        // IF no
+                            // return to player getting to decide
+                GameOver(crew, locations);
+            }
+            else
+            {
+                GameOver(crew, locations); 
+            }
         }
 
         static void StakeOutLocation(List<Criminal> crew, List<Location> locations, int userSelected)
@@ -586,7 +620,7 @@ namespace heist
             Console.WriteLine("Crew skill improved.");
             Console.WriteLine("Crew morale decreased.");
             Console.WriteLine("");
-            Console.WriteLine("Listen to your crew. Unhappy members may get decide to turn.");
+            Console.WriteLine("Watch the crew. Unhappy members may turn.");
             Console.WriteLine("");
             Console.Write("Press any key to continue ");
 
