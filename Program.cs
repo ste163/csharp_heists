@@ -1,18 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-    
+
+// C# Heists
+    // is a text-based heist game created to learn the basics of C#
+    // the disorganized code is because I had not learned proper
+    // C# project management. I am fully aware no project should ever
+    // be written in such a gigantic file.
+
+// BUGS
+    // Traitor - cash gets added to the heist success BEFORE the traitor check. So the money gets added even if there is a traitor
+        // Need to have traitor actually subtract cash
+    // Can enter crew members with blank names
+    // Can enter crew members with duplicate names
+    // Crew morale can go over 100. If it tries, to, set it back to 100
+
 // Crew management
+    // To IMPROVE morale, need to be able to promise
+        // crew you will give them more cash
+        // HOWEVER, you can only do this once for every SUCESSFUL level
+        // so on level success, reset this boolean property 
     // IF player ices a crew member
         // Run morale check to see if any crew member will turn
             // If crew member turns, they take a large % of cash
             // If there is no cash, then say the crew member ran in fear
 
 // Splitting the cash view
-    // after all heists attempted, go to new view with a list of all criminals
-    // Say how much they've earned, and how much everyone's cut is
     // Player can decide to either ICE a crew member, or split the money evenly
-        // IF player ices a crew member, then do a morale check to see if anyone is going to turn
+        // IF player ices a crew member, then do a morale checkto see if anyone is going to turn
             // Turning at this point means shooting another crew member
             // If a crew member shoots another crew member, display a message that this occured
             // then give the player control to decide whether to ice another crew member or split the cash
@@ -65,13 +80,18 @@ namespace heist
                     }
                 });
 
-                if (crew.Count() == 1)
+                // IF you have ANY money, option 7 is available
+                Criminal player = crew.Find(c => c.IsPlayer);
+                if (player.CrewTotalCash > 0)
                 {
-                    Console.WriteLine("7) end heist spree");
-                }
-                else
-                {
-                    Console.WriteLine("7) end heist spree and split cash");
+                    if (crew.Count() == 1)
+                    {
+                        Console.WriteLine("7) end heist spree");
+                    }
+                    else
+                    {
+                        Console.WriteLine("7) end heist spree and split cash");
+                    }
                 }
                 
                 int selection = MenuInput(7);
@@ -103,7 +123,10 @@ namespace heist
                         break;
                     case 7:
                         // split
-                        SplitCash(crew,locations);
+                        if (player.CrewTotalCash > 0)
+                        {
+                            SplitCash(crew,locations);
+                        }
                         break;
                 }
 
@@ -118,22 +141,57 @@ namespace heist
             // If there is a crew, split cash. Else, end game
             if (crew.Count() > 1)
             {
-                Console.WriteLine("SPLIT THE CASH");
-                Console.ReadLine();
-                // HEADING split cash
-                // SUBHEADING - Part ways or open fire
-                // display current crew info
-                // IMAGE OF SOMETHING???
-                // display everyone's name and current morale description
-                // Options to
-                // 1) split money evenly - ENDS GAME
-                // 2) ice a crew member
-                // Iceing a crew member here lowers trust by 60
-                    // Run a check to see if any crew member will open fire
-                        // IF YES - randomly shoot an index value, including player
-                            // if player - message,the game over
-                        // IF no
-                            // return to player getting to decide
+                Console.Clear();
+                ASCII art = new ASCII();
+                // Display headings and crew info
+                Console.WriteLine(art.DisplayHeadingSplit());
+                Console.WriteLine(art.DisplaySubheadingSplit());
+                DisplayCrewInfoShortened(crew);
+                // Money bag image
+                Console.WriteLine(art.DisplayMoneyBag());
+
+                // Display crews name and current morale status
+                Console.WriteLine("Crew");
+                Console.WriteLine("-----");
+                crew.ForEach(c => 
+                    {
+                        if (!c.IsPlayer)
+                        {
+                            Console.WriteLine($"{c.Name} - {c.MoraleDescription}");
+                        }
+                    });
+
+                Console.WriteLine("");
+                Console.WriteLine("The more money you take, the better off you'll be when you skip town.");
+                Console.WriteLine("");
+                Console.WriteLine("1) split cash evenly among crew members and part ways");
+                Console.WriteLine("2) ice a crew member");
+
+                int select = MenuInput(2);
+
+                switch (select)
+                {
+                    case 1:
+                        // Loop through criminals and see if anyone will open fire
+                            // If a crew member opens fire,
+                            // show a message that this occured
+                            // then allow the player to decide if they should try to split cash
+                            // or ice another crew member 
+                        GameOver(crew, locations);
+                        break;
+                    case 2:
+                        List<Criminal> smallerCrew = IceCrewMember(crew);
+                        // Loop through the smallerCrew. Lower everyone's morale by (40-60)
+                        // Then do the morale check for if a crew member will open fire
+                            // IF YES - randomly shoot an index value, including player
+                                // IF player - message,the game over
+                                // Display message of who was shot
+                                // IF NOT player, give player option to split or ice
+                            // IF NO
+                                // return to player getting to decide
+                        SplitCash(smallerCrew, locations);
+                        break;
+                }
                 GameOver(crew, locations);
             }
             else
@@ -287,7 +345,6 @@ namespace heist
                     // Compare the location's difficulty with the crew's max skills
                     int crewTotalSkill = crew.Sum(c => c.TotalSkillLevel);
                     
-                    
                     // If the crew succeeds, add the total cash to each crew member
                         // This is to save the cash, it will be split later
                     if (l.Difficulty <= crewTotalSkill)
@@ -370,7 +427,8 @@ namespace heist
             string msg = "Press any key to continue";
             string moraleMsg = "Crew morale decreased";
             // 50-50 chance for arrested or escaped
-            int r = new Random().Next(2, 3);
+            Random random = new Random();
+            int r = random.Next(2,3);
             ASCII ASCII = new ASCII();
            
             // Arrested
@@ -694,14 +752,14 @@ namespace heist
                     name = Console.ReadLine();
 
                     // Make a new list of criminals WITHOUT the iced crew member
-                    List<Criminal> iceMember = crew.Where(c => c.Name != name || c.IsPlayer == true).ToList();
+                    List<Criminal> icedCrew = crew.Where(c => c.Name != name || c.IsPlayer == true).ToList();
 
                     // Only lower morale if we have iced a crew member
-                    if (iceMember.Count() < crew.Count()) 
+                    if (icedCrew.Count() < crew.Count()) 
                     {
-                        List<Criminal> newCrew = iceMember.Select(c =>
+                        List<Criminal> newCrew = icedCrew.Select(c =>
                         {
-                            int subtractMorale = new Random().Next(4, 31);
+                            int subtractMorale = new Random().Next(8, 36);
 
                             int loweredMorale = c.Morale - subtractMorale;
                             if (loweredMorale < 0)
@@ -720,7 +778,7 @@ namespace heist
                     }
                     else
                     {
-                        crew = iceMember;
+                        crew = icedCrew;
                     }
                 }
                 return crew;
@@ -792,6 +850,23 @@ namespace heist
             Console.WriteLine("--------");
         }
 
+        static void DisplayCrewInfoShortened(List<Criminal> crew)
+        {
+            // Get crew's cash
+            int TotalCash;
+
+            Criminal player = crew.Find(c => c.IsPlayer);
+            TotalCash = player.CrewTotalCash;
+
+            int CurrentSplit = (TotalCash / crew.Count());
+
+            Console.WriteLine($@"Total associates in crew: {crew.Count()}");
+            Console.WriteLine("--------");
+            Console.WriteLine($"Cash: ${TotalCash}");
+            if (crew.Count() > 1) Console.WriteLine($"current cut: ${CurrentSplit}");
+            Console.WriteLine("--------");
+        }
+
         static void DisplayCurrentCrew(List<Criminal> crew)
         {
             ASCII art = new ASCII();
@@ -805,7 +880,7 @@ namespace heist
 
 You: {c.Name}
 ------------
- base skill: {c.BaseSkill} / 100");
+ base skill: {c.BaseSkill}");
                 }
                 else
                 {
@@ -814,7 +889,7 @@ You: {c.Name}
 {c.Name}
 {c.MoraleDescription}
 ------------
- base skill: {c.BaseSkill} / 100");
+ base skill: {c.BaseSkill}");
                 }
             });         
         }
@@ -945,14 +1020,14 @@ You: {c.Name}
                 if (c.IsPlayer == true)
                 {
                     Console.WriteLine($@"You: {c.Name}");
-                    Console.WriteLine($" base skill level: {c.BaseSkill} / 100");
+                    Console.WriteLine($" base skill level: {c.BaseSkill}");
                 } 
                 
                 if (c.IsPlayer == false)
                 {
                     Console.WriteLine($@"{c.Name}");
                     Console.WriteLine($@" {c.MoraleDescription}
- base skill level: {c.BaseSkill} / 100");
+ base skill level: {c.BaseSkill}");
                 }
                 Console.WriteLine("");
             });
@@ -971,7 +1046,7 @@ You: {c.Name}
 
 {newCriminal.Name} recruited!
 ------------
- base skill: {newCriminal.BaseSkill} / 100
+ base skill: {newCriminal.BaseSkill}
  ");
             return newCriminal;
         }
@@ -989,7 +1064,7 @@ You: {c.Name}
 
 {player.Name}
 ------------
- skill level: {player.BaseSkill} / 100
+ skill level: {player.BaseSkill}
  ");
             return player;
         }
