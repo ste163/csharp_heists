@@ -1,3 +1,10 @@
+// ASCII CREDITS (I TAKE NO CREDIT FOR ANY ARTWORK. I did modify most artwork to fit the screen better)
+    // https://textfancy.com/multiline-text-art/
+    // https://asciiart.website/
+    // https://asciiart.website/index.php?art=people/faces
+    // https://simpletextart.blogspot.com/2013/12/money-bag-picture-made-with-ascii-text.html
+    // https://www.asciiart.eu/buildings-and-places/cities
+    // http://www.asciiworld.com/-Buildings-.html
 using System;
 
 namespace heist
@@ -171,10 +178,6 @@ return @"
 | __)                   M A J O R  D O L L A R S                 __) |
 `--------------------------------------------------------------------'
 ";
-// Thank you for visiting https://asciiart.website/
-// This ASCII pic can be found at
-// https://asciiart.website/index.php?art=objects/money
-
         }
 
         public string DisplayArrested()
@@ -588,16 +591,7 @@ Hopefully you can hide in the woods long enough for people to forget your crimes
     }
 }
 
-// Thank you for visiting https://asciiart.website/
-// This ASCII pic can be found at
-// https://asciiart.website/index.php?art=people/faces
-
-// https://simpletextart.blogspot.com/2013/12/money-bag-picture-made-with-ascii-text.html
-
-// https://www.asciiart.eu/buildings-and-places/cities
-
-// http://www.asciiworld.com/-Buildings-.html
-
+// When I add guards, show this message. The muscle will have to deal with this punk
 //                       ________________
 //                       \      __      /         __
 //                        \_____()_____/         /  )
