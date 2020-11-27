@@ -15,6 +15,12 @@ using System.Linq;
     // Can enter crew members with duplicate names
     // Crew morale can go over 100. If it tries, to, set it back to 100
 
+// CREW DEAD FACE
+    // Make new faces with the X X and open mouths. Pass in the random int from 1, 8 INTO the functions
+    // for displaying faces, so that live and dead will match
+    // add a property to each criminal for a "dead" face
+    // So whenever they're "Iced," we'll show the dead face and a "press any key to continue"
+
 // Crew management
     // To IMPROVE morale, need to be able to promise
         // crew you will give them more cash
@@ -26,13 +32,12 @@ using System.Linq;
             // If there is no cash, then say the crew member ran in fear
 
 // Splitting the cash view
-    // Player can decide to either ICE a crew member, or split the money evenly
-        // IF player ices a crew member, then do a morale checkto see if anyone is going to turn
-            // Turning at this point means shooting another crew member
-            // If a crew member shoots another crew member, display a message that this occured
-            // then give the player control to decide whether to ice another crew member or split the cash
-            // THERE IS A RANDOM CHANCE PLAYER WILL BE SHOT AND DIES
-            // REPEAT until game over 
+    // IF player ices a crew member, then do a morale checkto see if anyone is going to turn
+        // Turning at this point means shooting another crew member
+        // If a crew member shoots another crew member, display a message that this occured
+        // then give the player control to decide whether to ice another crew member or split the cash
+        // THERE IS A RANDOM CHANCE PLAYER WILL BE SHOT AND DIES
+        // REPEAT until game over 
 
 namespace heist
 {

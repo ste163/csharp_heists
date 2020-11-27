@@ -499,11 +499,11 @@ LS|/  /             \________________________ ____________";
 
         public string DisplayMoneyBag()
         {
-            return @"                    ██
-                  ████
-                ██████
-                ▌─────▌
-                ███─█████
+            return @"                     ██
+                   ████
+                 ██████
+                 ▌─────▌
+                 ███─█████
              ███████─────██████
           ███████─────────██████
         █████████───██─██████████
@@ -515,7 +515,7 @@ LS|/  /             \________________________ ____________";
     ████████████████████──────███████
      ██████████████──────────███████
        ████████████───────████████
-         ████████████──████████";
+          █████████████──████████";
         }
 
         public String DisplayEndingBeach()
@@ -597,7 +597,6 @@ Hopefully you can hide in the woods long enough for people to forget your crimes
 // https://www.asciiart.eu/buildings-and-places/cities
 
 // http://www.asciiworld.com/-Buildings-.html
-
 
 //                       ________________
 //                       \      __      /         __
