@@ -58,8 +58,7 @@ namespace heist
             // Store values for locations
             string houseName = "Annoying Neighbor's House";
             string houseSummary = @"He always talks about hating banks and keeping money in the guest room mattress.";
-            // int houseDiff = (new Random().Next(10, 100));
-            int houseDiff = 1;
+            int houseDiff = (new Random().Next(10, 100));
             int houseCash = (new Random().Next(2_000, 150_000));
 
             string gasName = "Corner 7-Eleven";

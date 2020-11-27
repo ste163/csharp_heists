@@ -12,6 +12,10 @@ using System.Linq;
     // Can enter crew members with blank names
     // Can enter crew members with duplicate names
     // IF you have $0, the game over view doesn't show any ASCII or specific text
+        // Picture of your face, with the words WANTED over it
+        // message: "You somehow managed to steal $0. You don't have any money to skip town with.
+        // Police all over Tennessee and the ajoining states are looking for you."
+        // Enjoy your freedom while you can."
 
 // CHANGES TO MAKE LATER
     // Instead of Y/N for continue recruting, do the leave blank like in iceCrewMember
@@ -222,74 +226,43 @@ namespace heist
             switch (userSelected)
             {
                 case 2:
+                    // Use this string to check the locations with 
                     string houseSelected = "Annoying Neighbor's House";
-                    // If the house hasn't been completed, add it to list
+                    // Check if the location has been completed, if not, add to list
                     List<Location> isHouseCompleted = locations.Where(l => l.Name == houseSelected && !l.Completed).ToList();
-
-                    if (isHouseCompleted.Count() == 1)
-                    {
-                        LocationInfo(locations, houseSelected, crew);
-                    }
-                    else
-                    {
-                        LevelSelect(crew, locations);
-                    }
+                    // If location is in list, load the locationInfo
+                    if (isHouseCompleted.Count() == 1) LocationInfo(locations, houseSelected, crew);
+                    // If it's been completed, return to LevelSelect
+                    else LevelSelect(crew, locations);
+                    
                     break;
                 case 3:
                     string gasSelected = "Corner 7-Eleven";
-
                     List<Location> isGasCompleted = locations.Where(l => l.Name == gasSelected && !l.Completed).ToList();
-
-                    if (isGasCompleted.Count() == 1)
-                    {
-                        LocationInfo(locations, gasSelected, crew);
-                    }
-                    else
-                    {
-                        LevelSelect(crew, locations);
-                    }
+                    if (isGasCompleted.Count() == 1) LocationInfo(locations, gasSelected, crew);
+                    else LevelSelect(crew, locations);
+                    
                     break;
                 case 4:
                     string wfSelected = "Welts Fargo";
-
                     List<Location> isWfCompleted = locations.Where(l => l.Name == wfSelected && !l.Completed).ToList();
-
-                    if (isWfCompleted.Count() == 1)
-                    {
-                        LocationInfo(locations, wfSelected, crew);
-                    }
-                    else
-                    {
-                        LevelSelect(crew, locations);
-                    }
+                    if (isWfCompleted.Count() == 1) LocationInfo(locations, wfSelected, crew);
+                    else LevelSelect(crew, locations);
+                    
                     break;
                 case 5:
                     string pnbSelected = "Pinnackle National Bank";
-
                     List<Location> isPnbCompleted = locations.Where(l => l.Name == pnbSelected && !l.Completed).ToList();
-
-                    if (isPnbCompleted.Count() == 1)
-                    {
-                        LocationInfo(locations, pnbSelected, crew);
-                    }
-                    else
-                    {
-                        LevelSelect(crew, locations);
-                    }
+                    if (isPnbCompleted.Count() == 1) LocationInfo(locations, pnbSelected, crew);
+                    else LevelSelect(crew, locations);
+                    
                     break;
                 case 6:
                     string boaSelected = "Bank of Amereeka";
-
                     List<Location> isBoaCompleted = locations.Where(l => l.Name == boaSelected && !l.Completed).ToList();
-
-                    if (isBoaCompleted.Count() == 1)
-                    {
-                        LocationInfo(locations, boaSelected, crew);
-                    }
-                    else
-                    {
-                        LevelSelect(crew, locations);
-                    }
+                    if (isBoaCompleted.Count() == 1) LocationInfo(locations, boaSelected, crew);
+                    else  LevelSelect(crew, locations);
+                
                     break;
             }
         }
