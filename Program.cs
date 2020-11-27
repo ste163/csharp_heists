@@ -16,13 +16,6 @@ using System.Linq;
     // Instead of Y/N for continue recruting, do the leave blank like in iceCrewMember
 
 // TO DO
-    // Refactor
-        // press any key to continue into a method
-    // Crew management
-        // To IMPROVE morale, need to be able to promise
-            // crew you will give them more cash
-            // HOWEVER, you can only do this once for every SUCESSFUL level
-            // so on level success, reset this boolean property 
     // Morale Checks
         // If player ices a crew member in CREW MANAGEMENT
             // Run morale check to see if any crew member will turn
@@ -125,6 +118,8 @@ namespace heist
                         // End game - split cash
                         if (player.CrewTotalCash > 0)
                         {
+                            // Ensure player can give a speech
+                            crew.ForEach(c => c.HasPlayerEncouragedCrew = false);
                             SplitCash(crew,locations);
                         }
                         break;
@@ -132,7 +127,8 @@ namespace heist
 
                 locationsLeftToRob = locations.Where(l => l.Completed == false).ToList();
             }
-
+            // Ensure player can give a speech
+            crew.ForEach(c => c.HasPlayerEncouragedCrew = false);
             SplitCash(crew,locations);     
         }
 
@@ -141,6 +137,7 @@ namespace heist
             // get crew cash
             int totalCash = 0;
             crew.ForEach(c => totalCash = c.CrewTotalCash);
+            Criminal player = crew.Find(c => c.IsPlayer);
 
             if (totalCash > 0)
             {
@@ -172,8 +169,9 @@ namespace heist
                     Console.WriteLine("");
                     Console.WriteLine("1) attempt to split cash evenly among crew members and part ways");
                     Console.WriteLine("2) ice a crew member");
+                    if (player.HasPlayerEncouragedCrew == false ) Console.WriteLine("3) give congratulations speech");
 
-                    int select = MenuInput(2);
+                    int select = MenuInput(3);
 
                     switch (select)
                     {
@@ -197,6 +195,9 @@ namespace heist
                                 // IF NO
                                     // return to player getting to decide
                             SplitCash(smallerCrew, locations);
+                            break;
+                        case 3:
+                            SplitCash(EncourageCrew(crew, true), locations);
                             break;
                     }
                     GameOver(crew, locations, true);
@@ -754,7 +755,7 @@ namespace heist
                 Random r = new Random();
                 crew.ForEach(c =>
                 {
-                    if (!c.IsPlayer) c.Morale = c.Morale + r.Next(1, 15);
+                    if (!c.IsPlayer) c.Morale = c.Morale + r.Next(5, 15);
                     if (c.IsPlayer) c.HasPlayerEncouragedCrew = true;
                 });
                 DisplayEncouragingSpeech(player, isSplitMenu);
@@ -771,8 +772,11 @@ namespace heist
             Console.WriteLine(player.Face);
             Console.WriteLine("");
             // for the speeches, get names of the crew members and plop them into a speech
-            if (isSplitMenu == false) Console.WriteLine("You give a big speech and promise everyone will get rich.");
-            if (isSplitMenu == true) Console.WriteLine("You give a big speech congratulating everyone's amazing skill.");
+            if (isSplitMenu == false) Console.WriteLine(@"You give a big speech complimenting the crew's skills.
+You promise everyone will get rich.");
+
+            if (isSplitMenu == true) Console.WriteLine(@"You give a big speech congratulating the crew's heist expertise.
+And talk about how much money you all have made as a team.");
             Console.WriteLine("");
             Console.WriteLine("Crew morale increased.");
             Console.WriteLine("");

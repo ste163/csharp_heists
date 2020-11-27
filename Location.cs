@@ -26,7 +26,7 @@ namespace heist
                 if (Difficulty >= 551 && Difficulty <= 650) d = "Two security cameras and a guard outside. [~550-650 skill level required]";
                 if (Difficulty >= 651 && Difficulty <= 750) d = "Many cameras, guards inside and out. [~650-750 skill level required]";
                 if (Difficulty >= 751 && Difficulty <= 850) d = "Guards outside have rifles. It's almost like they're expecting a robbery. [~750-850 skill level required]";
-                if (Difficulty >= 850) d = "A cop cruiser is parked in front. On the bank steps, cops chat with armed bank security guards. [+850 skill level required]";
+                if (Difficulty >= 850) d = "A cop cruiser is parked in front. A cop leans out the window and chats with the security guards. [+850 skill level required]";
 
                 return d;
             }
