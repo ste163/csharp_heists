@@ -17,12 +17,14 @@ using System.Linq;
 
 // TO DO
     // Morale Checks
-        // If player ices a crew member in CREW MANAGEMENT
-            // Run morale check to see if any crew member will turn
+        // Icing a crew member needs to have a big affect on everyone
+        // Any morale under 70 should have a chance of turning
+        
+        // If player ices a crew member in Crew Management
+            // Run morale check to see if crew members will turn
                 // If crew member turns, they take a large % of cash
                 // If there is no cash, then say the crew member ran in fear
-        // If player ices a crew member in SPLIT CASH / attempts to split cash
-        // Player can say 1 congratulations to slightly increase morale (0, 10pts)
+        // If player ices a crew member in Split Cash OR when player attempts to split cash
             // Run morale checks to see if any crew member will turn
                 // If crew member turns, member shoots a random index value criminal, possibly the player
                 // If the player didn't die, then let the player choose options again, minus congrats
