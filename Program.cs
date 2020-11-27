@@ -14,12 +14,9 @@ using System.Linq;
     // Can enter crew members with blank names
     // Can enter crew members with duplicate names
     // Crew morale can go over 100. If it tries, to, set it back to 100
-
-// CREW DEAD FACE
-    // Make new faces with the X X and open mouths. Pass in the random int from 1, 8 INTO the functions
-    // for displaying faces, so that live and dead will match
-    // add a property to each criminal for a "dead" face
-    // So whenever they're "Iced," we'll show the dead face and a "press any key to continue"
+    // The Ice crew member needs two views, one for when you're in crew management & one for when you're at split the cash
+        // because you don't need to now everyone's skill and morale bonus
+    // Remove the / 300 skill for crew
 
 // Crew management
     // To IMPROVE morale, need to be able to promise
@@ -63,7 +60,6 @@ namespace heist
             while (locationsLeftToRob.Count() > 0)
             {
                 Console.Clear();
-                // Only allowed to select the levels you HAVEN'T attempted
                 ASCII art = new ASCII();
                 Console.Write(art.DisplayPlanning());
                 DisplayCrewInfo(crew);
@@ -99,6 +95,7 @@ namespace heist
                     }
                 }
                 
+                // Check to ensure user typed only a number
                 int selection = MenuInput(7);
 
                 switch (selection)
@@ -127,7 +124,7 @@ namespace heist
                         StakeOutLocation(crew, locations, 6);
                         break;
                     case 7:
-                        // split
+                        // End game - split cash
                         if (player.CrewTotalCash > 0)
                         {
                             SplitCash(crew,locations);
