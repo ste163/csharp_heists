@@ -164,7 +164,7 @@ namespace heist
                 Console.WriteLine("");
                 Console.WriteLine("The more money you take, the better off you'll be when you skip town.");
                 Console.WriteLine("");
-                Console.WriteLine("1) split cash evenly among crew members and part ways");
+                Console.WriteLine("1) attempt to split cash evenly among crew members and part ways");
                 Console.WriteLine("2) ice a crew member");
 
                 int select = MenuInput(2);
@@ -177,7 +177,7 @@ namespace heist
                             // show a message that this occured
                             // then allow the player to decide if they should try to split cash
                             // or ice another crew member 
-                        GameOver(crew, locations);
+                        GameOver(crew, locations, true);
                         break;
                     case 2:
                         List<Criminal> smallerCrew = IceCrewMember(crew);
@@ -185,6 +185,7 @@ namespace heist
                         // Then do the morale check for if a crew member will open fire
                             // IF YES - randomly shoot an index value, including player
                                 // IF player - message,the game over
+                                    // DISPLAY image of player dead w/ msg that you got shot
                                 // Display message of who was shot
                                 // IF NOT player, give player option to split or ice
                             // IF NO
@@ -192,11 +193,11 @@ namespace heist
                         SplitCash(smallerCrew, locations);
                         break;
                 }
-                GameOver(crew, locations);
+                GameOver(crew, locations, true);
             }
             else
             {
-                GameOver(crew, locations); 
+                GameOver(crew, locations, true); 
             }
         }
 
@@ -428,7 +429,7 @@ namespace heist
             string moraleMsg = "Crew morale decreased";
             // 50-50 chance for arrested or escaped
             Random random = new Random();
-            int r = random.Next(2,3);
+            int r = random.Next(1,3);
             ASCII ASCII = new ASCII();
            
             // Arrested
@@ -446,7 +447,7 @@ namespace heist
                     Console.Write(msg);
                     Console.ReadLine();
                     Console.WriteLine();
-                    GameOver(crew, locations);
+                    GameOver(crew, locations, true);
                 }
                 // If multiple crew members
                 else if (crew.Count > 1)
@@ -495,12 +496,13 @@ namespace heist
             }
         }
 
-        static void GameOver(List<Criminal> crew, List<Location> locations)
+        static void GameOver(List<Criminal> crew, List<Location> locations, bool playerAlive)
         {
             ASCII ASCII = new ASCII();
             
             Criminal player = crew.Find(c => c.IsPlayer);
             int cashStolen = player.CrewTotalCash;
+            int playersCut = cashStolen / crew.Count();
             int totalCashAvailable = 0;
             locations.ForEach(l => totalCashAvailable = l.Cash + totalCashAvailable);
 
@@ -509,13 +511,34 @@ namespace heist
             Console.WriteLine(ASCII.DisplaySubHeadingSummary());
             Console.WriteLine($"Total cash stolen: ${cashStolen} / ${totalCashAvailable}");
             
-            if (crew.Count() > 1)
+            if (playerAlive)
             {
-                Console.WriteLine($"Crew members survived: {crew.Count()}");
-                Console.WriteLine($"The cut per member: ${cashStolen / crew.Count()}");
-            }
+                if (crew.Count() > 1)
+                {
+                    Console.WriteLine($"The cut per member: ${cashStolen / crew.Count()}");
 
-            if (player.PlayerContactCount > 0) Console.WriteLine($"Associates you could have hired: {player.PlayerContactCount}");
+                    Console.WriteLine($"Crew members who survived:");
+                    crew.ForEach(c =>
+                    {
+                        if (!c.IsPlayer)
+                        {
+                            Console.WriteLine($"  {c.Name}");
+                        }
+                    });     
+
+                    if (player.PlayerContactCount > 0) Console.WriteLine($"Number of associates left you could have hired: {player.PlayerContactCount}");               
+                }
+                
+                // Based on how much the playersCut was, display ending message
+                if (playersCut >= 0 && playersCut <= 10_000) Console.WriteLine(ASCII.DisplayEndingCamp());
+                if (playersCut >= 10_001 && playersCut <= 500_000) Console.WriteLine(ASCII.DisplayEndingRoad());
+                if (playersCut > 500_000) Console.WriteLine(ASCII.DisplayEndingBeach());
+            }
+            else
+            {
+                // Display player died face
+                // Crime doesn't pay when you're dead.
+            }
             
             Console.WriteLine("");
             Console.Write("Press any key to close C# Heists ");
