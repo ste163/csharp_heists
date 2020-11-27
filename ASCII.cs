@@ -437,6 +437,15 @@ return @"
 --------------------------------------------------------------------------";
         }
 
+        public String DisplaySubheadingWanted()
+        {
+            return @"
+
+█   █ ▄▀▄ █▄ █ ▀█▀ ██▀ █▀▄
+▀▄▀▄▀ █▀█ █ ▀█  █  █▄▄ █▄▀
+";
+        }
+
         public string DisplayHouse()
         {
             return @"                    [[[[[[[[\_(X)_/]]]]]

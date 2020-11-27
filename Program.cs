@@ -16,12 +16,6 @@ using System.Linq;
     // Instead of Y/N for continue recruting, do the leave blank like in iceCrewMember
 
 // TO DO
-    // Game Over
-        // IF you have $0, the game over view doesn't show any ASCII or specific text
-            // Picture of your face, with the words WANTED over it
-            // message: "You somehow managed to steal $0. You don't have any money to skip town with.
-            // Police all over Tennessee and the ajoining states are looking for you."
-            // Enjoy your freedom while you can."
     // Crew management
         // To IMPROVE morale, need to be able to promise
             // crew you will give them more cash
@@ -497,22 +491,15 @@ namespace heist
             Console.WriteLine(ASCII.DisplaySubHeadingSummary());
             Console.WriteLine($"Total cash stolen: ${cashStolen} / ${totalCashAvailable}");
             
+            // Doesn't need else because it exits the program
             if (player.IsPlayerArrested == true)
             {
                 // If we have a crew
                 if (crew.Count() > 1)
                 {
                     // Minus you from crew.Count
-                    Console.WriteLine($"The cut per members not in jail: ${cashStolen / crew.Count()} - 1");
-
-                    Console.WriteLine($"Crew members who survived:");
-                    crew.ForEach(c =>
-                    {
-                        if (!c.IsPlayer)
-                        {
-                            Console.WriteLine($"  {c.Name}");
-                        }
-                    });     
+                    Console.WriteLine($"The cut per members not in jail: ${cashStolen / crew.Count() - 1}");
+                    DisplayCrewMembersWhoSurvived(crew);
                 }
 
                 if (player.PlayerContactCount > 0) Console.WriteLine($"Number of associates left you could have hired: {player.PlayerContactCount}");     
@@ -521,28 +508,35 @@ namespace heist
                 Console.WriteLine(ASCII.DisplayArrested());
 
                 Console.WriteLine("You should have known, crime never pays.");
-                // EXIT game lines copied up here
-                // So that they won't double up
-                Console.WriteLine("");
-                Console.Write("Press any key to close C# Heists ");
-                Console.ReadLine();
-                Environment.Exit(0);
+
+                ExitGame();
             }
 
             if (playerAlive)
             {
+                if (player.CrewTotalCash == 0)
+                {
+                    DisplayCrewMembersWhoSurvived(crew);
+                    if (player.PlayerContactCount > 0) Console.WriteLine($"Number of associates left you could have hired: {player.PlayerContactCount}");
+
+                    Console.WriteLine(ASCII.DisplaySubheadingWanted());
+                    Console.WriteLine($"{player.Name} for multiple attempts at robbery.");
+                    Console.WriteLine($"{player.Face}");
+                    Console.WriteLine("");
+                    Console.WriteLine("You somehow ended up with nothing. You can't even get out of town.");
+                    Console.WriteLine("Police all over Tennessee and the ajoining states are hunting you.");
+                    Console.WriteLine($"Enjoy your freedom while you can, {player.Name}.");
+                    
+                    ExitGame();
+                }
+                // the crew does have cash
+                else
+                {
                 if (crew.Count() > 1)
                 {
                     Console.WriteLine($"The cut per member: ${cashStolen / crew.Count()}");
 
-                    Console.WriteLine($"Crew members who survived:");
-                    crew.ForEach(c =>
-                    {
-                        if (!c.IsPlayer)
-                        {
-                            Console.WriteLine($"  {c.Name}");
-                        }
-                    });     
+                    DisplayCrewMembersWhoSurvived(crew);
 
                     if (player.PlayerContactCount > 0) Console.WriteLine($"Number of associates left you could have hired: {player.PlayerContactCount}");               
                 }
@@ -551,7 +545,9 @@ namespace heist
                 if (playersCut > 0 && playersCut <= 10_000) Console.WriteLine(ASCII.DisplayEndingCamp());
                 if (playersCut >= 10_001 && playersCut <= 500_000) Console.WriteLine(ASCII.DisplayEndingRoad());
                 if (playersCut > 500_000) Console.WriteLine(ASCII.DisplayEndingBeach());
+                }
             }
+
             else if (!playerAlive)
             {
                 // If there are any crew members left
@@ -575,6 +571,23 @@ namespace heist
                 // Crime doesn't pay when you're dead.
             }
             
+            ExitGame();
+        }
+
+        static void DisplayCrewMembersWhoSurvived(List<Criminal> crew)
+        {
+            Console.WriteLine($"Crew members who survived:");
+            crew.ForEach(c =>
+            {
+                if (!c.IsPlayer)
+                {
+                    Console.WriteLine($"  {c.Name}");
+                }
+            });   
+        }
+
+        static void ExitGame()
+        {
             Console.WriteLine("");
             Console.Write("Press any key to close C# Heists ");
             Console.ReadLine();
