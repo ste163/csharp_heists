@@ -37,11 +37,12 @@ namespace heist
             {
                 string d = "";
 
-                if (Morale <= 9) d = "*Eyes keep shifting from the back door of the van to the cash.*";
+                if (Morale <= 9) d = "*Eyes keep shifting from you to the back door of the van.*";
                 if (Morale >= 10 && Morale <= 19) d = "'You're the worst.'";
                 if (Morale >= 20 && Morale <= 29) d = "'You better know what you're doing, or else.'";
                 if (Morale >= 30 && Morale <= 39) d = "'Things aren't great right now.'";
                 if (Morale >= 40 && Morale <= 49) d = "'Could be going better.'";
+                // All morale levels above this line have a chance of turning on crew/player
                 if (Morale >= 50 && Morale <= 59) d = "'Doing okay.'";
                 if (Morale >= 60 && Morale <= 69) d = "'Going well, boss.'";
                 if (Morale >= 70 && Morale <= 79) d = "'Great work so far, boss!'";

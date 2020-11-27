@@ -25,7 +25,7 @@ namespace heist
                 if (Difficulty >= 451 && Difficulty <= 550) d = "No guards outside, but there are security cameras. [~450-550 skill level required]";
                 if (Difficulty >= 551 && Difficulty <= 650) d = "Two security cameras and a guard outside. [~550-650 skill level required]";
                 if (Difficulty >= 651 && Difficulty <= 750) d = "Many cameras, guards inside and out. [~650-750 skill level required]";
-                if (Difficulty >= 751 && Difficulty <= 850) d = "Guards outside have rifles. It's almost like they're expecting a robbery. [~850-950 skill level required]";
+                if (Difficulty >= 751 && Difficulty <= 850) d = "Guards outside have rifles. It's almost like they're expecting a robbery. [~750-850 skill level required]";
                 if (Difficulty >= 850) d = "A cop cruiser is parked in front. On the bank steps, cops chat with armed bank security guards. [+850 skill level required]";
 
                 return d;
@@ -58,7 +58,8 @@ namespace heist
             // Store values for locations
             string houseName = "Annoying Neighbor's House";
             string houseSummary = @"He always talks about hating banks and keeping money in the guest room mattress.";
-            int houseDiff = (new Random().Next(10, 100));
+            // int houseDiff = (new Random().Next(10, 100));
+            int houseDiff = 1;
             int houseCash = (new Random().Next(2_000, 150_000));
 
             string gasName = "Corner 7-Eleven";
@@ -78,7 +79,7 @@ namespace heist
 
             string baName = "Bank of Amereeka";
             string baSummary = "Just opened a couple days ago. This will be hard.";
-            int baDiff = (new Random().Next(800, 1000));
+            int baDiff = (new Random().Next(800, 900));
             int baCash = (new Random().Next(1_000_000, 3_000_000));
 
             // Instantiate locations
