@@ -16,6 +16,8 @@ using System.Linq;
     // Instead of Y/N for continue recruting, do the leave blank like in iceCrewMember
 
 // TO DO
+    // Refactor
+        // press any key to continue into a method
     // Crew management
         // To IMPROVE morale, need to be able to promise
             // crew you will give them more cash
@@ -333,6 +335,7 @@ namespace heist
                             c.CrewTotalCash = c.CrewTotalCash + l.Cash;
                             c.BaseSkill = c.BaseSkill + skillIncrease;
                             c.Morale = c.Morale + moraleIncrease;
+                            c.HasPlayerEncouragedCrew = false;
                             // If the new morale is over 100, set it to only 100
                             if (c.Morale > 100)
                             {
@@ -713,10 +716,14 @@ namespace heist
             Criminal player = crew.Find(c => c.IsPlayer);
             Console.WriteLine();
             if (player.PlayerContactCount > 0) Console.WriteLine("1) recruit crew member");
-            if (crew.Count() > 1) Console.WriteLine("2) ice crew member");
-            Console.WriteLine("3) return to planning");           
+            if (crew.Count() > 1) 
+            {
+                if (player.HasPlayerEncouragedCrew == false) Console.WriteLine("2) give an encouraging speech");
+                Console.WriteLine("3) ice crew member");
+            };
+            Console.WriteLine("4) return to planning");           
             
-            int input = MenuInput(3);
+            int input = MenuInput(4);
 
             switch (input)
             {
@@ -725,13 +732,53 @@ namespace heist
                     ManageCrew(updatedCrew, locations);
                     break;
                 case 2:
+                    if (crew.Count() > 1) updatedCrew = EncourageCrew(updatedCrew, false);
+                    ManageCrew(updatedCrew, locations);
+                    break;
+                case 3:
                     updatedCrew = IceCrewMember(updatedCrew, false);
                     ManageCrew(updatedCrew, locations);           
                     break;
-                case 3:
+                case 4:
                     LevelSelect(updatedCrew, locations);
                     break;
             }
+        }
+
+        static List<Criminal> EncourageCrew(List<Criminal> crew, bool isSplitMenu)
+        {
+            // Takes an isSplitMenu because different encouragements require different speeches
+            Criminal player = crew.Find(c => c.IsPlayer);
+            if (player.HasPlayerEncouragedCrew == false)
+            {
+                Random r = new Random();
+                crew.ForEach(c =>
+                {
+                    if (!c.IsPlayer) c.Morale = c.Morale + r.Next(1, 15);
+                    if (c.IsPlayer) c.HasPlayerEncouragedCrew = true;
+                });
+                DisplayEncouragingSpeech(player, isSplitMenu);
+                return crew;
+            }
+            return crew;
+        }
+
+        static void DisplayEncouragingSpeech(Criminal player, bool isSplitMenu)
+        {
+            Console.Clear();
+            ASCII ASCII = new ASCII();
+            Console.WriteLine(ASCII.DisplaySubheadingSpeech());  
+            Console.WriteLine(player.Face);
+            Console.WriteLine("");
+            // for the speeches, get names of the crew members and plop them into a speech
+            if (isSplitMenu == false) Console.WriteLine("You give a big speech and promise everyone will get rich.");
+            if (isSplitMenu == true) Console.WriteLine("You give a big speech congratulating everyone's amazing skill.");
+            Console.WriteLine("");
+            Console.WriteLine("Crew morale increased.");
+            Console.WriteLine("");
+
+            Console.Write("Press any key to continue ");
+            Console.ReadLine();
         }
 
         static List<Criminal> IceCrewMember(List<Criminal> crew, bool splitCashMenu)

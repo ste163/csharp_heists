@@ -57,7 +57,7 @@ namespace heist
 
         public bool IsPlayer { get; set; }
         public bool IsPlayerArrested { get; set; } = false;
-
+        public bool HasPlayerEncouragedCrew { get; set; } = false;
         public int PlayerContactCount { get; set; }
 
         public string Face { get; set; }
@@ -75,7 +75,7 @@ namespace heist
             ASCII ASCII = new ASCII();
             
             Name = name;
-            BaseSkill = new Random().Next(20, 50);
+            BaseSkill = new Random().Next(20, 40);
 
             Random r = new Random();
 
