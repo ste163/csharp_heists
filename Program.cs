@@ -3,41 +3,41 @@ using System.Collections.Generic;
 using System.Linq;
 
 // C# Heists
-    // is a text-based heist game created to learn the basics of C#
-    // the disorganized code is because I had not learned proper
-    // C# project management. I am fully aware no project should ever
-    // be written in such a gigantic file.
+    // is a text-based heist adventure game created to learn the basics of C#.
+    // The disorganized code is because I had not learned proper C# project management.
+    // I am fully aware no project should ever be written in such a gigantic file.
 
 // BUGS
-    // Can enter crew members with blank names
-    // Can enter crew members with duplicate names
-    // IF you have $0, the game over view doesn't show any ASCII or specific text
-        // Picture of your face, with the words WANTED over it
-        // message: "You somehow managed to steal $0. You don't have any money to skip town with.
-        // Police all over Tennessee and the ajoining states are looking for you."
-        // Enjoy your freedom while you can."
+    // Crew
+        // Can enter crew members with blank names
+        // Can enter crew members with duplicate names
 
 // CHANGES TO MAKE LATER
     // Instead of Y/N for continue recruting, do the leave blank like in iceCrewMember
 
 // TO DO
+    // Game Over
+        // IF you have $0, the game over view doesn't show any ASCII or specific text
+            // Picture of your face, with the words WANTED over it
+            // message: "You somehow managed to steal $0. You don't have any money to skip town with.
+            // Police all over Tennessee and the ajoining states are looking for you."
+            // Enjoy your freedom while you can."
     // Crew management
         // To IMPROVE morale, need to be able to promise
             // crew you will give them more cash
             // HOWEVER, you can only do this once for every SUCESSFUL level
             // so on level success, reset this boolean property 
-        // IF player ices a crew member
+    // Morale Checks
+        // If player ices a crew member in CREW MANAGEMENT
             // Run morale check to see if any crew member will turn
                 // If crew member turns, they take a large % of cash
                 // If there is no cash, then say the crew member ran in fear
-
-    // Splitting the cash view
-        // IF player ices a crew member, then do a morale checkto see if anyone is going to turn
-            // Turning at this point means shooting another crew member
-            // If a crew member shoots another crew member, display a message that this occured
-            // then give the player control to decide whether to ice another crew member or split the cash
-            // THERE IS A RANDOM CHANCE PLAYER WILL BE SHOT AND DIES
-            // REPEAT until game over 
+        // If player ices a crew member in SPLIT CASH / attempts to split cash
+        // Player can say 1 congratulations to slightly increase morale (0, 10pts)
+            // Run morale checks to see if any crew member will turn
+                // If crew member turns, member shoots a random index value criminal, possibly the player
+                // If the player didn't die, then let the player choose options again, minus congrats
+                // Repeat until success
 
 namespace heist
 {
@@ -70,8 +70,7 @@ namespace heist
 
                 Console.WriteLine("1) manage crew");
 
-                // Iterate through locations, for those that are not completed,
-                    // Check if it's name has been completed, if not, show that option
+                // Iterate through locations, for those that are not completed, then show those options
                 locations.ForEach(l =>
                 {
                     if (!l.Completed)
@@ -233,36 +232,31 @@ namespace heist
                     // If location is in list, load the locationInfo
                     if (isHouseCompleted.Count() == 1) LocationInfo(locations, houseSelected, crew);
                     // If it's been completed, return to LevelSelect
-                    else LevelSelect(crew, locations);
-                    
+                    else LevelSelect(crew, locations);                  
                     break;
                 case 3:
                     string gasSelected = "Corner 7-Eleven";
                     List<Location> isGasCompleted = locations.Where(l => l.Name == gasSelected && !l.Completed).ToList();
                     if (isGasCompleted.Count() == 1) LocationInfo(locations, gasSelected, crew);
-                    else LevelSelect(crew, locations);
-                    
+                    else LevelSelect(crew, locations);                   
                     break;
                 case 4:
                     string wfSelected = "Welts Fargo";
                     List<Location> isWfCompleted = locations.Where(l => l.Name == wfSelected && !l.Completed).ToList();
                     if (isWfCompleted.Count() == 1) LocationInfo(locations, wfSelected, crew);
-                    else LevelSelect(crew, locations);
-                    
+                    else LevelSelect(crew, locations);                   
                     break;
                 case 5:
                     string pnbSelected = "Pinnackle National Bank";
                     List<Location> isPnbCompleted = locations.Where(l => l.Name == pnbSelected && !l.Completed).ToList();
                     if (isPnbCompleted.Count() == 1) LocationInfo(locations, pnbSelected, crew);
-                    else LevelSelect(crew, locations);
-                    
+                    else LevelSelect(crew, locations);           
                     break;
                 case 6:
                     string boaSelected = "Bank of Amereeka";
                     List<Location> isBoaCompleted = locations.Where(l => l.Name == boaSelected && !l.Completed).ToList();
                     if (isBoaCompleted.Count() == 1) LocationInfo(locations, boaSelected, crew);
-                    else  LevelSelect(crew, locations);
-                
+                    else  LevelSelect(crew, locations);            
                     break;
             }
         }
@@ -271,12 +265,12 @@ namespace heist
         {
             Console.Clear();
             ASCII ASCII = new ASCII();
-
+            // Get the selected location
             List<Location> loc = locations.Where(l => l.Name == locName).ToList();
-
+            // Display the Stakeout heading
             Console.WriteLine(ASCII.DisplayStakeout());
-
             DisplayCrewInfo(crew);
+            // Display location info
             loc.ForEach(l => Console.WriteLine($@"
 {l.Image}
 
@@ -285,12 +279,12 @@ namespace heist
 {l.Summary}
 {l.DifficultyDescription}
 "));
-
+            // Options for stakeouts
             Console.WriteLine("1) keep watching from van");
             Console.WriteLine("2) begin heist");
             Console.WriteLine("3) return to planning");
             int selection = MenuInput(3);
-
+            // Switch based on user input
             switch (selection)
             {
                 case 1:
