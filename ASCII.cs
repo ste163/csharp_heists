@@ -639,7 +639,7 @@ _           ~=-.,__,.-=~         ~'`^`'~=-.,.-=~'`^`'~=-.,__,.-=~'
         public string DisplayEndingRoad()
         {
             return @"
-You escaped with enough money to travel west.
+You escaped with enough cash to travel west.
 It's a big country. Hopefully you'll find somewhere to hide.
 
                                                
