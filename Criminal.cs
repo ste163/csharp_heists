@@ -76,7 +76,6 @@ namespace heist
             
             Name = name;
             BaseSkill = new Random().Next(20, 50);
-            CourageFactor = new Random().NextDouble();
             Face = ASCII.DisplayCriminalFace();
             if (player)
             {
@@ -88,7 +87,7 @@ namespace heist
             {
                 IsPlayer = false;
                 PlayerContactCount = 0;
-                Morale = new Random().Next(25, 61);
+                Morale = new Random().Next(20, 40);
             }
         }
     }

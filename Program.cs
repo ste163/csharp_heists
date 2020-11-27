@@ -1,13 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
-// Locations
-    // Wells Fargo (dif 100 - 300) ($100,000-$500,000)
-        // {crew member} staked this place out earlier. Tame security and somewhat run-down. 
-    // Pinnacle National Bank? (dif 400 - 800) ($100,000 - $500,000)
-    // Bank of America (dif 600 - 1000) ($100,000-$500,000)
-        // {NAME} has cased the place. This will be the toughest job, but banks have all the money, right?
     
 // Heist
     // IF Successfull
@@ -72,10 +65,13 @@ namespace heist
                     {
                         if (l.Name == "Annoying Neighbor's House") Console.WriteLine("2) stakeout Annoying Neighbor's House");
                         if (l.Name == "Corner 7-Eleven") Console.WriteLine("3) stock-up at Corner 7-Eleven");
+                        if (l.Name == "Welts Fargo") Console.WriteLine("4) stakeout Welts Fargo");
+                        if (l.Name == "Pinnackle National Bank") Console.WriteLine("5) stakeout Pinnackle National Bank");
+                        if (l.Name == "Bank of Amereeka") Console.WriteLine("6) stakeout Bank of Amereeka");
                     }
                 });
                 
-                int selection = MenuInput(3);
+                int selection = MenuInput(6);
 
                 switch (selection)
                 {
@@ -89,6 +85,18 @@ namespace heist
                     case 3:
                         // 7-Eleven
                         StakeOutLocation(crew, locations, 3);
+                        break;
+                    case 4:
+                        // Welts Fargo
+                        StakeOutLocation(crew, locations, 4);
+                        break;
+                    case 5:
+                        // Pinnackle
+                        StakeOutLocation(crew, locations, 5);
+                        break;
+                    case 6:
+                        // Amereeka
+                        StakeOutLocation(crew, locations, 6);
                         break;
                 }
 
@@ -130,6 +138,48 @@ namespace heist
                     if (isGasCompleted.Count() == 1)
                     {
                         LocationInfo(locations, gasSelected, crew);
+                    }
+                    else
+                    {
+                        LevelSelect(crew, locations);
+                    }
+                    break;
+                case 4:
+                    string wfSelected = "Welts Fargo";
+
+                    List<Location> isWfCompleted = locations.Where(l => l.Name == wfSelected && !l.Completed).ToList();
+
+                    if (isWfCompleted.Count() == 1)
+                    {
+                        LocationInfo(locations, wfSelected, crew);
+                    }
+                    else
+                    {
+                        LevelSelect(crew, locations);
+                    }
+                    break;
+                case 5:
+                    string pnbSelected = "Pinnackle National Bank";
+
+                    List<Location> isPnbCompleted = locations.Where(l => l.Name == pnbSelected && !l.Completed).ToList();
+
+                    if (isPnbCompleted.Count() == 1)
+                    {
+                        LocationInfo(locations, pnbSelected, crew);
+                    }
+                    else
+                    {
+                        LevelSelect(crew, locations);
+                    }
+                    break;
+                case 6:
+                    string boaSelected = "Bank of Amereeka";
+
+                    List<Location> isBoaCompleted = locations.Where(l => l.Name == boaSelected && !l.Completed).ToList();
+
+                    if (isBoaCompleted.Count() == 1)
+                    {
+                        LocationInfo(locations, boaSelected, crew);
                     }
                     else
                     {
@@ -245,6 +295,10 @@ namespace heist
         static void HeistSuccess(List<Criminal> crew, List<Location> locations, string locName)
         {
             Console.Clear();
+
+            // Morale check before continuing
+            WillCrewMemberTurnAfterHeist(crew, locations, locName);
+
             ASCII ASCII = new ASCII();
             Console.WriteLine(ASCII.DisplayHeistSuccess());
             Console.WriteLine(ASCII.DisplayMoney());
@@ -261,7 +315,7 @@ namespace heist
             // how much the current split will be if it's more than one crew member
             if (crew.Count() > 1)
             {
-                Console.WriteLine($"The split will be: ${cashEarned / crew.Count()}");
+                Console.WriteLine($"The split per crew member will be: ${cashEarned / crew.Count()}");
                 Console.WriteLine("----");
                 Console.WriteLine("Crew skill increased");
                 Console.WriteLine("Crew morale increased");
@@ -271,7 +325,7 @@ namespace heist
                 Console.WriteLine("Your skill increased");
             }
             Console.WriteLine("");
-            Console.Write("Press any key to continue");
+            Console.Write("Press any key to continue ");
             Console.ReadLine();
             LevelSelect(crew, locations);
         }
@@ -372,30 +426,172 @@ namespace heist
             if (player.PlayerContactCount > 0) Console.WriteLine($"Associates you could have hired: {player.PlayerContactCount}");
             
             Console.WriteLine("");
-            Console.Write("Press any key multiple times to close the game ");
+            Console.Write("Press any key to close C# Heists ");
             Console.ReadLine();
+            Environment.Exit(0);
         }
 
         static void WillCrewMemberTurnAfterHeist(List<Criminal> crew, List<Location> locations, string locName)
         {
-            // THIS check is ONLY for if they're going to turn on a heist
+            // THIS check is ONLY for if they're going to turn on a HEIST
                 // Break out some of this functinality so it can be used on
                 // WillCrewMemberTurnAfterIce
-            // IF a heist is successful
-                // loop through each crew member
-                // if (morale is under 40 && l.StolenByCrewMember == false ) then:
-                    // Have a switch statement that checks a random number that is the percentage chance
-                    // of this turning to occur
-                    //  if (Morale >= 30 && Morale <= 40) 30% chance to turn;
-                    //  if (Morale >= 20 && Morale <= 29) 50% chance to turn;
-                    //  if (Morale >= 10 && Morale <= 19) 70% chance to turn;
-                    //  if (Morale <= 9) 100% chance to turn;
-                // Switch on if someone will turn
-                    // if they turn,
-                        // steal all money from this location & a random amount of the other cash
-                        // remove that crew member from the list
-                        // lower everyone's morale
-                        // return to levelSelect
+
+            // Get the selected location
+            Location selectLocation = locations.Find(l => l.Name == locName);
+            // Loop through criminals to see if any fail the morale check
+            crew.ForEach(c =>
+            {
+                int morale = c.Morale;
+                // if morale is less than 40 and another crew member hasn't turned and stole the money first
+                if (morale <= 40 && selectLocation.crewMemberStoleCash == false)
+                {
+                    // Save as traitor for easy understanding
+                    Criminal traitor = c;
+
+                    // Generate a new random number between 1-10 to handle the % a person will turn
+                    Random r = new Random();
+                    int randomNumber = r.Next(101);
+                    int chance30 = 0;
+                    int chance50 = 0;
+                    int chance70 = 0;
+                    int chance100 = 0;
+
+                    // Based on this member's morale, generate a number by chance
+                    if (morale >= 30 && morale <= 40) chance30 = r.Next(31);
+                    if (morale >= 20 && morale <= 29) chance50 = r.Next(51);
+                    if (morale >= 10 && morale <= 19) chance70 = r.Next(71);
+                    // Chance100 equals the randomNumber so if they're at that level, they'll always turn
+                    if (morale <= 9) chance100 = randomNumber;
+
+                    // If their generated number is greater
+                    if (chance30 != 0 && chance30 >= randomNumber) 
+                        {
+                            // Lower everyone's Morale
+                            crew.ForEach(c =>
+                            {
+                                if (c.IsPlayer == false) c.Morale = c.Morale - new Random().Next(10, 35);
+                            });
+
+                            // Set the current location to stolen
+                            locations.ForEach(l =>
+                            {
+                                if (l.Name == locName) l.crewMemberStoleCash = true;
+                            }); 
+
+                            // Set selectLocation to true for the looping in this local scope
+                            // because the selecLocation is created OUTSIDE the forEach loop
+                            selectLocation.crewMemberStoleCash = true;
+                            // Get the traitor's index value
+                            int traitorsIndex = crew.IndexOf(traitor);
+                            // Remove that index value
+                            crew.RemoveAt(traitorsIndex);
+                                                    
+                            TraitorScreen(crew, locations, locName, traitor);    
+                        }
+                    if (chance50 != 0 && chance50 >= randomNumber)
+                    {
+                        // Repeated from chance30
+                        // Lower everyone's Morale
+                        crew.ForEach(c =>
+                        {
+                            if (c.IsPlayer == false) c.Morale = c.Morale - new Random().Next(10, 35);
+                        });
+
+                        // Set the current location to stolen
+                        locations.ForEach(l =>
+                        {
+                            if (l.Name == locName) l.crewMemberStoleCash = true;
+                        }); 
+
+                        // Set selectLocation to true for the looping in this local scope
+                        // because the selecLocation is created OUTSIDE the forEach loop
+                        selectLocation.crewMemberStoleCash = true;
+                        // Get the traitor's index value
+                        int traitorsIndex = crew.IndexOf(traitor);
+                        // Remove that index value
+                        crew.RemoveAt(traitorsIndex);
+                                                
+                        TraitorScreen(crew, locations, locName, traitor); 
+                    }
+                    if (chance70 != 0 && chance70 >= randomNumber)
+                    {
+                        // Repeated from chance30
+                        // Lower everyone's Morale
+                        crew.ForEach(c =>
+                        {
+                            if (c.IsPlayer == false) c.Morale = c.Morale - new Random().Next(10, 35);
+                        });
+
+                        // Set the current location to stolen
+                        locations.ForEach(l =>
+                        {
+                            if (l.Name == locName) l.crewMemberStoleCash = true;
+                        }); 
+
+                        // Set selectLocation to true for the looping in this local scope
+                        // because the selecLocation is created OUTSIDE the forEach loop
+                        selectLocation.crewMemberStoleCash = true;
+                        // Get the traitor's index value
+                        int traitorsIndex = crew.IndexOf(traitor);
+                        // Remove that index value
+                        crew.RemoveAt(traitorsIndex);
+                                                
+                        TraitorScreen(crew, locations, locName, traitor); 
+                    }
+                    if (chance100 !=  0)
+                    {
+                        // Repeated from chance30
+                        // Lower everyone's Morale
+                        crew.ForEach(c =>
+                        {
+                            if (c.IsPlayer == false) c.Morale = c.Morale - new Random().Next(10, 35);
+                        });
+
+                        // Set the current location to stolen
+                        locations.ForEach(l =>
+                        {
+                            if (l.Name == locName) l.crewMemberStoleCash = true;
+                        }); 
+
+                        // Set selectLocation to true for the looping in this local scope
+                        // because the selecLocation is created OUTSIDE the forEach loop
+                        selectLocation.crewMemberStoleCash = true;
+                        // Get the traitor's index value
+                        int traitorsIndex = crew.IndexOf(traitor);
+                        // Remove that index value
+                        crew.RemoveAt(traitorsIndex);
+                                                
+                        TraitorScreen(crew, locations, locName, traitor); 
+                    }
+                }
+            });
+            // If a crew member doesn't turn, don't do anything
+            // and let the rest of the heist success method run
+        }
+
+        static void TraitorScreen(List<Criminal> crew, List<Location> locations, string locName, Criminal traitor)
+        {
+            ASCII art = new ASCII();
+
+            Location currentLocation = locations.Find(l => l.Name == locName);
+
+            Console.WriteLine(art.DisplayHeadingTraitor());
+            Console.WriteLine(art.DisplaySubheadingTraitor());
+            Console.WriteLine("");
+            Console.WriteLine($"{traitor.Face}");
+            Console.WriteLine("");
+            Console.WriteLine($"{traitor.Name} stole ${currentLocation.Cash}");
+            Console.WriteLine("--------------------");
+            Console.WriteLine("Crew skill improved.");
+            Console.WriteLine("Crew morale decreased.");
+            Console.WriteLine("");
+            Console.WriteLine("Listen to your crew. Unhappy members may get decide to turn.");
+            Console.WriteLine("");
+            Console.Write("Press any key to continue ");
+
+            Console.ReadLine();
+            LevelSelect(crew, locations);
         }
 
         static void ManageCrew(List<Criminal> crew, List<Location> locations)
@@ -673,7 +869,7 @@ You: {c.Name}
                                 // Check based on if the player wants to continue hiring
                                 if (playerContactsLeft > 0)
                                 {
-                                    if (updatedCrew.Count() > 1)Console.WriteLine($"{updatedCrew.Count()} criminals in crew.");
+                                    if (updatedCrew.Count() > 1)Console.WriteLine($"{newCrew.Count() + 1} criminals in crew.");
                                     Console.Write(recruitingMessage);
                                     string response = Console.ReadLine().ToLower();
 
