@@ -9,19 +9,16 @@ using System.Linq;
 
 // BUGS
     // Player can enter a blank name
-    // If player was shot and only 1 crew member survied, Remove the cut per member. And say, {NAME} was the only survivor
-    // If the player DOESN"T want to shoot someone at the split cash, someone else can still shoot
-    // If a crew member shoots someone, it doesn't lower morale
-    // On splitting cash
-        // If crew members begin to open fire, and if some die. They are not removed from the crew
+    // Instead of Y/N for continue recruting, do the leave blank like in iceCrewMember
 
-    // Split Cash view
-        // Player must stop entering names in the ice associate on split cash before the morale check occurs
+    // Splitting cash view
+        // If player was shot and only 1 crew member survied, Remove the cut per member. And say, {NAME} was the only survivor
+        // If the player DOESN'T want to shoot someone at the split cash, someone else can still shoot
+        // If a crew member shoots someone, it doesn't lower morale
+        // On attempting to split cash
+            // If crew members begin to open fire, and if some die. They are not removed from the crew. They show up on the summary page
         // The check for who gets to shoot is NOT random, it always follows the same for each loop
             // It also only appears to run once -- BUT THAT MIGHT NOT BE THE CASE
-        // If player attempts to split cash, the player is able to get another turn to shoot. Attempting to split cash should not allow player to shoot
-
-    // Instead of Y/N for continue recruting, do the leave blank like in iceCrewMember
 
 namespace heist
 {
@@ -608,7 +605,7 @@ _____
                 {
                 if (crew.Count() > 1)
                 {
-                    Console.WriteLine($"The cut per member: ${cashStolen / crew.Count()}");
+                    Console.WriteLine($"Cut per member: ${cashStolen / crew.Count()}");
 
                     DisplayCrewMembersWhoSurvived(crew);
 
@@ -617,8 +614,8 @@ _____
                 
                 // Based on how much the playersCut was, display ending message
                 if (playersCut > 0 && playersCut <= 10_000) Console.WriteLine(ASCII.DisplayEndingCamp());
-                if (playersCut >= 10_001 && playersCut <= 500_000) Console.WriteLine(ASCII.DisplayEndingRoad());
-                if (playersCut > 500_000) Console.WriteLine(ASCII.DisplayEndingBeach());
+                if (playersCut >= 10_001 && playersCut <= 999_999) Console.WriteLine(ASCII.DisplayEndingRoad());
+                if (playersCut > 1_000_000) Console.WriteLine(ASCII.DisplayEndingBeach());
                 }
             }
 
@@ -1310,7 +1307,7 @@ _____
             if (crew.Count() > 1) Console.WriteLine($"Morale bonus to skill: {MoraleSkillBonus.Sum()}");
             Console.WriteLine("--------");
             Console.WriteLine($"Cash: ${TotalCash}");
-            if (crew.Count() > 1) Console.WriteLine($"current cut: ${CurrentSplit}");
+            if (crew.Count() > 1) Console.WriteLine($"Current cut: ${CurrentSplit}");
             Console.WriteLine("--------");
         }
 
@@ -1327,7 +1324,7 @@ _____
             Console.WriteLine($@"Total associates in crew: {crew.Count()}");
             Console.WriteLine("--------");
             Console.WriteLine($"Cash: ${TotalCash}");
-            if (crew.Count() > 1) Console.WriteLine($"current cut: ${CurrentSplit}");
+            if (crew.Count() > 1) Console.WriteLine($"Current cut: ${CurrentSplit}");
             Console.WriteLine("--------");
         }
 
