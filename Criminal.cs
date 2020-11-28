@@ -59,7 +59,7 @@ namespace heist
         public bool IsPlayerArrested { get; set; } = false;
         public bool HasPlayerEncouragedCrew { get; set; } = false;
         public int PlayerContactCount { get; set; }
-
+        public bool HasRanInFear { get; set; } = false;
         public string Face { get; set; }
         public string FaceIced { get; set; }
 
@@ -93,7 +93,7 @@ namespace heist
             {
                 IsPlayer = false;
                 PlayerContactCount = 0;
-                Morale = new Random().Next(20, 35);
+                Morale = new Random().Next(15, 30);
             }
         }
     }

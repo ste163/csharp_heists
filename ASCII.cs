@@ -370,6 +370,19 @@ return @"
 ";
         }
 
+        public string DisplayHeadingFled()
+        {
+            return @"
+
+███████╗██╗     ███████╗██████╗ 
+██╔════╝██║     ██╔════╝██╔══██╗
+█████╗  ██║     █████╗  ██║  ██║
+██╔══╝  ██║     ██╔══╝  ██║  ██║
+██║     ███████╗███████╗██████╔╝
+╚═╝     ╚══════╝╚══════╝╚═════╝ 
+";
+        }
+
         public string DisplayHeadingEscaped()
         {
             return @"
@@ -565,6 +578,7 @@ LS|/  /             \________________________ ____________";
         }
 
         public string DisplayAssociateRanWithCash()
+        // CURRENTLY NOT USED
         {
             return @"                       _________________
   { )_  <-            |              |   \

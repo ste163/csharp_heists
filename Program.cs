@@ -27,8 +27,8 @@ using System.Linq;
         // Crew Management
             // If player ices a crew member
                 // Run morale check to see if crew members will turn
-                    // If crew member turns, they take a large % of cash
-                    // If there is no cash, then say the crew member ran in fear
+                    // IF cash, TAKE LOTS OF CASH
+                    // Otherwise, the player can scare everyone into running without repercussions
 
         // Split Cash view
             // If player ices a crew member or when player attempts to split cash
@@ -57,6 +57,8 @@ namespace heist
         {
             // While there are levels not yet completed, allow user to continue selecting levels
             List<Location> locationsLeftToRob = locations.Where(l => l.Completed == false).ToList();
+            
+            Criminal player = crew.Find(c => c.IsPlayer);
 
             while (locationsLeftToRob.Count() > 0)
             {
@@ -66,8 +68,16 @@ namespace heist
                 DisplayCrewInfo(crew);
                 Console.WriteLine(art.DisplayNashville());
 
-                Console.WriteLine("1) manage crew");
-                Console.WriteLine("--------------");
+                if (player.PlayerContactCount == 0 && crew.Count() == 1)
+                {
+                    Console.WriteLine("No crew left to manage");
+                    Console.WriteLine("--------------");
+                }
+                else
+                {
+                    Console.WriteLine("1) manage crew");
+                    Console.WriteLine("--------------");
+                }
 
                 // Iterate through locations, for those that are not completed, then show those options
                 locations.ForEach(l =>
@@ -83,7 +93,7 @@ namespace heist
                 });
 
                 // IF you have ANY money, option 7 is available
-                Criminal player = crew.Find(c => c.IsPlayer);
+
                 if (player.CrewTotalCash > 0)
                 {
                     Console.WriteLine("--------------");
@@ -103,7 +113,8 @@ namespace heist
                 switch (selection)
                 {
                     case 1:
-                        ManageCrew(crew, locations);
+                        if (player.PlayerContactCount == 0 && crew.Count() == 1) LevelSelect(crew, locations);
+                        else ManageCrew(crew, locations);
                         break;
                     case 2:
                         // Annoying Neighbor
@@ -201,7 +212,7 @@ namespace heist
                             GameOver(crew, locations, true);
                             break;
                         case 2:
-                            List<Criminal> smallerCrew = IceCrewMember(crew, true);
+                            List<Criminal> smallerCrew = IceCrewMember(crew, locations, true);
                             // Loop through the smallerCrew. Lower everyone's morale by (40-60)
                             // Then do the morale check for if a crew member will open fire
                                 // IF YES - randomly shoot an index value, including player
@@ -679,11 +690,11 @@ namespace heist
                         int chance100 = 0;
 
                         // Based on this member's morale, generate a number by chance
-                        if (morale >= 30 && morale <= 40) chance30 = r.Next(31);
-                        if (morale >= 20 && morale <= 29) chance50 = r.Next(51);
-                        if (morale >= 10 && morale <= 19) chance70 = r.Next(71);
+                        if (morale >= 30 && morale <= 40) chance30 = r.Next(31) + 10;
+                        else if (morale >= 20 && morale <= 29) chance50 = r.Next(51) + 20;
+                        else if (morale >= 10 && morale <= 19) chance70 = r.Next(71) + 30;
                         // Chance100 equals the randomNumber so if they're at that level, they'll always turn
-                        if (morale <= 9) chance100 = randomNumber;
+                        else if (morale <= 9) chance100 = randomNumber;
 
                         ChanceToTurnAfterHeist(chance30, randomNumber, crew, locations, traitor, locName);
                         ChanceToTurnAfterHeist(chance50, randomNumber, crew, locations, traitor, locName);
@@ -694,7 +705,7 @@ namespace heist
             });
         }
 
-        static bool ChanceToTurnAfterHeist(
+        static void ChanceToTurnAfterHeist(
             int chanceInt,
             int randFrom100,
             List<Criminal> crew,
@@ -703,7 +714,7 @@ namespace heist
             string locName)
         {
             // If the percentage chance is under the random value picked
-            if (chanceInt != 0 && chanceInt <= randFrom100 || traitor.Morale <= 9) 
+            if (chanceInt != 0 && chanceInt >= randFrom100) 
             {
                 // Get selected location
                 Location selectedLocation = locations.Find(l => l.Name == locName);
@@ -728,10 +739,7 @@ namespace heist
                 crew.ForEach(c => c.CrewTotalCash = c.CrewTotalCash - selectedLocation.Cash);
 
                 TraitorScreen(crew, locations, locName, traitor);    
-
-                return true;
             }
-            return false;
         }
 
         static void TraitorScreen(List<Criminal> crew, List<Location> locations, string locName, Criminal traitor)
@@ -791,7 +799,7 @@ namespace heist
                     ManageCrew(updatedCrew, locations);
                     break;
                 case 3:
-                    updatedCrew = IceCrewMember(updatedCrew, false);
+                    updatedCrew = IceCrewMember(updatedCrew, locations, false);
                     ManageCrew(updatedCrew, locations);           
                     break;
                 case 4:
@@ -850,7 +858,7 @@ namespace heist
             Console.ReadLine();
         }
 
-        static List<Criminal> IceCrewMember(List<Criminal> crew, bool splitCashMenu)
+        static List<Criminal> IceCrewMember(List<Criminal> crew, List<Location> locations, bool splitCashMenu)
         {
             if (crew.Count() > 1)
             {
@@ -916,17 +924,18 @@ namespace heist
                             return c;
                         }).ToList();
 
-                        // DISPLAY Who was iced, require a readline in that function to pause
-                        // method execution
+                        // Display Who was iced, if not null
                         if (whoWasIced != null)
                         {
                             DisplayWhoWasIced(whoWasIced);
                         }
 
+                        // If we're on Crew Management, morale check if anyone ran in fear
+                        if (!splitCashMenu) WillCrewMemberRunAfterIce(newCrew, locations);
+                
                         crew = newCrew;
-                        
                     }
-                    // We didn't time in a name
+                    // We didn't type in a name
                     else
                     {
                         crew = icedCrew;
@@ -956,6 +965,86 @@ namespace heist
             // Player input to continue
             Console.WriteLine("");
             Console.Write("Press any key to return to crew management ");
+            Console.ReadLine();
+        }
+
+        static void WillCrewMemberRunAfterIce(List<Criminal> crew, List<Location> locations)
+        {
+            // SIMILAR to WillCrewMemberTurnAfterHeist
+            // But his checks EVERY member instead of until one turns
+            List<Criminal> checkedCrew = new List<Criminal>();
+            List<Criminal> notScaredCrew = new List<Criminal>();
+            // Loop through criminals & check their morale
+            checkedCrew = crew.Select(c =>
+            {
+                if (!c.IsPlayer)
+                {
+                    int morale = c.Morale;
+                    // if morale is less than 40, chance to run    
+                    if (morale <= 40)
+                    {
+                        Criminal possibleTraitor = c;
+
+                        // Get new random
+                        Random r = new Random();
+                        int randFrom100 = r.Next(101);
+                        int chance10 = 0;
+                        int chance20 = 0;
+                        int chance40 = 0;
+                        int chance100 = 0;
+
+                        // Based on this member's morale, generate a number by chance
+                        if (morale >= 30 && morale <= 40) chance10 = r.Next(11);
+                        else if (morale >= 20 && morale <= 29) chance20 = r.Next(21);
+                        else if (morale >= 10 && morale <= 19) chance40 = r.Next(41);
+                        // Chance100 equals the randomNumber so if they're at that level, they'll always turn
+                        else if (morale <= 9) chance100 = randFrom100;
+
+                        possibleTraitor = ChanceToRun(chance10, randFrom100, possibleTraitor);
+                        possibleTraitor = ChanceToRun(chance20, randFrom100, possibleTraitor);
+                        possibleTraitor = ChanceToRun(chance40, randFrom100, possibleTraitor);
+                        possibleTraitor = ChanceToRun(chance100, randFrom100, possibleTraitor);
+
+                        return possibleTraitor;
+                    }
+                }
+                return c;
+            }).ToList();
+
+            // Filter only the crew members who didn't run in fear
+            notScaredCrew = checkedCrew.Where(c => c.HasRanInFear == false).ToList();
+
+            ManageCrew(notScaredCrew, locations);
+        }
+
+        static Criminal ChanceToRun(
+            int chanceInt,
+            int randFrom100,
+            Criminal possibleTraitor)
+        {
+            // Check if they're a traitor
+            if (chanceInt != 0 && chanceInt >= randFrom100)
+            {
+                possibleTraitor.HasRanInFear = true;
+                AssociateRanInFear(possibleTraitor);
+                return possibleTraitor;
+            }
+            // Not a traitor
+            return possibleTraitor;
+        }
+
+        static void AssociateRanInFear(Criminal scared)
+        {
+            Console.Clear();
+            ASCII ASCII = new ASCII();
+            Console.WriteLine(ASCII.DisplayHeadingFled());
+            Console.WriteLine(ASCII.DisplayAssociateRanInFear());
+            Console.WriteLine(scared.Face);
+            Console.WriteLine("");
+            Console.WriteLine($"{scared.Name} fled from your horrifically violent action!");
+
+            Console.WriteLine("");
+            Console.Write("Press any key to continue ");
             Console.ReadLine();
         }
 
