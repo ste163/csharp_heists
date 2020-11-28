@@ -8,9 +8,7 @@ using System.Linq;
     // I am fully aware no project should ever be written in such a gigantic file.
 
 // BUGS
-    // Crew
-        // Can enter crew members with blank names
-        // Can enter crew members with duplicate names
+    // Player can enter a blank name
 
 // CHANGES TO MAKE LATER
     // Instead of Y/N for continue recruting, do the leave blank like in iceCrewMember
@@ -34,7 +32,13 @@ namespace heist
 {
     class Program
     {
+
         static void Main(string[] args)
+        {
+            StartGame();
+        }
+
+        static void StartGame()
         {
             Console.Clear();
             DisplayIntro();
@@ -657,8 +661,8 @@ _____
                 Console.WriteLine("");
                 Console.WriteLine("Crime doesn't pay when you're dead.");
             }
-            
-            ExitGame();
+
+             ExitGame();
         }
 
         static void DisplayCrewMembersWhoSurvived(List<Criminal> crew)
@@ -683,9 +687,12 @@ _____
         static void ExitGame()
         {
             Console.WriteLine("");
-            Console.Write("Press any key to close C# Heists ");
-            Console.ReadLine();
-            Environment.Exit(0);
+            Console.WriteLine("_________");
+            Console.WriteLine("");
+            Console.Write("Enter any key to play again or leave blank to exit C# Heists ");
+            string input = Console.ReadLine();
+            if (input != "") StartGame();
+            else if (input == "") Environment.Exit(0);
         }
 
         static void WillCrewMemberTurnAfterHeist(List<Criminal> crew, List<Location> locations, string locName)
@@ -1270,7 +1277,7 @@ ___________");
                 // Create the player and add them first to the roster
                 newCrew.Add(CreatePlayer(crew));
 
-                string hireMessage = "Go solo or hire a crew? [solo/hire]: ";
+                string hireMessage = @"Go solo or hire a crew (you can recruit associates later)? [solo/hire]: ";
 
                 Console.WriteLine(hireMessage);
                 string solo = Console.ReadLine().ToLower();
@@ -1315,7 +1322,7 @@ ___________");
                                 // Check based on if the player wants to continue hiring
                                 if (playerContactsLeft > 0)
                                 {
-                                    if (updatedCrew.Count() > 1)Console.WriteLine($"{newCrew.Count() + 1} criminals in crew.");
+                                    if (updatedCrew.Count() > 1)Console.WriteLine($"{newCrew.Count() + 1} associates in crew.");
                                     Console.Write(recruitingMessage);
                                     string response = Console.ReadLine().ToLower();
 
@@ -1375,16 +1382,33 @@ ___________");
 
         static Criminal RecruitNewCriminal(List<Criminal> crew)
         {
-            Console.Write("Enter new criminal's nickname: ");
-            string enteredName = Console.ReadLine();
-            Criminal newCriminal = new Criminal(enteredName, false, crew);
+            bool nameAvailable = true;
+            // Set a blank new criminal that we can return after the loop completes
+            Criminal newCriminal = null;
 
-            Console.WriteLine($@"{newCriminal.Face}
+            while (nameAvailable)
+            {
+                Console.Write("Enter associate's nickname: ");
+                string enteredName = Console.ReadLine();
+
+                Criminal isNameTaken = crew.Find(c => c.Name == enteredName);
+
+                if (isNameTaken == null && enteredName != "")
+                {
+                    newCriminal = new Criminal(enteredName, false, crew);
+                    nameAvailable = false;
+                    Console.WriteLine($@"{newCriminal.Face}
 
 {newCriminal.Name} recruited!
-------------
- base skill: {newCriminal.BaseSkill}
+_________
+   
+   base skill: {newCriminal.BaseSkill}
  ");
+                }
+                // Reset isNameTaken
+                isNameTaken = null;
+            }
+            // Exit loop and return new criminal
             return newCriminal;
         }
 
@@ -1400,8 +1424,9 @@ ___________");
             Console.WriteLine($@"{player.Face}
 
 {player.Name}
-------------
- skill level: {player.BaseSkill}
+_________
+  
+  skill level: {player.BaseSkill}
  ");
             return player;
         }
