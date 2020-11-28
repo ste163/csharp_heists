@@ -9,27 +9,13 @@ using System.Linq;
 
 // BUGS
     // Player can enter a blank name
+
     // Split Cash view
         // Player must stop entering names in the ice associate on split cash before the morale check occurs
         // The check for who gets to shoot is NOT random, it always follows the same for each loop
+        // If player attempts to split cash, the player is able to get another turn to shoot. Attempting to split cash should not allow player to shoot
 
-// CHANGES TO MAKE LATER
     // Instead of Y/N for continue recruting, do the leave blank like in iceCrewMember
-
-    // Game Over
-        // View for when player gets iced at the split
-            // Will need property for IsPlayerIced
-            // Show player's iced face
-            // Show who all survived
-            // Say and show WHO shot you
-
-    // Morale Checks
-        // Split Cash view
-            // If player ices a crew member or when player attempts to split cash
-            // Run morale checks to see if any crew member will turn
-                // If crew member turns, member shoots a random index value criminal, possibly the player
-                // If the player didn't die, then let the player choose options again, minus congrats
-                // Repeat until success
 
 namespace heist
 {
@@ -207,6 +193,7 @@ namespace heist
                     switch (select)
                     {
                         case 1:
+                        // Player gives up chance to shoot. Otherwise the player will always have the chance to ice the last person
                             WillCrewMemberShoot(crew, locations);
                             GameOver(crew, locations, true, player);
                             break;
