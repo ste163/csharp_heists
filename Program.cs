@@ -8,9 +8,6 @@ using System.Linq;
     // I am fully aware no project should ever be written in such a gigantic file.
 
 // BUGS
-    // Crew management
-        // Only show faces if less than 3 crew members
-        // If no contacts available AND no crew members other than player, jump to levelSelect
     // Crew
         // Can enter crew members with blank names
         // Can enter crew members with duplicate names
@@ -800,11 +797,16 @@ _____
         {
             Console.Clear();
 
+
             List<Criminal> updatedCrew = crew;
 
             DisplayCurrentCrew(updatedCrew);
    
             Criminal player = crew.Find(c => c.IsPlayer);
+
+            // If only the player is in the crew & player has 0 contacts, return to level select
+            if (crew.Count == 1 && player.PlayerContactCount == 0) LevelSelect(crew, locations);
+
             Console.WriteLine();
             if (player.PlayerContactCount > 0) Console.WriteLine($"1) recruit an associate [{player.PlayerContactCount} associates available to contact]");
             else if (player.PlayerContactCount == 0) Console.WriteLine("You've contacted every associate you know.");
