@@ -17,6 +17,10 @@ using System.Linq;
     // Instead of Y/N for continue recruting, do the leave blank like in iceCrewMember
 
 // TO DO
+    // Crew management
+        // After you give a speech,
+            // Change the text to say "You think the best time to give another speech will be after a successful heist"
+
     // Game Over
         // View for when player gets iced at the split
             // Will need property for IsPlayerIced
@@ -35,7 +39,6 @@ using System.Linq;
                     // If there is no cash, then say the crew member ran in fear
 
         // Split Cash view
-            // Immediately lower everyone's morale by 20-30pts
             // If player ices a crew member or when player attempts to split cash
             // Run morale checks to see if any crew member will turn
                 // If crew member turns, member shoots a random index value criminal, possibly the player
