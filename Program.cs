@@ -16,11 +16,6 @@ using System.Linq;
 // CHANGES TO MAKE LATER
     // Instead of Y/N for continue recruting, do the leave blank like in iceCrewMember
 
-// TO DO
-    // Crew management
-        // After you give a speech,
-            // Change the text to say "You think the best time to give another speech will be after a successful heist"
-
     // Game Over
         // View for when player gets iced at the split
             // Will need property for IsPlayerIced
@@ -29,9 +24,6 @@ using System.Linq;
             // Say and show WHO shot you
 
     // Morale Checks
-        // Icing a crew member needs to have a big affect on everyone
-        // Any morale under 70 should have a chance of turning
-
         // Crew Management
             // If player ices a crew member
                 // Run morale check to see if crew members will turn
@@ -75,6 +67,7 @@ namespace heist
                 Console.WriteLine(art.DisplayNashville());
 
                 Console.WriteLine("1) manage crew");
+                Console.WriteLine("--------------");
 
                 // Iterate through locations, for those that are not completed, then show those options
                 locations.ForEach(l =>
@@ -93,6 +86,7 @@ namespace heist
                 Criminal player = crew.Find(c => c.IsPlayer);
                 if (player.CrewTotalCash > 0)
                 {
+                    Console.WriteLine("--------------");
                     if (crew.Count() == 1)
                     {
                         Console.WriteLine("7) end heist spree");
@@ -779,6 +773,7 @@ namespace heist
             if (crew.Count() > 1) 
             {
                 if (player.HasPlayerEncouragedCrew == false) Console.WriteLine("2) give an encouraging speech");
+                else if (player.HasPlayerEncouragedCrew == true) Console.WriteLine("You can give another speech after a successful heist.");
                 Console.WriteLine("3) ice crew member");
             };
             Console.WriteLine("4) return to planning");           
@@ -814,7 +809,7 @@ namespace heist
                 Random r = new Random();
                 crew.ForEach(c =>
                 {
-                    if (!c.IsPlayer) c.Morale = c.Morale + r.Next(5, 15);
+                    if (!c.IsPlayer) c.Morale = c.Morale + r.Next(4, 25);
                     if (c.IsPlayer) c.HasPlayerEncouragedCrew = true;
                 });
                 DisplayEncouragingSpeech(player, isSplitMenu);
@@ -845,7 +840,6 @@ namespace heist
                 // {Name}, remember when you pushed that guard down the steps?
                 // {Name}, when you almost ran us into traffic?
                 // {Name}, for recommending subs for lunch, and {Name from earlier}, for suggesting coffee.
-
             }
         
             Console.WriteLine("");
@@ -908,7 +902,7 @@ namespace heist
                     {
                         List<Criminal> newCrew = icedCrew.Select(c =>
                         {
-                            int subtractMorale = new Random().Next(20, 66);
+                            int subtractMorale = new Random().Next(35, 70);
 
                             int loweredMorale = c.Morale - subtractMorale;
                             if (loweredMorale < 0)
