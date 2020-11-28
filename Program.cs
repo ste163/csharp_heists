@@ -10,8 +10,8 @@ using System.Linq;
 // BUGS
     // Crew management
         // Only show faces if less than 3 crew members
+        // If no contacts available AND no crew members other than player, jump to levelSelect
     // Crew
-        // No repeated faces
         // Can enter crew members with blank names
         // Can enter crew members with duplicate names
 
@@ -67,12 +67,14 @@ namespace heist
                 if (player.PlayerContactCount == 0 && crew.Count() == 1)
                 {
                     Console.WriteLine("No crew left to manage");
-                    Console.WriteLine("--------------");
+                    Console.WriteLine("______________________");
+                    Console.WriteLine("");
                 }
                 else
                 {
                     Console.WriteLine("1) manage crew");
-                    Console.WriteLine("--------------");
+                    Console.WriteLine("______________");
+                    Console.WriteLine("");
                 }
 
                 // Iterate through locations, for those that are not completed, then show those options
@@ -92,7 +94,8 @@ namespace heist
 
                 if (player.CrewTotalCash > 0)
                 {
-                    Console.WriteLine("--------------");
+                    Console.WriteLine("____________");
+                    Console.WriteLine("");
                     if (crew.Count() == 1)
                     {
                         Console.WriteLine("7) end heist spree");
@@ -296,7 +299,8 @@ namespace heist
 {selectedLoc.Image}
 
 {selectedLoc.Name}
------
+_____
+
 {selectedLoc.Summary}
 {selectedLoc.DifficultyDescription}
 ");
@@ -386,7 +390,14 @@ namespace heist
                             int locationCash = l.Cash;
                             c.CrewTotalCash = c.CrewTotalCash + l.Cash;
                             c.BaseSkill = c.BaseSkill + skillIncrease;
-                            c.Morale = c.Morale + moraleIncrease;
+                            if (c.Morale + moraleIncrease > c.MoraleMax)
+                            {
+                                c.Morale = c.MoraleMax;
+                            }
+                            else
+                            {
+                                c.Morale = c.Morale + moraleIncrease;
+                            }
                             c.HasPlayerEncouragedCrew = false;
                             // If the new morale is over 100, set it to only 100
                             if (c.Morale > 100)
@@ -504,7 +515,18 @@ namespace heist
                     // Randomly lower every non-player's morale
                     crew.ForEach(c =>
                     {
-                        if (c.IsPlayer == false) c.Morale = c.Morale - new Random().Next(25, 54);
+                        if (c.IsPlayer == false)
+                        {
+                            int loweredMorale = c.Morale - new Random().Next(25, 54);
+                            if (loweredMorale < c.MoraleMin)
+                            {
+                                c.Morale = c.MoraleMin;
+                            } 
+                            else
+                            {
+                                c.Morale = loweredMorale;
+                            }
+                        }
                     });
                     // Return to level select menu
                     LevelSelect(crew, locations);
@@ -516,7 +538,18 @@ namespace heist
                 // Randomly lower every non-player's morale
                 crew.ForEach(c =>
                 {
-                    if (c.IsPlayer == false) c.Morale = c.Morale - new Random().Next(15, 35);
+                    if (c.IsPlayer == false)
+                    {
+                        int loweredMorale = c.Morale - new Random().Next(15, 35);
+                        if (loweredMorale < c.MoraleMin)
+                        {
+                            c.Morale = c.MoraleMin;
+                        } 
+                        else
+                        {
+                            c.Morale = loweredMorale;
+                        }
+                    }
                 });
                 // Display escaped summary
                 Console.WriteLine(ASCII.DisplayHeadingEscaped());
@@ -773,7 +806,8 @@ namespace heist
    
             Criminal player = crew.Find(c => c.IsPlayer);
             Console.WriteLine();
-            if (player.PlayerContactCount > 0) Console.WriteLine("1) recruit crew member");
+            if (player.PlayerContactCount > 0) Console.WriteLine($"1) recruit an associate [{player.PlayerContactCount} associates available to contact]");
+            else if (player.PlayerContactCount == 0) Console.WriteLine("You've contacted every associate you know.");
             if (crew.Count() > 1) 
             {
                 if (player.HasPlayerEncouragedCrew == false) Console.WriteLine("2) give an encouraging speech");
@@ -813,7 +847,18 @@ namespace heist
                 Random r = new Random();
                 crew.ForEach(c =>
                 {
-                    if (!c.IsPlayer) c.Morale = c.Morale + r.Next(4, 25);
+                    if (!c.IsPlayer)
+                    {
+                        int improvedMorale = c.Morale + r.Next(4, 25);
+                        if (improvedMorale > c.MoraleMax)
+                        {
+                            c.Morale = c.MoraleMax;
+                        }
+                        else
+                        {
+                            c.Morale = improvedMorale;
+                        }
+                    }
                     if (c.IsPlayer) c.HasPlayerEncouragedCrew = true;
                 });
                 DisplayEncouragingSpeech(player, isSplitMenu);
@@ -909,9 +954,9 @@ namespace heist
                             int subtractMorale = new Random().Next(35, 70);
 
                             int loweredMorale = c.Morale - subtractMorale;
-                            if (loweredMorale < 0)
+                            if (loweredMorale < c.MoraleMin)
                             {
-                                c.Morale = 0;
+                                c.Morale = c.MoraleMin;
                             }
                             else
                             {
@@ -1068,7 +1113,8 @@ namespace heist
                 Console.WriteLine(ASCII.DisplayAssociateRanWithCash());
                 Console.WriteLine(scared.Face);
                 Console.WriteLine("");
-                Console.WriteLine($"{scared.Name} fled with a portion of the cash!");
+                Console.WriteLine($"Your horrifically violent act terrified {scared.Name}.");
+                Console.WriteLine($"{scared.Name} fled with a large portion of the cash!");
             }
 
             Console.WriteLine("");
@@ -1165,20 +1211,20 @@ namespace heist
             crew.ForEach(c => {
                 if (c.IsPlayer)
                 {
-                    Console.WriteLine($@"{c.Face}
-
+                    if (crew.Count() <= 3) Console.WriteLine(c.Face);
+                    Console.WriteLine($@"
 You: {c.Name}
-------------
- base skill: {c.BaseSkill}");
+   base skill: {c.BaseSkill}
+ ___________");
                 }
                 else
                 {
-                    Console.WriteLine($@"{c.Face}
-
-{c.Name}
-{c.MoraleDescription}
-------------
- base skill: {c.BaseSkill}");
+                    if (crew.Count() <= 3) Console.WriteLine(c.Face);
+                    Console.WriteLine($@"
+{c.Name}:
+   {c.MoraleDescription}
+   base skill: {c.BaseSkill}
+___________");
                 }
             });         
         }
@@ -1206,7 +1252,7 @@ You: {c.Name}
                         Console.WriteLine("");
                         Console.WriteLine($"{playerContactsLeft} associates left to hire.");
                         updatedCrew.Add(c);
-                        updatedCrew.Add(RecruitNewCriminal());
+                        updatedCrew.Add(RecruitNewCriminal(crew));
                         c.PlayerContactCount = --playerContactsLeft;
                     }
                     else 
@@ -1220,7 +1266,7 @@ You: {c.Name}
             else
             {
                 // Create the player and add them first to the roster
-                newCrew.Add(CreatePlayer());
+                newCrew.Add(CreatePlayer(crew));
 
                 string hireMessage = "Go solo or hire a crew? [solo/hire]: ";
 
@@ -1259,7 +1305,7 @@ You: {c.Name}
                             if (c.IsPlayer && playerContactsLeft > 0)
                             {
                                 updatedCrew.Add(c);
-                                updatedCrew.Add(RecruitNewCriminal());
+                                updatedCrew.Add(RecruitNewCriminal(newCrew));
                                 c.PlayerContactCount = --playerContactsLeft;
                                 Console.WriteLine("");
                                 Console.WriteLine($"{playerContactsLeft} associates available to contact.");
@@ -1325,11 +1371,11 @@ You: {c.Name}
             Console.ReadLine();
         }
 
-        static Criminal RecruitNewCriminal()
+        static Criminal RecruitNewCriminal(List<Criminal> crew)
         {
             Console.Write("Enter new criminal's nickname: ");
             string enteredName = Console.ReadLine();
-            Criminal newCriminal = new Criminal(enteredName, false);
+            Criminal newCriminal = new Criminal(enteredName, false, crew);
 
             Console.WriteLine($@"{newCriminal.Face}
 
@@ -1340,14 +1386,14 @@ You: {c.Name}
             return newCriminal;
         }
 
-        static Criminal CreatePlayer()
+        static Criminal CreatePlayer(List<Criminal> crew)
         {
-            ASCII ASCII = new ASCII();
-            Console.WriteLine(ASCII.DisplayWhoAreYou());
+            Console.WriteLine("");
+            Console.WriteLine("Who are you?");
             Console.Write("Enter your name: ");
 
             string playerName = Console.ReadLine();
-            Criminal player = new Criminal(playerName, true);
+            Criminal player = new Criminal(playerName, true, crew);
 
             Console.WriteLine($@"{player.Face}
 

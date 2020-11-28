@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace heist
 {
@@ -6,10 +7,9 @@ namespace heist
     {
         public string Name { get; set; }
 
-        // 1 - 100
         public int BaseSkill { get; set; }
-
-        // 1 -100
+        public int MoraleMin { get; set; }
+        public int MoraleMax { get; set; }
         public int Morale { get; set; }
         public int MoraleSkillBonus
         {
@@ -60,6 +60,7 @@ namespace heist
         public bool HasPlayerEncouragedCrew { get; set; } = false;
         public int PlayerContactCount { get; set; }
         public bool HasRanInFear { get; set; } = false;
+        public int FaceMatchingInt { get; set; }
         public string Face { get; set; }
         public string FaceIced { get; set; }
 
@@ -70,19 +71,46 @@ namespace heist
                return MoraleSkillBonus + BaseSkill;
             }
         }
-        public Criminal(string name, bool player)
+        public Criminal(string name, bool player, List<Criminal> crew)
         {
             ASCII ASCII = new ASCII();
+            Random r = new Random();
             
             Name = name;
             BaseSkill = new Random().Next(20, 40);
+            
+            bool checkFaces = true;
 
-            Random r = new Random();
+            while (checkFaces)
+            {
+                // Get random face value
+                int faceInt = r.Next(1, 8);
 
-            int faceInt = r.Next(1, 8);
+                if (crew.Count == 0)
+                {
+                    Face = ASCII.DisplayCriminalFace(faceInt);
+                    FaceIced = ASCII.DisplayCriminalFaceIced(faceInt);
+                    FaceMatchingInt = faceInt;
+                    checkFaces = false;
+                }
+                else
+                {
+                    // Check if face value is in the crew already
+                    Criminal anyMatches = crew.Find(c => c.FaceMatchingInt == faceInt);
+                    // If it's null, we didn't find a match!
+                    if (anyMatches == null)
+                    {
+                        Face = ASCII.DisplayCriminalFace(faceInt);
+                        FaceIced = ASCII.DisplayCriminalFaceIced(faceInt);
+                        FaceMatchingInt = faceInt;
+                        checkFaces = false;
+                    }
+                    // Reset the match
+                    anyMatches = null;
+                }
 
-            Face = ASCII.DisplayCriminalFace(faceInt);
-            FaceIced = ASCII.DisplayCriminalFaceIced(faceInt);
+            }
+
             if (player)
             {
                 IsPlayer = true;
@@ -93,7 +121,10 @@ namespace heist
             {
                 IsPlayer = false;
                 PlayerContactCount = 0;
-                Morale = new Random().Next(15, 30);
+                MoraleMin = r.Next(5, 20);
+                MoraleMax = r.Next(70, 101);
+                // Set morale start at a max of 50
+                Morale = r.Next(MoraleMin, 45);
             }
         }
     }
