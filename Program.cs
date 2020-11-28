@@ -9,6 +9,9 @@ using System.Linq;
 
 // BUGS
     // Player can enter a blank name
+    // Split Cash view
+        // Player must stop entering names in the ice associate on split cash before the morale check occurs
+        // The check for who gets to shoot is NOT random, it always follows the same for each loop
 
 // CHANGES TO MAKE LATER
     // Instead of Y/N for continue recruting, do the leave blank like in iceCrewMember
@@ -204,40 +207,29 @@ namespace heist
                     switch (select)
                     {
                         case 1:
-                            // Loop through criminals and see if anyone will open fire
-                                // If a crew member opens fire,
-                                // show a message that this occured
-                                // then allow the player to decide if they should try to split cash
-                                // or ice another crew member 
-                            GameOver(crew, locations, true);
+                            WillCrewMemberShoot(crew, locations);
+                            GameOver(crew, locations, true, player);
                             break;
                         case 2:
+                            // Player ices an associate 
                             List<Criminal> smallerCrew = IceCrewMember(crew, locations, true);
-                            // Loop through the smallerCrew. Lower everyone's morale by (40-60)
-                            // Then do the morale check for if a crew member will open fire
-                                // IF YES - randomly shoot an index value, including player
-                                    // IF player - message,the game over
-                                        // DISPLAY image of player dead w/ msg that you got shot
-                                    // Display message of who was shot
-                                    // IF NOT player, give player option to split or ice
-                                // IF NO
-                                    // return to player getting to decide
+                            WillCrewMemberShoot(smallerCrew, locations);
                             SplitCash(smallerCrew, locations);
                             break;
                         case 3:
                             SplitCash(EncourageCrew(crew, true), locations);
                             break;
                     }
-                    GameOver(crew, locations, true);
+                    GameOver(crew, locations, true, player);
                 }
                 else
                 {
-                    GameOver(crew, locations, true); 
+                    GameOver(crew, locations, true, player); 
                 }
             }
             else
             {
-                GameOver(crew, locations, true);
+                GameOver(crew, locations, true, player);
             }
         }
 
@@ -471,6 +463,7 @@ _____
         static void HeistFailure(List<Criminal> crew, List<Location> locations)
         {
             Console.Clear();
+            Criminal player = crew.Find(c => c.IsPlayer);
             string msg = "Press any key to continue ";
             string moraleMsg = "Crew morale decreased.";
             // 50-50 chance for arrested or escaped
@@ -493,7 +486,7 @@ _____
                     Console.Write(msg);
                     Console.ReadLine();
                     Console.WriteLine();
-                    GameOver(crew, locations, true);
+                    GameOver(crew, locations, true, player);
                 }
                 // If multiple crew members
                 else if (crew.Count > 1)
@@ -565,12 +558,11 @@ _____
             }
         }
 
-        static void GameOver(List<Criminal> crew, List<Location> locations, bool playerAlive)
+        static void GameOver(List<Criminal> crew, List<Location> locations, bool playerAlive, Criminal player)
         {
             ASCII ASCII = new ASCII();
-            
-            Criminal player = crew.Find(c => c.IsPlayer);
-            int cashStolen = player.CrewTotalCash;
+            Criminal firstIndex = crew[0];
+            int cashStolen = firstIndex.CrewTotalCash;
             int playersCut = cashStolen / crew.Count();
             int totalCashAvailable = 0;
             locations.ForEach(l => totalCashAvailable = l.Cash + totalCashAvailable);
@@ -579,30 +571,30 @@ _____
             Console.WriteLine(ASCII.DisplayHeadingGameOver());
             Console.WriteLine(ASCII.DisplaySubHeadingSummary());
             Console.WriteLine($"Total cash stolen: ${cashStolen} / ${totalCashAvailable}");
-            
-            // Doesn't need else because it exits the program
-            if (player.IsPlayerArrested == true)
-            {
-                // If we have a crew
-                if (crew.Count() > 1)
-                {
-                    // Minus you from crew.Count
-                    Console.WriteLine($"The cut per members not in jail: ${cashStolen / crew.Count() - 1}");
-                    DisplayCrewMembersWhoSurvived(crew);
-                }
-
-                if (player.PlayerContactCount > 0) Console.WriteLine($"Number of associates left you could have hired: {player.PlayerContactCount}");     
-                
-                Console.WriteLine("");
-                Console.WriteLine(ASCII.DisplayArrested());
-
-                Console.WriteLine("You should have known, crime never pays.");
-
-                ExitGame();
-            }
 
             if (playerAlive)
             {
+                // Arrested Ending
+                if (player.IsPlayerArrested == true)
+                {
+                    // If we have a crew
+                    if (crew.Count() > 1)
+                    {
+                        // Minus you from crew.Count
+                        Console.WriteLine($"The cut per members not in jail: ${cashStolen / crew.Count() - 1}");
+                        DisplayCrewMembersWhoSurvived(crew);
+                    }
+
+                    if (player.PlayerContactCount > 0) Console.WriteLine($"Number of associates left you could have hired: {player.PlayerContactCount}");     
+                    
+                    Console.WriteLine("");
+                    Console.WriteLine(ASCII.DisplayArrested());
+
+                    Console.WriteLine("You should have known, crime never pays.");
+
+                    ExitGame();
+                }
+
                 if (player.CrewTotalCash == 0)
                 {
                     DisplayCrewMembersWhoSurvived(crew);
@@ -639,24 +631,20 @@ _____
 
             else if (!playerAlive)
             {
-                // If there are any crew members left
-                if (crew.Count() > 1)
+                // one less crew count because the player is dead
+                Console.WriteLine($"The cut per member: ${cashStolen / crew.Count() - 1}");
+
+                Console.WriteLine($"Crew members who survived:");
+                crew.ForEach(c =>
                 {
-                    // one less crew count because the player is dead
-                    Console.WriteLine($"The cut per member: ${cashStolen / crew.Count() - 1}");
-
-                    Console.WriteLine($"Crew members who survived:");
-                    crew.ForEach(c =>
+                    if (!c.IsPlayer)
                     {
-                        if (!c.IsPlayer)
-                        {
-                            Console.WriteLine($"  {c.Name}");
-                        }
-                    });     
+                        Console.WriteLine($"  {c.Name}");
+                    }
+                });     
 
-                    if (player.PlayerContactCount > 0) Console.WriteLine($"Number of associates left you could have hired: {player.PlayerContactCount}");               
-                }
-
+                if (player.PlayerContactCount > 0) Console.WriteLine($"Number of associates left you could have hired: {player.PlayerContactCount}");               
+                
                 Console.WriteLine(player.FaceIced);
                 Console.WriteLine("");
                 Console.WriteLine("Crime doesn't pay when you're dead.");
@@ -985,7 +973,7 @@ _____
                 
                         crew = newCrew;
                     }
-                    // We didn't type in a name
+                    // We didn't type in a name, so go back
                     else
                     {
                         crew = icedCrew;
@@ -1021,7 +1009,7 @@ _____
         static void WillCrewMemberRunAfterIce(List<Criminal> crew, List<Location> locations)
         {
             // SIMILAR to WillCrewMemberTurnAfterHeist
-            // But his checks EVERY member instead of until one turns
+            // But this checks EVERY member instead of until one turns
             List<Criminal> checkedCrew = new List<Criminal>();
             List<Criminal> notScaredCrew = new List<Criminal>();
 
@@ -1129,6 +1117,109 @@ _____
             Console.WriteLine("");
             Console.Write("Press any key to continue ");
             Console.ReadLine();
+        }
+
+    static void WillCrewMemberShoot(List<Criminal> crew, List<Location> locations)
+    // Check every crew member's morale to see if they will turn
+    {
+        // SIMILAR to WillCrewMemberTurnAfterHeist
+        crew.ForEach(c =>
+        {
+            int morale = c.Morale;
+            if (c.IsPlayer == false && morale <= 40)
+            {
+                // Save as traitor for easy understanding
+                Criminal traitor = c;
+
+                // Generate a new random number between 1-10 to handle the % a person will turn
+                Random r = new Random();
+                int randomNumber = r.Next(101);
+                int chance30 = 0;
+                int chance50 = 0;
+                int chance70 = 0;
+                int chance100 = 0;
+
+                // Based on this member's morale, generate a number by chance
+                if (morale >= 30 && morale <= 40) chance30 = r.Next(31);
+                else if (morale >= 20 && morale <= 29) chance50 = r.Next(51);
+                else if (morale >= 10 && morale <= 19) chance70 = r.Next(71);
+                // Chance100 equals the randomNumber so if they're at that level, they'll always turn
+                else if (morale <= 9) chance100 = randomNumber;
+
+                ChanceToShoot(chance30, randomNumber, crew, locations, traitor);
+                ChanceToShoot(chance50, randomNumber, crew, locations, traitor);
+                ChanceToShoot(chance70, randomNumber, crew, locations, traitor);
+                ChanceToShoot(chance100, randomNumber, crew, locations, traitor);
+            }
+            
+        });
+    }
+
+    // CHANCE TO SHOOT METHOD
+        static void ChanceToShoot(
+            int chanceInt,
+            int randFrom100,
+            List<Criminal> crew,
+            List<Location> locations,
+            Criminal traitor)
+        {
+            if (chanceInt != 0 && chanceInt >= randFrom100)
+            {
+                // This traitor WILL shoot
+                // Get the traitor's index value
+                int traitorIndex = crew.IndexOf(traitor);
+                // Declare a target's index
+                Criminal target = null;
+                Random r = new Random();
+                bool lookingForTarget = true;
+                // WHILE we do not have a person to shoot
+                while(lookingForTarget)
+                {
+                    // Player is a possible target
+                    int possibleTargetIndex = r.Next(0, crew.Count());
+                    // If the target is not the shooter
+                    if (possibleTargetIndex != traitorIndex)
+                    {
+                        target = crew[possibleTargetIndex];
+                        lookingForTarget = false;
+                    }
+                }
+
+                crew.Remove(target);
+                // Lower everyone's morale
+            
+                // pass traitor and target into display message
+                DisplayWhoIcedWho(crew, locations, traitor, target);
+            }
+        }
+
+    // MESSAGE METHOD
+        static void DisplayWhoIcedWho(List<Criminal> crew, List<Location> locations, Criminal traitor, Criminal gotShot)
+        {
+            ASCII ASCII = new ASCII();
+            Console.Clear();
+
+            Console.WriteLine(ASCII.DisplayHeadingIced());
+            Console.WriteLine(gotShot.FaceIced);
+            Console.WriteLine("");
+            if (gotShot.IsPlayer) 
+            {
+                Console.WriteLine($"{traitor.Name} iced YOU in the face!");
+                Console.WriteLine("Press any key to continue ");
+                Console.ReadLine();
+                GameOver(crew, locations, false, gotShot);
+            }
+            
+            else if (!gotShot.IsPlayer)
+            {
+                Console.WriteLine($"{traitor.Name} iced {gotShot.Name} in the face!");
+                Console.WriteLine("");
+                Console.WriteLine("Survivor's morale decreased.");
+                Console.WriteLine("");
+                Console.WriteLine("Press any key to return to splitting the cash ");
+                Console.ReadLine();
+                SplitCash(crew, locations);
+            } 
         }
 
         static int MenuInput(int maxOptions)

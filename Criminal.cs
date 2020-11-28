@@ -57,6 +57,7 @@ namespace heist
 
         public bool IsPlayer { get; set; }
         public bool IsPlayerArrested { get; set; } = false;
+        public bool IsPlayerIced { get; set; } = false;
         public bool HasPlayerEncouragedCrew { get; set; } = false;
         public int PlayerContactCount { get; set; }
         public bool HasRanInFear { get; set; } = false;
