@@ -8,8 +8,11 @@ namespace heist
         public string Image { get; set; }
         public string Name { get; set; }
         public string Summary { get; set; }
-        public int Difficulty { get; set; }
+        public int WaitsInVanAvailable { get; set; } = 3;
         public bool crewMemberStoleCash { get; set; } = false;
+        public int Difficulty { get; set; }
+        public int DifficultyMin { get; set; }
+        public int DifficultyMax { get; set;}
         public string DifficultyDescription
         {
             get
@@ -40,12 +43,14 @@ namespace heist
             // So we can use the GenerateAllLocations method
         }
 
-        public Location(string img, string name, string summary, int diff, int cash)
+        public Location(string img, string name, string summary, int diff, int diffMin, int diffMax, int cash)
         {
             Image = img;
             Name = name;
             Summary = summary;
             Difficulty = diff;
+            DifficultyMin = diffMin;
+            DifficultyMax = diffMax;
             Cash = cash;
         }
 
@@ -58,35 +63,45 @@ namespace heist
             // Store values for locations
             string houseName = "Annoying Neighbor's House";
             string houseSummary = @"He always talks about hating banks and keeping money in the guest room mattress.";
-            int houseDiff = (new Random().Next(10, 80));
+            int houseDiffMin = 10;
+            int houseDiffMax = 80;
+            int houseDiff = (new Random().Next(houseDiffMin, houseDiffMax));
             int houseCash = (new Random().Next(2_000, 150_000));
 
             string gasName = "Corner 7-Eleven";
             string gasSummary = @"Need to fill up the van and get some snacks. Might as well take their cash, too.";
-            int gasDiff = (new Random().Next(80, 200));
+            int gasDiffMin = 80;
+            int gasDiffMax = 240;
+            int gasDiff = (new Random().Next(gasDiffMin, gasDiffMax));
             int gasCash = (new Random().Next(10, 3_000));
 
             string wfName = "Welts Fargo";
             string wfSummary = "An older building with what looks like lack security.";
-            int wfDiff = (new Random().Next(250, 450));
+            int wfDiffMin = 200;
+            int wfDiffMax = 500;
+            int wfDiff = (new Random().Next(wfDiffMin, wfDiffMax));
             int wfCash = (new Random().Next(88_000, 478_000));
 
             string pnName = "Pinnackle National Bank";
             string pnSummary = "Opened a couple years ago, latest security.";
-            int pnDiff = (new Random().Next(580, 800));
+            int pnDiffMin = 475;
+            int pnDiffMax = 800;
+            int pnDiff = (new Random().Next(pnDiffMin, pnDiffMax));
             int pnCash = (new Random().Next(250__000, 888_000));
 
             string baName = "Bank of Amereeka";
             string baSummary = "Just opened a couple days ago. This will be hard.";
-            int baDiff = (new Random().Next(800, 900));
-            int baCash = (new Random().Next(1_000_000, 3_000_000));
+            int baDiffMin = 700;
+            int baDiffMax = 1000;
+            int baDiff = (new Random().Next(baDiffMin, baDiffMax));
+            int baCash = (new Random().Next(1_000_000, 4_000_000));
 
             // Instantiate locations
-            Location houseLocation = new Location(ASCII.DisplayHouse(), houseName, houseSummary, houseDiff, houseCash); 
-            Location gasLocation = new Location(ASCII.Display711(), gasName, gasSummary, gasDiff, gasCash); 
-            Location wfLocation = new Location(ASCII.DisplayWF(), wfName, wfSummary, wfDiff, wfCash);
-            Location pnLocation = new Location(ASCII.DisplayPNB(), pnName, pnSummary, pnDiff, pnCash);
-            Location baLocation = new Location(ASCII.DisplayBOA(), baName, baSummary, baDiff, baCash);
+            Location houseLocation = new Location(ASCII.DisplayHouse(), houseName, houseSummary, houseDiff, houseDiffMin, houseDiffMax, houseCash); 
+            Location gasLocation = new Location(ASCII.Display711(), gasName, gasSummary, gasDiff, gasDiffMin, gasDiffMax, gasCash); 
+            Location wfLocation = new Location(ASCII.DisplayWF(), wfName, wfSummary, wfDiff, wfDiffMin, wfDiffMax, wfCash);
+            Location pnLocation = new Location(ASCII.DisplayPNB(), pnName, pnSummary, pnDiff, pnDiffMin, pnDiffMax, pnCash);
+            Location baLocation = new Location(ASCII.DisplayBOA(), baName, baSummary, baDiff, baDiffMin, baDiffMax, baCash);
             
             // Add locations to list
             Locations.Add(houseLocation);

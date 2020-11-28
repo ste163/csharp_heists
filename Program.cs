@@ -9,6 +9,7 @@ using System.Linq;
 
 // BUGS
     // Crew
+        // No repeated faces
         // Can enter crew members with blank names
         // Can enter crew members with duplicate names
 
@@ -16,22 +17,12 @@ using System.Linq;
     // Instead of Y/N for continue recruting, do the leave blank like in iceCrewMember
 
 // TO DO
-
     // Game Over
         // View for when player gets iced at the split
             // Will need property for IsPlayerIced
             // Show player's iced face
             // Show who all survived
             // Say and show WHO shot you
-
-    // Waiting in van (5x only)
-        // Min difficulty for each location
-        // Max difficulty for each location
-        // Limit the number of times you can wait in the van for any given location, display that on screen
-            // Remove the option to wait in van when you exceed this. Replace it with the message
-                // IF there are still other locations to heist
-                // Come back after attempting another heist. Waiting here longer will draw suspicion
-            // Reset waits after every heist success/failure
 
     // Morale Checks
         // Icing a crew member needs to have a big affect on everyone
@@ -139,20 +130,26 @@ namespace heist
                         break;
                     case 7:
                         // End game - split cash
-                        if (player.CrewTotalCash > 0)
-                        {
-                            // Ensure player can give a speech
-                            crew.ForEach(c => c.HasPlayerEncouragedCrew = false);
-                            SplitCash(crew,locations);
-                        }
+                        if (player.CrewTotalCash > 0) SplitCash(PrepCrewForEndGame(crew),locations);
                         break;
                 }
 
                 locationsLeftToRob = locations.Where(l => l.Completed == false).ToList();
             }
+
+            SplitCash(PrepCrewForEndGame(crew),locations);     
+        }
+
+        static List<Criminal> PrepCrewForEndGame(List<Criminal> crew)
+        {
             // Ensure player can give a speech
-            crew.ForEach(c => c.HasPlayerEncouragedCrew = false);
-            SplitCash(crew,locations);     
+            // Lower everyone's morale 20-30 points each because all that money is tempting.
+            Random r = new Random();
+            return crew.Select(c => {
+                c.HasPlayerEncouragedCrew = false;
+                c.Morale = c.Morale - r.Next(25, 41);
+                return c;
+            }).ToList();
         }
 
         static void SplitCash(List<Criminal> crew, List<Location> locations)
@@ -286,21 +283,26 @@ namespace heist
             Console.Clear();
             ASCII ASCII = new ASCII();
             // Get the selected location
-            List<Location> loc = locations.Where(l => l.Name == locName).ToList();
+            Location selectedLoc = locations.Find(l => l.Name == locName);
             // Display the Stakeout heading
             Console.WriteLine(ASCII.DisplayStakeout());
             DisplayCrewInfo(crew);
             // Display location info
-            loc.ForEach(l => Console.WriteLine($@"
-{l.Image}
+            Console.WriteLine($@"
+{selectedLoc.Image}
 
-{l.Name}
+{selectedLoc.Name}
 -----
-{l.Summary}
-{l.DifficultyDescription}
-"));
+{selectedLoc.Summary}
+{selectedLoc.DifficultyDescription}
+");
             // Options for stakeouts
-            Console.WriteLine("1) keep watching from van");
+            if (selectedLoc.WaitsInVanAvailable >= 1)
+            {
+                if (selectedLoc.WaitsInVanAvailable > 1) Console.WriteLine($"1) keep watching from van [{selectedLoc.WaitsInVanAvailable} waits left]");
+                else Console.WriteLine($"1) keep watching from van [{selectedLoc.WaitsInVanAvailable} wait left]");
+            }
+            else if (selectedLoc.WaitsInVanAvailable == 0) Console.WriteLine("Come back later to contine staking out from van. Don't wait to raise suspicion");
             Console.WriteLine("2) begin heist");
             Console.WriteLine("3) return to planning");
             int selection = MenuInput(3);
@@ -308,19 +310,7 @@ namespace heist
             switch (selection)
             {
                 case 1:
-                // Waiting, add/subtract a random value from -50 to +50
-                int r = new Random().Next(-50, 51);
-                List<Location> updatedLocations = locations.Select(l =>
-                {
-                    if (l.Name == locName)
-                    {
-                        // NEED TO ENSURE DIFFICULTY CAN NEVER BE BELOW THE MIN FOR THAT LOCATION
-                        // PROBABLY NEED A CALCULATE/COMPUTATED PROPERTY?
-                        l.Difficulty = l.Difficulty + r;
-                    }
-                    return l;
-                }).ToList();
-                    LocationInfo(updatedLocations, locName, crew);
+                    LocationInfo(WaitInVan(locations, locName), locName, crew);
                     break;
                 case 2:
                     BeginHeist(crew, locations, locName);
@@ -331,8 +321,42 @@ namespace heist
             }
         }
 
+        static List<Location> WaitInVan(List<Location> locations, string locName)
+        {
+            // Instantiate a Random object
+            Random r = new Random();
+            // Loop through locations to find selected one
+            locations.ForEach(l =>
+            {
+                // Find selected location
+                if (l.Name == locName)
+                {
+                    // If we have turns left, randomize the difficulty based on the min & max
+                    if (l.WaitsInVanAvailable > 0)
+                    {
+                        int difficultyModifier = r.Next(-90, 91);
+                        // Add the modifier to the current location difficulty
+                        int newDifficulty = l.Difficulty + difficultyModifier;
+                        // If the difficulty is below the min, set to min
+                        if (newDifficulty < l.DifficultyMin) l.Difficulty = l.DifficultyMin;
+                        // If the difficulty is above the max, set to max
+                        else if (newDifficulty > l.DifficultyMax) l.Difficulty = l.DifficultyMax;
+                        // Otherwise, set to the modified value
+                        else l.Difficulty = newDifficulty;
+                        // Remove 1 wait in van
+                        l.WaitsInVanAvailable = --l.WaitsInVanAvailable;
+                    }
+                }
+            });
+            
+            return locations;
+        }
+
         static void BeginHeist(List<Criminal> crew, List<Location> locations, string locName)
         {
+            // Regardless of success/failure, reset all waits in van
+            locations.ForEach(l => l.WaitsInVanAvailable = 3);
+
             bool heistSuccess = false;
 
             List<Criminal> crewSuccess = crew;
@@ -354,7 +378,7 @@ namespace heist
                         {
                             // Every crew member gets a random skill+
                             int skillIncrease = new Random().Next(8, 38);
-                            int moraleIncrease = new Random().Next(7, 34);
+                            int moraleIncrease = new Random().Next(7, 24);
                             int locationCash = l.Cash;
                             c.CrewTotalCash = c.CrewTotalCash + l.Cash;
                             c.BaseSkill = c.BaseSkill + skillIncrease;
@@ -606,13 +630,20 @@ namespace heist
         static void DisplayCrewMembersWhoSurvived(List<Criminal> crew)
         {
             Console.WriteLine($"Crew members who survived:");
-            crew.ForEach(c =>
+            if (crew.Count() == 1)
             {
-                if (!c.IsPlayer)
+                Console.WriteLine("  All your crew members either ran off, were arrested, or shot dead.");
+            }
+            else
+            {
+                crew.ForEach(c =>
                 {
-                    Console.WriteLine($"  {c.Name}");
-                }
-            });   
+                    if (!c.IsPlayer)
+                    {
+                        Console.WriteLine($"  {c.Name}");
+                    }
+                });   
+            }
         }
 
         static void ExitGame()
@@ -796,12 +827,24 @@ namespace heist
             Console.WriteLine(ASCII.DisplaySubheadingSpeech());  
             Console.WriteLine(player.Face);
             Console.WriteLine("");
-            // for the speeches, get names of the crew members and plop them into a speech
-            if (isSplitMenu == false) Console.WriteLine(@"You give a big speech complimenting the crew's skills.
-You promise everyone will get rich.");
+            // for the speeches, get names of the crew members and saying something dramatic about each person
+                // will need to make some random compliments
+            if (isSplitMenu == false)
+            {
+                Console.WriteLine("You give a big speech complimenting the crew's skills.");
+                Console.WriteLine("You promise everyone will get rich.");
+            }
 
-            if (isSplitMenu == true) Console.WriteLine(@"You give a big speech congratulating the crew's heist expertise
-and talk about how much money you all have made as a team.");
+            if (isSplitMenu == true)
+            {
+                Console.WriteLine("You give a big speech congratulating the crew's heist expertise");
+                Console.WriteLine("and talk about how much money you all have made as a team.");
+                // {Name}, remember when you pushed that guard down the steps?
+                // {Name}, when you almost ran us into traffic?
+                // {Name}, for recommending subs for lunch, and {Name from earlier}, for suggesting coffee.
+
+            }
+        
             Console.WriteLine("");
             Console.WriteLine("Crew morale increased.");
             Console.WriteLine("");

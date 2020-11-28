@@ -16,9 +16,9 @@ namespace heist
             get {
                 int bonus = 0;
 
-                if (Morale <= 9) return bonus = -30;
-                if (Morale >= 10 && Morale <= 19) return bonus = -20;
-                if (Morale >= 20 && Morale <= 29) return bonus = -10;
+                if (Morale <= 9) return bonus = -20;
+                if (Morale >= 10 && Morale <= 19) return bonus = -10;
+                if (Morale >= 20 && Morale <= 29) return bonus = -8;
                 if (Morale >= 30 && Morale <= 39) return bonus =  -5;
                 if (Morale >= 40 && Morale <= 49) return bonus =  0;
                 if (Morale >= 50 && Morale <= 59) return bonus =  5;
@@ -46,7 +46,7 @@ namespace heist
                 if (Morale >= 50 && Morale <= 59) d = "'Doing okay.'";
                 if (Morale >= 60 && Morale <= 69) d = "'Going well, boss.'";
                 if (Morale >= 70 && Morale <= 79) d = "'Great work so far, boss!'";
-                if (Morale >= 80 && Morale <= 89) d = "'Let's keep going! We're on a roll!'";
+                if (Morale >= 80 && Morale <= 89) d = "'We're kickin' ass, Boss! Nothing can stop us.'";
                 if (Morale >= 90) d = "'I've got your back, boss, through anything.'";
 
                 return d;
@@ -93,7 +93,7 @@ namespace heist
             {
                 IsPlayer = false;
                 PlayerContactCount = 0;
-                Morale = new Random().Next(20, 40);
+                Morale = new Random().Next(20, 35);
             }
         }
     }
