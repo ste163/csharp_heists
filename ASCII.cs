@@ -578,7 +578,6 @@ LS|/  /             \________________________ ____________";
         }
 
         public string DisplayAssociateRanWithCash()
-        // CURRENTLY NOT USED
         {
             return @"                       _________________
   { )_  <-            |              |   \

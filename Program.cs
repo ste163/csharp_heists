@@ -16,6 +16,9 @@ using System.Linq;
 // CHANGES TO MAKE LATER
     // Instead of Y/N for continue recruting, do the leave blank like in iceCrewMember
 
+    // Crew
+        // Min and Max morale level, so some members will ALWAYS be untrustworthy
+
     // Game Over
         // View for when player gets iced at the split
             // Will need property for IsPlayerIced
@@ -27,7 +30,7 @@ using System.Linq;
         // Crew Management
             // If player ices a crew member
                 // Run morale check to see if crew members will turn
-                    // IF cash, TAKE LOTS OF CASH
+                    // IF cash, TAKE LOTS OF CASH %
                     // Otherwise, the player can scare everyone into running without repercussions
 
         // Split Cash view
@@ -974,6 +977,9 @@ namespace heist
             // But his checks EVERY member instead of until one turns
             List<Criminal> checkedCrew = new List<Criminal>();
             List<Criminal> notScaredCrew = new List<Criminal>();
+
+            Criminal player = crew.Find(c => c.IsPlayer);
+            int currentCashTotal = player.CrewTotalCash;
             // Loop through criminals & check their morale
             checkedCrew = crew.Select(c =>
             {
@@ -1011,6 +1017,25 @@ namespace heist
                 return c;
             }).ToList();
 
+            // Check if any traitors stole cash
+            if (currentCashTotal > 2)
+            {
+                checkedCrew.ForEach(c =>
+                {
+                    // Did anyone run in fear?
+                    if (c.HasRanInFear)
+                    {
+                        // Reset the cash to the current amount
+                        c.CrewTotalCash = currentCashTotal;
+                        // Remove 50% of cash
+                        currentCashTotal = currentCashTotal - (currentCashTotal / 2);
+                    }
+                });
+            }
+
+            // Updated everyone's cash amount
+            checkedCrew.ForEach(c => c.CrewTotalCash = currentCashTotal);
+
             // Filter only the crew members who didn't run in fear
             notScaredCrew = checkedCrew.Where(c => c.HasRanInFear == false).ToList();
 
@@ -1038,10 +1063,20 @@ namespace heist
             Console.Clear();
             ASCII ASCII = new ASCII();
             Console.WriteLine(ASCII.DisplayHeadingFled());
-            Console.WriteLine(ASCII.DisplayAssociateRanInFear());
-            Console.WriteLine(scared.Face);
-            Console.WriteLine("");
-            Console.WriteLine($"{scared.Name} fled from your horrifically violent action!");
+            if (scared.CrewTotalCash == 0)
+            {
+                Console.WriteLine(ASCII.DisplayAssociateRanInFear());
+                Console.WriteLine(scared.Face);
+                Console.WriteLine("");
+                Console.WriteLine($"{scared.Name} fled from your horrifically violent action!");
+            }
+            else
+            {
+                Console.WriteLine(ASCII.DisplayAssociateRanWithCash());
+                Console.WriteLine(scared.Face);
+                Console.WriteLine("");
+                Console.WriteLine($"{scared.Name} fled with a portion of the cash!");
+            }
 
             Console.WriteLine("");
             Console.Write("Press any key to continue ");
