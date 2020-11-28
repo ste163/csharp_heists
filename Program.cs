@@ -8,6 +8,8 @@ using System.Linq;
     // I am fully aware no project should ever be written in such a gigantic file.
 
 // BUGS
+    // Crew management
+        // Only show faces if less than 3 crew members
     // Crew
         // No repeated faces
         // Can enter crew members with blank names
@@ -15,9 +17,6 @@ using System.Linq;
 
 // CHANGES TO MAKE LATER
     // Instead of Y/N for continue recruting, do the leave blank like in iceCrewMember
-
-    // Crew
-        // Min and Max morale level, so some members will ALWAYS be untrustworthy
 
     // Game Over
         // View for when player gets iced at the split
@@ -27,12 +26,6 @@ using System.Linq;
             // Say and show WHO shot you
 
     // Morale Checks
-        // Crew Management
-            // If player ices a crew member
-                // Run morale check to see if crew members will turn
-                    // IF cash, TAKE LOTS OF CASH %
-                    // Otherwise, the player can scare everyone into running without repercussions
-
         // Split Cash view
             // If player ices a crew member or when player attempts to split cash
             // Run morale checks to see if any crew member will turn
