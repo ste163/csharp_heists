@@ -58,6 +58,7 @@ namespace heist
         public bool IsPlayer { get; set; }
         public bool IsPlayerArrested { get; set; } = false;
         public bool IsPlayerIced { get; set; } = false;
+        public bool isAssociateIced { get; set; } = false;
         public bool HasPlayerEncouragedCrew { get; set; } = false;
         public int PlayerContactCount { get; set; }
         public bool HasRanInFear { get; set; } = false;
@@ -122,7 +123,7 @@ namespace heist
             {
                 IsPlayer = false;
                 PlayerContactCount = 0;
-                MoraleMin = r.Next(5, 20);
+                MoraleMin = r.Next(5, 15);
                 MoraleMax = r.Next(70, 101);
                 // Set morale start at a max of 50
                 Morale = r.Next(MoraleMin, 45);

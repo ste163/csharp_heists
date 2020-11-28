@@ -9,10 +9,16 @@ using System.Linq;
 
 // BUGS
     // Player can enter a blank name
+    // If player was shot and only 1 crew member survied, Remove the cut per member. And say, {NAME} was the only survivor
+    // If the player DOESN"T want to shoot someone at the split cash, someone else can still shoot
+    // If a crew member shoots someone, it doesn't lower morale
+    // On splitting cash
+        // If crew members begin to open fire, and if some die. They are not removed from the crew
 
     // Split Cash view
         // Player must stop entering names in the ice associate on split cash before the morale check occurs
         // The check for who gets to shoot is NOT random, it always follows the same for each loop
+            // It also only appears to run once -- BUT THAT MIGHT NOT BE THE CASE
         // If player attempts to split cash, the player is able to get another turn to shoot. Attempting to split cash should not allow player to shoot
 
     // Instead of Y/N for continue recruting, do the leave blank like in iceCrewMember
@@ -194,13 +200,13 @@ namespace heist
                     {
                         case 1:
                         // Player gives up chance to shoot. Otherwise the player will always have the chance to ice the last person
-                            WillCrewMemberShoot(crew, locations);
+                            WillCrewMemberShoot(crew, locations, true);
                             GameOver(crew, locations, true, player);
                             break;
                         case 2:
                             // Player ices an associate 
                             List<Criminal> smallerCrew = IceCrewMember(crew, locations, true);
-                            WillCrewMemberShoot(smallerCrew, locations);
+                            WillCrewMemberShoot(smallerCrew, locations, false);
                             SplitCash(smallerCrew, locations);
                             break;
                         case 3:
@@ -642,7 +648,7 @@ _____
 
         static void DisplayCrewMembersWhoSurvived(List<Criminal> crew)
         {
-            Console.WriteLine($"Crew members who survived:");
+            Console.WriteLine($"Crew members (besides you) who survived:");
             if (crew.Count() == 1)
             {
                 Console.WriteLine("  All your crew members either ran off, were arrested, or shot dead.");
@@ -883,92 +889,105 @@ _____
             Console.ReadLine();
         }
 
+        static void DisplayIceAssociateWarning(List<Criminal> crew)
+        {
+            ASCII ASCII = new ASCII();
+            Console.WriteLine("");
+            Console.WriteLine("Icing crew members upsets the rest of the crew.");
+            Console.WriteLine(ASCII.DisplayGun());
+
+            Console.WriteLine("Crew members");
+            Console.WriteLine("------------------");
+            crew.ForEach(c =>
+            {
+                if (c.IsPlayer == false)
+                {
+                    Console.WriteLine($"{c.Name} - {c.MoraleDescription}");
+                }
+            });
+            Console.WriteLine("");
+
+            Console.Write("Enter name of who you will ice [leave blank to cancel]: ");
+        }
+
         static List<Criminal> IceCrewMember(List<Criminal> crew, List<Location> locations, bool splitCashMenu)
         {
-            if (crew.Count() > 1)
+            if (crew.Count() > 1)  return IceAssociateCheck(crew, locations, splitCashMenu);
+            else return crew;
+        }
+
+        static List<Criminal> IceAssociateCheck(List<Criminal> crew, List<Location> locations, bool splitCashMenu)
+        {
+            Console.Clear();
+            string name = "not empty for a base value";
+            ASCII ASCII = new ASCII();
+            Console.WriteLine(ASCII.DisplayIce());
+
+            if (!splitCashMenu)
             {
-                string name = "not empty for a base value";
-
-                List<Criminal> updatedCrew = new List<Criminal>();
-
                 while (name != "" && crew.Count() > 1)
                 {
-                    Console.Clear();
-                    ASCII ASCII = new ASCII();
-                    Console.WriteLine(ASCII.DisplayIce());
-                    // If NOT on split cash menu, so on crew management, show full info
-                    if (!splitCashMenu)
-                    {
-                        DisplayCrewInfo(crew);
-                    }
-                    // If on split cash menu, show shortened menu
-                    else
-                    {
-                        DisplayCrewInfoShortened(crew);
-                    }
-                    Console.WriteLine("");
-                    Console.WriteLine("Icing crew members upsets the rest of the crew.");
-                    Console.WriteLine(ASCII.DisplayGun());
-
-                    Console.WriteLine("Crew members");
-                    Console.WriteLine("------------------");
-                    crew.ForEach(c =>
-                    {
-                        if (c.IsPlayer == false)
-                        {
-                            Console.WriteLine($"{c.Name} - {c.MoraleDescription}");
-                        }
-                    });
-                    Console.WriteLine("");
-
-                    Console.Write("Enter name of who you will ice [leave blank to cancel]: ");
+                    DisplayCrewInfo(crew);
+                    DisplayIceAssociateWarning(crew);
                     name = Console.ReadLine();
 
                     // Store the criminal who was iced for use in display
                     Criminal whoWasIced = crew.Find(c => c.Name == name);
-
                     // Make a new list of criminals WITHOUT the iced crew member
                     List<Criminal> icedCrew = crew.Where(c => c.Name != name || c.IsPlayer == true).ToList();
-
+                    
                     // Only lower morale if we have iced a crew member
                     if (icedCrew.Count() < crew.Count()) 
                     {
-                        List<Criminal> newCrew = icedCrew.Select(c =>
-                        {
-                            int subtractMorale = new Random().Next(35, 70);
-
-                            int loweredMorale = c.Morale - subtractMorale;
-                            if (loweredMorale < c.MoraleMin)
-                            {
-                                c.Morale = c.MoraleMin;
-                            }
-                            else
-                            {
-                                c.Morale = loweredMorale;
-                            }
-                            return c;
-                        }).ToList();
-
+                        // Lower the crews morale
+                        List<Criminal> newCrew = LowerMoraleFromIce(icedCrew);
                         // Display Who was iced, if not null
-                        if (whoWasIced != null)
-                        {
-                            DisplayWhoWasIced(whoWasIced);
-                        }
-
-                        // If we're on Crew Management, morale check if anyone ran in fear
-                        if (!splitCashMenu) WillCrewMemberRunAfterIce(newCrew, locations);
-                
+                        if (whoWasIced != null) DisplayWhoWasIced(whoWasIced);
+                        WillCrewMemberRunAfterIce(newCrew, locations);
                         crew = newCrew;
                     }
-                    // We didn't type in a name, so go back
-                    else
-                    {
-                        crew = icedCrew;
-                    }
+                    // We didn't type in a name, so return the new crew
+                    else crew = icedCrew;
                 }
-                return crew;
             }
-            else return crew;
+            else if (splitCashMenu)
+            {
+                DisplayCrewInfoShortened(crew);
+                DisplayIceAssociateWarning(crew);
+                name = Console.ReadLine();
+
+                // Store the criminal who was iced for use in display
+                Criminal whoWasIced = crew.Find(c => c.Name == name);
+                // Make a new list of criminals WITHOUT the iced crew member
+                List<Criminal> icedCrew = crew.Where(c => c.Name != name || c.IsPlayer == true).ToList();
+
+                // Only lower morale if we have iced a crew member
+                if (icedCrew.Count() < crew.Count()) 
+                {
+                    // Lower the crews morale
+                    List<Criminal> newCrew = LowerMoraleFromIce(icedCrew);
+                    // Display Who was iced, if not null
+                    if (whoWasIced != null) DisplayWhoWasIced(whoWasIced);
+                    crew = newCrew;
+                }
+                // We didn't type in a name, so return the new crew
+                else crew = icedCrew;     
+            }
+            // If the first check is false, return a crew
+            return crew;
+        }
+
+        static List<Criminal> LowerMoraleFromIce(List<Criminal> icedCrew)
+        {
+            return icedCrew.Select(c =>
+            {
+                int subtractMorale = new Random().Next(35, 70);
+                int loweredMorale = c.Morale - subtractMorale;
+
+                if (loweredMorale < c.MoraleMin) c.Morale = c.MoraleMin;
+                else c.Morale = loweredMorale; 
+                return c;
+            }).ToList();
         }
 
         static void DisplayWhoWasIced(Criminal whoWasIced)
@@ -1106,10 +1125,12 @@ _____
             Console.ReadLine();
         }
 
-    static void WillCrewMemberShoot(List<Criminal> crew, List<Location> locations)
+    static void WillCrewMemberShoot(List<Criminal> crew, List<Location> locations, bool isPlayerAttemptingMoneySplit)
     // Check every crew member's morale to see if they will turn
     {
         // SIMILAR to WillCrewMemberTurnAfterHeist
+        Criminal player = crew.Find(c => c.IsPlayer);
+
         crew.ForEach(c =>
         {
             int morale = c.Morale;
@@ -1133,13 +1154,17 @@ _____
                 // Chance100 equals the randomNumber so if they're at that level, they'll always turn
                 else if (morale <= 9) chance100 = randomNumber;
 
-                ChanceToShoot(chance30, randomNumber, crew, locations, traitor);
-                ChanceToShoot(chance50, randomNumber, crew, locations, traitor);
-                ChanceToShoot(chance70, randomNumber, crew, locations, traitor);
-                ChanceToShoot(chance100, randomNumber, crew, locations, traitor);
+                ChanceToShoot(chance30, randomNumber, crew, locations, traitor, isPlayerAttemptingMoneySplit);
+                ChanceToShoot(chance50, randomNumber, crew, locations, traitor, isPlayerAttemptingMoneySplit);
+                ChanceToShoot(chance70, randomNumber, crew, locations, traitor, isPlayerAttemptingMoneySplit);
+                ChanceToShoot(chance100, randomNumber, crew, locations, traitor, isPlayerAttemptingMoneySplit);
             }
-            
         });
+        // Find criminals WHERE they have not been marked as ICED and set them as the new crew
+        crew = crew.Where(c => !c.isAssociateIced).ToList();
+        // After we have looped through every associate, go to the correct view
+        if (isPlayerAttemptingMoneySplit) GameOver(crew, locations, true, player);
+        if (!isPlayerAttemptingMoneySplit) SplitCash(crew, locations);
     }
 
     // CHANCE TO SHOOT METHOD
@@ -1148,7 +1173,8 @@ _____
             int randFrom100,
             List<Criminal> crew,
             List<Location> locations,
-            Criminal traitor)
+            Criminal traitor,
+            bool isPlayerAttemptingMoneySplit)
         {
             if (chanceInt != 0 && chanceInt >= randFrom100)
             {
@@ -1171,17 +1197,25 @@ _____
                         lookingForTarget = false;
                     }
                 }
-
-                crew.Remove(target);
-                // Lower everyone's morale
+                
+                // Instead of removing the target, mark the target as "Iced." Otherwise we crash because we've
+                // 'Modified a collection' while attempting to loop over it.
+                crew.ForEach(c =>
+                {
+                    if (target.Name == c.Name) c.isAssociateIced = true;
+                });
             
                 // pass traitor and target into display message
-                DisplayWhoIcedWho(crew, locations, traitor, target);
+                DisplayWhoIcedWho(crew, locations, traitor, target, isPlayerAttemptingMoneySplit);
             }
         }
 
     // MESSAGE METHOD
-        static void DisplayWhoIcedWho(List<Criminal> crew, List<Location> locations, Criminal traitor, Criminal gotShot)
+        static void DisplayWhoIcedWho(List<Criminal> crew,
+            List<Location> locations,
+            Criminal traitor,
+            Criminal gotShot,
+            bool isPlayerAttemptingMoneySplit)
         {
             ASCII ASCII = new ASCII();
             Console.Clear();
@@ -1205,7 +1239,15 @@ _____
                 Console.WriteLine("");
                 Console.WriteLine("Press any key to return to splitting the cash ");
                 Console.ReadLine();
-                SplitCash(crew, locations);
+
+                // If player is NOT attempting to split the cash, return to SplitCash view
+                if (!isPlayerAttemptingMoneySplit)
+                {
+                    // Loop through the crew and find the members WHERE they have not been iced
+                    crew = crew.Where(c => !c.isAssociateIced).ToList();
+                    SplitCash(crew, locations);
+                }
+                // Otherwise, continue the forEach check for each crew member
             } 
         }
 
