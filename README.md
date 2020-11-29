@@ -4,6 +4,8 @@ A text-based heist adventure game
 - create a crew
 - perform heists throughout Nashville
 - manage your crew (careful! If they're upset, they may turn on you!)
+- 6 endings
+- enough randomization so no two playthroughs have the same outcome
 
 SETUP
 instructions for what to do after downloading
@@ -15,4 +17,3 @@ Thanks to these sites for the amazing ASCII artwork:
 - https://simpletextart.blogspot.com/2013/12/money-bag-picture-made-with-ascii-text.html
 - https://www.asciiart.eu/buildings-and-places/cities
 - http://www.asciiworld.com/-Buildings-.html
-

@@ -8,7 +8,7 @@ using System.Linq;
     // I am fully aware no project should ever be written in such a gigantic file.
 
 // BUGS
-    // Player can enter a blank name
+    // When trying to split the cash, crew members don't die
     // Instead of Y/N for continue recruting, do the leave blank like in iceCrewMember
 
     // Splitting cash view
@@ -1531,11 +1531,22 @@ _________
 
         static Criminal CreatePlayer(List<Criminal> crew)
         {
-            Console.WriteLine("");
-            Console.WriteLine("Who are you?");
-            Console.Write("Enter your name: ");
+            string playerName = "this is not an empty string";
 
-            string playerName = Console.ReadLine();
+            // Ask user to enter a name until they enter anything other than an empty string
+            while (true)
+            {
+                Console.WriteLine("");
+                Console.WriteLine("Who are you?");
+                Console.Write("Enter your name: ");
+
+                playerName = Console.ReadLine();
+                if (playerName != "")
+                {
+                    break;
+                }
+            }
+            // Create player object
             Criminal player = new Criminal(playerName, true, crew);
 
             Console.WriteLine($@"{player.Face}
