@@ -14,7 +14,7 @@
 
 ## Setup
 ### Windows
-- Download all the files, excluding the source code, from: https://github.com/ste163/csharp_heists/releases/tag/v1.0
+- Download ```win64_csharp-heists-v1.0.zip``` from: https://github.com/ste163/csharp_heists/releases/tag/v1.0
 - Run ```heist.exe```.
 
 ### Non-windows
