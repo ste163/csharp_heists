@@ -7,10 +7,6 @@ using System.Linq;
     // The disorganized code is because I had not learned proper C# project management at the time.
     // I am fully aware no project should ever be written in such a gigantic file.
 
-// BUGS
-    // If a crew member shoots someone, it doesn't lower morale
-    // On attempting to split cash - the check for who gets to shoot is NOT random, it always follows the same for each loop order
-
 namespace heist
 {
     class Program
