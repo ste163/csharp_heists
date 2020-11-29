@@ -17,7 +17,7 @@
 - Download ```win64_csharp-heists-v1.0.zip``` from: https://github.com/ste163/csharp_heists/releases/tag/v1.0
 - Run ```heist.exe```.
 
-### Non-windows
+### Non-Windows
 #### Prerequisites
 - .NET 5
 #### Download the project
@@ -29,7 +29,7 @@ cd csharp_heists
 #### Build & run the application
 - Inside the ```csharp_heists``` directory, run ```dotnet run``` to build and run the application.
 
-## Credits
+## ASCII Art Credits
 Thanks to these sites for the amazing ASCII artwork:
 - https://textfancy.com/multiline-text-art/
 - https://asciiart.website/
