@@ -8,13 +8,8 @@ using System.Linq;
     // I am fully aware no project should ever be written in such a gigantic file.
 
 // BUGS
-    // If player was shot and only 1 crew member survied, Remove the cut per member. And say, {NAME} was the only survivor
-    // If the player DOESN'T want to shoot someone at the split cash, someone else can still shoot
     // If a crew member shoots someone, it doesn't lower morale
-    // On attempting to split cash
-        // If crew members begin to open fire, and if some die. They are not removed from the crew. They show up on the summary page
-    // The check for who gets to shoot is NOT random, it always follows the same for each loop
-        // It also only appears to run once -- BUT THAT MIGHT NOT BE THE CASE
+    // On attempting to split cash - the check for who gets to shoot is NOT random, it always follows the same for each loop order
 
 namespace heist
 {
@@ -621,17 +616,15 @@ _____
 
             else if (!playerAlive)
             {
-                // one less crew count because the player is dead
-                Console.WriteLine($"The cut per member: ${cashStolen / crew.Count() - 1}");
+                // REMOVE the player from the crew
+                crew = crew.Where(c => !c.IsPlayer || !c.isAssociateIced).ToList();
 
-                Console.WriteLine($"Crew members who survived:");
-                crew.ForEach(c =>
-                {
-                    if (!c.IsPlayer)
-                    {
-                        Console.WriteLine($"  {c.Name}");
-                    }
-                });     
+                Console.WriteLine($"The cut per member: ${cashStolen / crew.Count()}");
+
+                if (crew.Count() == 1) Console.WriteLine($"The only survivor was: ");
+                else Console.WriteLine($"Crew members who survived:");
+
+                crew.ForEach(c => Console.WriteLine($"  {c.Name}"));     
 
                 if (player.PlayerContactCount > 0) Console.WriteLine($"Number of associates left you could have hired: {player.PlayerContactCount}");               
                 
@@ -1196,7 +1189,7 @@ _____
                 {
                     int possibleTargetIndex = 0;
                     // Player is a possible target, only if the crew is smaller than a certain number
-                    if (crew.Count() >= 2)
+                    if (crew.Count() > 2)
                     {
                         possibleTargetIndex = r.Next(1, crew.Count());
                     }
@@ -1584,37 +1577,3 @@ _________
         }
     }
 }
-// static int InputSkill()
-// {
-//     // Declares variable we will be re-assigning 
-//     int entered;
-//     // When user first enters the skill input, ensure they type only a number
-//     while(true)
-//     {
-//         try
-//         {
-//             Console.Write("Enter new criminal's skill level: ");
-//             entered = int.Parse(Console.ReadLine());
-//             break;
-//         }
-//         catch
-//         {
-//             Console.WriteLine("Must enter a whole number.");
-//         }
-//     }
-//     // After user has entered a number, if it is less than or equal to 0, user must re-enter number
-//     while(entered <= 0)
-//     {
-//         try
-//         {
-//             Console.Write("Enter whole number greater than zero: ");
-//             entered = int.Parse(Console.ReadLine());
-//         }
-//         catch(FormatException)
-//         {
-//             Console.WriteLine("Must enter a whole number.");
-//         }
-//     }
-
-//     return entered;
-// }
