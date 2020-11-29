@@ -8,17 +8,13 @@ using System.Linq;
     // I am fully aware no project should ever be written in such a gigantic file.
 
 // BUGS
-    // When trying to split the cash, crew members don't die
-    // Instead of Y/N for continue recruting, do the leave blank like in iceCrewMember
-
-    // Splitting cash view
-        // If player was shot and only 1 crew member survied, Remove the cut per member. And say, {NAME} was the only survivor
-        // If the player DOESN'T want to shoot someone at the split cash, someone else can still shoot
-        // If a crew member shoots someone, it doesn't lower morale
-        // On attempting to split cash
-            // If crew members begin to open fire, and if some die. They are not removed from the crew. They show up on the summary page
-        // The check for who gets to shoot is NOT random, it always follows the same for each loop
-            // It also only appears to run once -- BUT THAT MIGHT NOT BE THE CASE
+    // If player was shot and only 1 crew member survied, Remove the cut per member. And say, {NAME} was the only survivor
+    // If the player DOESN'T want to shoot someone at the split cash, someone else can still shoot
+    // If a crew member shoots someone, it doesn't lower morale
+    // On attempting to split cash
+        // If crew members begin to open fire, and if some die. They are not removed from the crew. They show up on the summary page
+    // The check for who gets to shoot is NOT random, it always follows the same for each loop
+        // It also only appears to run once -- BUT THAT MIGHT NOT BE THE CASE
 
 namespace heist
 {
@@ -203,7 +199,11 @@ namespace heist
                         case 2:
                             // Player ices an associate 
                             List<Criminal> smallerCrew = IceCrewMember(crew, locations, true);
-                            WillCrewMemberShoot(smallerCrew, locations, false);
+                            if (player.PlayerFiredWeapon) WillCrewMemberShoot(smallerCrew, locations, false);
+                            smallerCrew.ForEach(c => 
+                            {
+                                if (c.IsPlayer) c.PlayerFiredWeapon = false;
+                            });
                             SplitCash(smallerCrew, locations);
                             break;
                         case 3:
@@ -873,9 +873,6 @@ _____
             {
                 Console.WriteLine("You give a big speech congratulating the crew's heist expertise");
                 Console.WriteLine("and talk about how much money you all have made as a team.");
-                // {Name}, remember when you pushed that guard down the steps?
-                // {Name}, when you almost ran us into traffic?
-                // {Name}, for recommending subs for lunch, and {Name from earlier}, for suggesting coffee.
             }
         
             Console.WriteLine("");
@@ -965,10 +962,22 @@ _____
                     List<Criminal> newCrew = LowerMoraleFromIce(icedCrew);
                     // Display Who was iced, if not null
                     if (whoWasIced != null) DisplayWhoWasIced(whoWasIced);
+                    newCrew.ForEach(c =>
+                    {
+                        if (c.IsPlayer) c.PlayerFiredWeapon = true;
+                    });
                     crew = newCrew;
                 }
-                // We didn't type in a name, so return the new crew
-                else crew = icedCrew;     
+                // We didn't type in a name, so return the new crew, and do not let anyone shoot
+                else crew = icedCrew.Select(c =>
+                {
+                    if (c.IsPlayer)
+                    {
+                        c.PlayerFiredWeapon = false;
+                        return c;
+                    }
+                    else return c;
+                }).ToList();     
             }
             // If the first check is false, return a crew
             return crew;
@@ -1173,7 +1182,7 @@ _____
             Criminal traitor,
             bool isPlayerAttemptingMoneySplit)
         {
-            if (chanceInt != 0 && chanceInt >= randFrom100)
+            if (chanceInt != 0 && chanceInt >= randFrom100 && !traitor.isAssociateIced)
             {
                 // This traitor WILL shoot
                 // Get the traitor's index value
@@ -1185,8 +1194,16 @@ _____
                 // WHILE we do not have a person to shoot
                 while(lookingForTarget)
                 {
-                    // Player is a possible target
-                    int possibleTargetIndex = r.Next(0, crew.Count());
+                    int possibleTargetIndex = 0;
+                    // Player is a possible target, only if the crew is smaller than a certain number
+                    if (crew.Count() >= 2)
+                    {
+                        possibleTargetIndex = r.Next(1, crew.Count());
+                    }
+                    else
+                    {
+                        possibleTargetIndex = r.Next(0, crew.Count());
+                    }
                     // If the target is not the shooter
                     if (possibleTargetIndex != traitorIndex)
                     {
@@ -1195,8 +1212,8 @@ _____
                     }
                 }
                 
-                // Instead of removing the target, mark the target as "Iced." Otherwise we crash because we've
-                // 'Modified a collection' while attempting to loop over it.
+                // Instead of removing the target, mark the target as "Iced."
+                // Otherwise we crash because we've 'Modified a collection' while attempting to loop over it.
                 crew.ForEach(c =>
                 {
                     if (target.Name == c.Name) c.isAssociateIced = true;
@@ -1432,6 +1449,7 @@ ___________");
                             {
                                 updatedCrew.Add(c);
                                 updatedCrew.Add(RecruitNewCriminal(newCrew));
+
                                 c.PlayerContactCount = --playerContactsLeft;
                                 Console.WriteLine("");
                                 Console.WriteLine($"{playerContactsLeft} associates available to contact.");

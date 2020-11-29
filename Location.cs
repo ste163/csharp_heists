@@ -85,14 +85,14 @@ namespace heist
             string pnName = "Pinnackle National Bank";
             string pnSummary = "Opened a couple years ago, latest security.";
             int pnDiffMin = 475;
-            int pnDiffMax = 800;
+            int pnDiffMax = 750;
             int pnDiff = (new Random().Next(pnDiffMin, pnDiffMax));
             int pnCash = (new Random().Next(250__000, 888_000));
 
             string baName = "Bank of Amereeka";
             string baSummary = "Just opened a couple days ago. This will be hard.";
-            int baDiffMin = 700;
-            int baDiffMax = 1000;
+            int baDiffMin = 600;
+            int baDiffMax = 900;
             int baDiff = (new Random().Next(baDiffMin, baDiffMax));
             int baCash = (new Random().Next(1_000_000, 4_000_000));
 

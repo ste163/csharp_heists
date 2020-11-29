@@ -21,12 +21,12 @@ namespace heist
                 if (Morale >= 20 && Morale <= 29) return bonus = -8;
                 if (Morale >= 30 && Morale <= 39) return bonus =  -5;
                 if (Morale >= 40 && Morale <= 49) return bonus =  0;
-                if (Morale >= 50 && Morale <= 59) return bonus =  5;
-                if (Morale >= 60 && Morale <= 69) return bonus =  10;
-                if (Morale >= 70 && Morale <= 79) return bonus =  20;
-                if (Morale >= 80 && Morale <= 89) return bonus =  30;
-                if (Morale >= 90 && Morale <= 99) return bonus =  40;
-                if (Morale >= 100) return bonus = 50;
+                if (Morale >= 50 && Morale <= 59) return bonus =  10;
+                if (Morale >= 60 && Morale <= 69) return bonus =  20;
+                if (Morale >= 70 && Morale <= 79) return bonus =  30;
+                if (Morale >= 80 && Morale <= 89) return bonus =  40;
+                if (Morale >= 90 && Morale <= 99) return bonus =  50;
+                if (Morale >= 100) return bonus = 100;
 
                 return bonus;
                 }
@@ -58,6 +58,7 @@ namespace heist
         public bool IsPlayer { get; set; }
         public bool IsPlayerArrested { get; set; } = false;
         public bool IsPlayerIced { get; set; } = false;
+        public bool PlayerFiredWeapon { get; set; } = false;
         public bool isAssociateIced { get; set; } = false;
         public bool HasPlayerEncouragedCrew { get; set; } = false;
         public int PlayerContactCount { get; set; }
