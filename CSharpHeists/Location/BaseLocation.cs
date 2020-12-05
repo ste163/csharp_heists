@@ -4,7 +4,7 @@ using CSharpHeists.ASCII;
 
 namespace CSharpHeists.Location
 {
-    public class Location
+    public class BaseLocation
     {
         public string Image { get; set; }
         public string Name { get; set; }
@@ -38,13 +38,13 @@ namespace CSharpHeists.Location
         public int Cash { get; set; }
         public bool Completed { get; set; } = false;
 
-        public Location()
+        public BaseLocation()
         {
             // Blank location constructor to instantiate an initial location
             // So we can use the GenerateAllLocations method
         }
 
-        public Location(string img, string name, string summary, int diff, int diffMin, int diffMax, int cash)
+        public BaseLocation(string img, string name, string summary, int diff, int diffMin, int diffMax, int cash)
         {
             Image = img;
             Name = name;
@@ -55,9 +55,9 @@ namespace CSharpHeists.Location
             Cash = cash;
         }
 
-        public List<Location> GenerateAllLocations()
+        public List<BaseLocation> GenerateAllLocations()
         {
-            List<Location> Locations = new List<Location>();
+            List<BaseLocation> Locations = new List<BaseLocation>();
 
             // Store values for locations
             string houseName = "Annoying Neighbor's House";
@@ -96,11 +96,11 @@ namespace CSharpHeists.Location
             int baCash = (new Random().Next(1_000_000, 4_000_000));
 
             // Instantiate locations
-            Location houseLocation = new Location(Headings.DisplayHouse(), houseName, houseSummary, houseDiff, houseDiffMin, houseDiffMax, houseCash);
-            Location gasLocation = new Location(ASCII.Face.Display711(), gasName, gasSummary, gasDiff, gasDiffMin, gasDiffMax, gasCash);
-            Location wfLocation = new Location(ASCII.Face.DisplayWF(), wfName, wfSummary, wfDiff, wfDiffMin, wfDiffMax, wfCash);
-            Location pnLocation = new Location(ASCII.Face.DisplayPNB(), pnName, pnSummary, pnDiff, pnDiffMin, pnDiffMax, pnCash);
-            Location baLocation = new Location(ASCII.Face.DisplayBOA(), baName, baSummary, baDiff, baDiffMin, baDiffMax, baCash);
+            BaseLocation houseLocation = new BaseLocation(Level.DisplayHouse(), houseName, houseSummary, houseDiff, houseDiffMin, houseDiffMax, houseCash);
+            BaseLocation gasLocation = new BaseLocation(Level.Display711(), gasName, gasSummary, gasDiff, gasDiffMin, gasDiffMax, gasCash);
+            BaseLocation wfLocation = new BaseLocation(Level.DisplayWF(), wfName, wfSummary, wfDiff, wfDiffMin, wfDiffMax, wfCash);
+            BaseLocation pnLocation = new BaseLocation(Level.DisplayPNB(), pnName, pnSummary, pnDiff, pnDiffMin, pnDiffMax, pnCash);
+            BaseLocation baLocation = new BaseLocation(Level.DisplayBOA(), baName, baSummary, baDiff, baDiffMin, baDiffMax, baCash);
 
             // Add locations to list
             Locations.Add(houseLocation);

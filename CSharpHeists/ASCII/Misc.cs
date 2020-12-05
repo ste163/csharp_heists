@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CSharpHeists.ASCII
 {
-    public class Object
+    public class Misc
     {
         public static string DisplayMoney()
         {

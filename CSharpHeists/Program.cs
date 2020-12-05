@@ -19,27 +19,27 @@ namespace CSharpHeists
         {
             Console.Clear();
             DisplayIntro();
-            Location getLocations = new Location();
-            List<Location> locations = getLocations.GenerateAllLocations();
+            BaseLocation getLocations = new BaseLocation();
+            List<BaseLocation> locations = getLocations.GenerateAllLocations();
             List<Criminal> currentCrew = CreateCrew(new List<Criminal>());
             ShowCrewCreatedMsg(currentCrew);
             LevelSelect(currentCrew, locations);
             // From level select, go to the split money view, then game over
         }
 
-        static void LevelSelect(List<Criminal> crew, List<Location> locations)
+        static void LevelSelect(List<Criminal> crew, List<BaseLocation> locations)
         {
             // While there are levels not yet completed, allow user to continue selecting levels
-            List<Location> locationsLeftToRob = locations.Where(l => l.Completed == false).ToList();
+            List<BaseLocation> locationsLeftToRob = locations.Where(l => l.Completed == false).ToList();
 
             Criminal player = crew.Find(c => c.IsPlayer);
 
             while (locationsLeftToRob.Count() > 0)
             {
                 Console.Clear();
-                Console.Write(ASCII.DisplayPlanning());
+                Console.Write(Heading.DisplayPlanning());
                 DisplayCrewInfo(crew);
-                Console.WriteLine(art.DisplayNashville());
+                Console.WriteLine(Level.DisplayNashville());
 
                 if (player.PlayerContactCount == 0 && crew.Count() == 1)
                 {
@@ -136,7 +136,7 @@ namespace CSharpHeists
             }).ToList();
         }
 
-        static void SplitCash(List<Criminal> crew, List<Location> locations)
+        static void SplitCash(List<Criminal> crew, List<BaseLocation> locations)
         {
             // get crew cash
             int totalCash = 0;
@@ -149,13 +149,12 @@ namespace CSharpHeists
                 if (crew.Count() > 1)
                 {
                     Console.Clear();
-                    ASCII art = new ASCII();
                     // Display headings and crew info
-                    Console.WriteLine(art.DisplayHeadingSplit());
-                    Console.WriteLine(art.DisplaySubheadingSplit());
+                    Console.WriteLine(Heading.DisplayHeadingSplit());
+                    Console.WriteLine(Heading.DisplaySubheadingSplit());
                     DisplayCrewInfoShortened(crew);
                     // Money bag image
-                    Console.WriteLine(art.DisplayMoneyBag());
+                    Console.WriteLine(Misc.DisplayMoneyBag());
 
                     // Display crews name and current morale status
                     Console.WriteLine("Crew");
@@ -211,7 +210,7 @@ namespace CSharpHeists
             }
         }
 
-        static void StakeOutLocation(List<Criminal> crew, List<Location> locations, int userSelected)
+        static void StakeOutLocation(List<Criminal> crew, List<BaseLocation> locations, int userSelected)
         // Must always return the current crew and the current locations
         // LocationInfo names MUST match those in Location.cs
         {
@@ -223,7 +222,7 @@ namespace CSharpHeists
                     // Use this string to check the locations with 
                     string houseSelected = "Annoying Neighbor's House";
                     // Check if the location has been completed, if not, add to list
-                    List<Location> isHouseCompleted = locations.Where(l => l.Name == houseSelected && !l.Completed).ToList();
+                    List<BaseLocation> isHouseCompleted = locations.Where(l => l.Name == houseSelected && !l.Completed).ToList();
                     // If location is in list, load the locationInfo
                     if (isHouseCompleted.Count() == 1) LocationInfo(locations, houseSelected, crew);
                     // If it's been completed, return to LevelSelect
@@ -231,39 +230,38 @@ namespace CSharpHeists
                     break;
                 case 3:
                     string gasSelected = "Corner 7-Eleven";
-                    List<Location> isGasCompleted = locations.Where(l => l.Name == gasSelected && !l.Completed).ToList();
+                    List<BaseLocation> isGasCompleted = locations.Where(l => l.Name == gasSelected && !l.Completed).ToList();
                     if (isGasCompleted.Count() == 1) LocationInfo(locations, gasSelected, crew);
                     else LevelSelect(crew, locations);
                     break;
                 case 4:
                     string wfSelected = "Welts Fargo";
-                    List<Location> isWfCompleted = locations.Where(l => l.Name == wfSelected && !l.Completed).ToList();
+                    List<BaseLocation> isWfCompleted = locations.Where(l => l.Name == wfSelected && !l.Completed).ToList();
                     if (isWfCompleted.Count() == 1) LocationInfo(locations, wfSelected, crew);
                     else LevelSelect(crew, locations);
                     break;
                 case 5:
                     string pnbSelected = "Pinnackle National Bank";
-                    List<Location> isPnbCompleted = locations.Where(l => l.Name == pnbSelected && !l.Completed).ToList();
+                    List<BaseLocation> isPnbCompleted = locations.Where(l => l.Name == pnbSelected && !l.Completed).ToList();
                     if (isPnbCompleted.Count() == 1) LocationInfo(locations, pnbSelected, crew);
                     else LevelSelect(crew, locations);
                     break;
                 case 6:
                     string boaSelected = "Bank of Amereeka";
-                    List<Location> isBoaCompleted = locations.Where(l => l.Name == boaSelected && !l.Completed).ToList();
+                    List<BaseLocation> isBoaCompleted = locations.Where(l => l.Name == boaSelected && !l.Completed).ToList();
                     if (isBoaCompleted.Count() == 1) LocationInfo(locations, boaSelected, crew);
                     else LevelSelect(crew, locations);
                     break;
             }
         }
 
-        static void LocationInfo(List<Location> locations, string locName, List<Criminal> crew)
+        static void LocationInfo(List<BaseLocation> locations, string locName, List<Criminal> crew)
         {
             Console.Clear();
-            ASCII ASCII = new ASCII();
             // Get the selected location
-            Location selectedLoc = locations.Find(l => l.Name == locName);
+            BaseLocation selectedLoc = locations.Find(l => l.Name == locName);
             // Display the Stakeout heading
-            Console.WriteLine(ASCII.DisplayStakeout());
+            Console.WriteLine(Heading.DisplayStakeout());
             DisplayCrewInfo(crew);
             // Display location info
             Console.WriteLine($@"
@@ -300,7 +298,7 @@ _____
             }
         }
 
-        static List<Location> WaitInVan(List<Location> locations, string locName)
+        static List<BaseLocation> WaitInVan(List<BaseLocation> locations, string locName)
         {
             // Instantiate a Random object
             Random r = new Random();
@@ -331,7 +329,7 @@ _____
             return locations;
         }
 
-        static void BeginHeist(List<Criminal> crew, List<Location> locations, string locName)
+        static void BeginHeist(List<Criminal> crew, List<BaseLocation> locations, string locName)
         {
             // Regardless of success/failure, reset all waits in van
             locations.ForEach(l => l.WaitsInVanAvailable = 3);
@@ -340,7 +338,7 @@ _____
 
             List<Criminal> crewSuccess = crew;
 
-            List<Location> updatedLocations = locations.Select(l =>
+            List<BaseLocation> updatedLocations = locations.Select(l =>
             {
                 // find the selected location
                 if (l.Name == locName)
@@ -400,19 +398,18 @@ _____
             else HeistFailure(crewSuccess, updatedLocations);
         }
 
-        static void HeistSuccess(List<Criminal> crew, List<Location> locations, string locName)
+        static void HeistSuccess(List<Criminal> crew, List<BaseLocation> locations, string locName)
         {
             Console.Clear();
 
             // Morale check before continuing
             WillCrewMemberTurnAfterHeist(crew, locations, locName);
 
-            ASCII ASCII = new ASCII();
-            Console.WriteLine(ASCII.DisplayHeistSuccess());
-            Console.WriteLine(ASCII.DisplayMoney());
-            Console.WriteLine(ASCII.DisplaySuccessOveriew());
+            Console.WriteLine(Heading.DisplayHeistSuccess());
+            Console.WriteLine(Misc.DisplayMoney());
+            Console.WriteLine(Heading.DisplaySuccessOveriew());
 
-            Location currentLocation = locations.Find(l => l.Name == locName);
+            BaseLocation currentLocation = locations.Find(l => l.Name == locName);
             Criminal player = crew.Find(c => c.IsPlayer);
             int cashEarned = player.CrewTotalCash;
 
@@ -438,7 +435,7 @@ _____
             LevelSelect(crew, locations);
         }
 
-        static void HeistFailure(List<Criminal> crew, List<Location> locations)
+        static void HeistFailure(List<Criminal> crew, List<BaseLocation> locations)
         {
             Console.Clear();
             Criminal player = crew.Find(c => c.IsPlayer);
@@ -447,20 +444,19 @@ _____
             // 50-50 chance for arrested or escaped
             Random random = new Random();
             int r = random.Next(1, 3);
-            ASCII ASCII = new ASCII();
 
             // Arrested
             if (r == 1)
             {
                 // Generate arrested summary
-                Console.WriteLine(ASCII.DisplayHeadingArrested());
-                Console.WriteLine(ASCII.DisplaySubheadingArrested());
+                Console.WriteLine(Heading.DisplayHeadingArrested());
+                Console.WriteLine(Heading.DisplaySubheadingArrested());
 
                 // If only player is in crew
                 if (crew.Count == 1)
                 {
                     crew.ForEach(c => c.IsPlayerArrested = true);
-                    Console.WriteLine(ASCII.DisplayArrested());
+                    Console.WriteLine(Face.DisplayArrested());
                     Console.Write(msg);
                     Console.ReadLine();
                     Console.WriteLine();
@@ -524,9 +520,9 @@ _____
                     }
                 });
                 // Display escaped summary
-                Console.WriteLine(ASCII.DisplayHeadingEscaped());
-                Console.WriteLine(ASCII.DisplaySubheadingEscaped());
-                Console.WriteLine(ASCII.DisplayPoliceCar());
+                Console.WriteLine(Heading.DisplayHeadingEscaped());
+                Console.WriteLine(Heading.DisplaySubheadingEscaped());
+                Console.WriteLine(Vehicle.DisplayPoliceCar());
                 if (crew.Count() > 1) Console.WriteLine(moraleMsg);
                 Console.WriteLine("");
                 Console.Write(msg);
@@ -536,9 +532,8 @@ _____
             }
         }
 
-        static void GameOver(List<Criminal> crew, List<Location> locations, bool playerAlive, Criminal player)
+        static void GameOver(List<Criminal> crew, List<BaseLocation> locations, bool playerAlive, Criminal player)
         {
-            ASCII ASCII = new ASCII();
             Criminal firstIndex = crew[0];
             int cashStolen = firstIndex.CrewTotalCash;
             int playersCut = cashStolen / crew.Count();
@@ -546,8 +541,8 @@ _____
             locations.ForEach(l => totalCashAvailable = l.Cash + totalCashAvailable);
 
             Console.Clear();
-            Console.WriteLine(ASCII.DisplayHeadingGameOver());
-            Console.WriteLine(ASCII.DisplaySubHeadingSummary());
+            Console.WriteLine(Heading.DisplayHeadingGameOver());
+            Console.WriteLine(Heading.DisplaySubHeadingSummary());
             Console.WriteLine($"Total cash stolen: ${cashStolen} / ${totalCashAvailable}");
 
             if (playerAlive)
@@ -566,7 +561,7 @@ _____
                     if (player.PlayerContactCount > 0) Console.WriteLine($"Number of associates left you could have hired: {player.PlayerContactCount}");
 
                     Console.WriteLine("");
-                    Console.WriteLine(ASCII.DisplayArrested());
+                    Console.WriteLine(Face.DisplayArrested());
 
                     Console.WriteLine("You should have known, crime never pays.");
 
@@ -578,7 +573,7 @@ _____
                     DisplayCrewMembersWhoSurvived(crew);
                     if (player.PlayerContactCount > 0) Console.WriteLine($"Number of associates left you could have hired: {player.PlayerContactCount}");
 
-                    Console.WriteLine(ASCII.DisplaySubheadingWanted());
+                    Console.WriteLine(Heading.DisplaySubheadingWanted());
                     Console.WriteLine($"{player.Name} for multiple attempts at robbery.");
                     Console.WriteLine($"{player.Face}");
                     Console.WriteLine("");
@@ -601,9 +596,9 @@ _____
                     }
 
                     // Based on how much the playersCut was, display ending message
-                    if (playersCut > 0 && playersCut <= 10_000) Console.WriteLine(ASCII.DisplayEndingCamp());
-                    if (playersCut >= 10_001 && playersCut <= 999_999) Console.WriteLine(ASCII.DisplayEndingRoad());
-                    if (playersCut > 1_000_000) Console.WriteLine(ASCII.DisplayEndingBeach());
+                    if (playersCut > 0 && playersCut <= 10_000) Console.WriteLine(Ending.DisplayEndingCamp());
+                    if (playersCut >= 10_001 && playersCut <= 999_999) Console.WriteLine(Ending.DisplayEndingRoad());
+                    if (playersCut > 1_000_000) Console.WriteLine(Ending.DisplayEndingBeach());
                 }
             }
 
@@ -659,10 +654,10 @@ _____
             else if (input == "") Environment.Exit(0);
         }
 
-        static void WillCrewMemberTurnAfterHeist(List<Criminal> crew, List<Location> locations, string locName)
+        static void WillCrewMemberTurnAfterHeist(List<Criminal> crew, List<BaseLocation> locations, string locName)
         {
             // Get selected location
-            Location selectedLocation = locations.Find(l => l.Name == locName);
+            BaseLocation selectedLocation = locations.Find(l => l.Name == locName);
 
             int locationCash = selectedLocation.Cash;
             // Loop through criminals to see if any fail the morale check
@@ -706,7 +701,7 @@ _____
             int chanceInt,
             int randFrom100,
             List<Criminal> crew,
-            List<Location> locations,
+            List<BaseLocation> locations,
             Criminal traitor,
             string locName)
         {
@@ -714,7 +709,7 @@ _____
             if (chanceInt != 0 && chanceInt >= randFrom100)
             {
                 // Get selected location
-                Location selectedLocation = locations.Find(l => l.Name == locName);
+                BaseLocation selectedLocation = locations.Find(l => l.Name == locName);
 
                 // Lower everyone's Morale
                 crew.ForEach(c =>
@@ -739,11 +734,9 @@ _____
             }
         }
 
-        static void TraitorScreen(List<Criminal> crew, List<Location> locations, string locName, Criminal traitor)
+        static void TraitorScreen(List<Criminal> crew, List<BaseLocation> locations, string locName, Criminal traitor)
         {
-            ASCII art = new ASCII();
-
-            Location currentLocation = locations.Find(l => l.Name == locName);
+            BaseLocation currentLocation = locations.Find(l => l.Name == locName);
 
             Console.WriteLine(art.DisplayHeadingTraitor());
             Console.WriteLine(art.DisplaySubheadingTraitor());
@@ -763,7 +756,7 @@ _____
             LevelSelect(crew, locations);
         }
 
-        static void ManageCrew(List<Criminal> crew, List<Location> locations)
+        static void ManageCrew(List<Criminal> crew, List<BaseLocation> locations)
         // Must always return the current crew and the current locations
         {
             Console.Clear();
@@ -843,8 +836,7 @@ _____
         static void DisplayEncouragingSpeech(Criminal player, bool isSplitMenu)
         {
             Console.Clear();
-            ASCII ASCII = new ASCII();
-            Console.WriteLine(ASCII.DisplaySubheadingSpeech());
+            Console.WriteLine(Heading.DisplaySubheadingSpeech());
             Console.WriteLine(player.Face);
             Console.WriteLine("");
             // for the speeches, get names of the crew members and saying something dramatic about each person
@@ -871,10 +863,9 @@ _____
 
         static void DisplayIceAssociateWarning(List<Criminal> crew)
         {
-            ASCII ASCII = new ASCII();
             Console.WriteLine("");
             Console.WriteLine("Icing crew members upsets the rest of the crew.");
-            Console.WriteLine(ASCII.DisplayGun());
+            Console.WriteLine(Misc.DisplayGun());
 
             Console.WriteLine("Crew members");
             Console.WriteLine("------------------");
@@ -890,18 +881,17 @@ _____
             Console.Write("Enter name of who you will ice [leave blank to cancel]: ");
         }
 
-        static List<Criminal> IceCrewMember(List<Criminal> crew, List<Location> locations, bool splitCashMenu)
+        static List<Criminal> IceCrewMember(List<Criminal> crew, List<BaseLocation> locations, bool splitCashMenu)
         {
             if (crew.Count() > 1) return IceAssociateCheck(crew, locations, splitCashMenu);
             else return crew;
         }
 
-        static List<Criminal> IceAssociateCheck(List<Criminal> crew, List<Location> locations, bool splitCashMenu)
+        static List<Criminal> IceAssociateCheck(List<Criminal> crew, List<BaseLocation> locations, bool splitCashMenu)
         {
             Console.Clear();
             string name = "not empty for a base value";
-            ASCII ASCII = new ASCII();
-            Console.WriteLine(ASCII.DisplayIce());
+            Console.WriteLine(Heading.DisplayIce());
 
             if (!splitCashMenu)
             {
@@ -985,10 +975,9 @@ _____
         static void DisplayWhoWasIced(Criminal whoWasIced)
         {
             Console.Clear();
-            ASCII art = new ASCII();
 
             // Display ASCII artwork for who was killed 
-            Console.WriteLine(art.DisplayHeadingIced());
+            Console.WriteLine(Heading.DisplayHeadingIced());
             Console.WriteLine($"{whoWasIced.FaceIced}");
             Console.WriteLine("");
 
@@ -1004,7 +993,7 @@ _____
             Console.ReadLine();
         }
 
-        static void WillCrewMemberRunAfterIce(List<Criminal> crew, List<Location> locations)
+        static void WillCrewMemberRunAfterIce(List<Criminal> crew, List<BaseLocation> locations)
         {
             // SIMILAR to WillCrewMemberTurnAfterHeist
             // But this checks EVERY member instead of until one turns
@@ -1094,18 +1083,17 @@ _____
         static void AssociateRanInFear(Criminal scared)
         {
             Console.Clear();
-            ASCII ASCII = new ASCII();
-            Console.WriteLine(ASCII.DisplayHeadingFled());
+            Console.WriteLine(Heading.DisplayHeadingFled());
             if (scared.CrewTotalCash == 0)
             {
-                Console.WriteLine(ASCII.DisplayAssociateRanInFear());
+                Console.WriteLine(Vehicle.DisplayAssociateRanInFear());
                 Console.WriteLine(scared.Face);
                 Console.WriteLine("");
                 Console.WriteLine($"{scared.Name} fled from your horrifically violent action!");
             }
             else
             {
-                Console.WriteLine(ASCII.DisplayAssociateRanWithCash());
+                Console.WriteLine(Vehicle.DisplayAssociateRanWithCash());
                 Console.WriteLine(scared.Face);
                 Console.WriteLine("");
                 Console.WriteLine($"Your horrifically violent act terrified {scared.Name}.");
@@ -1117,7 +1105,7 @@ _____
             Console.ReadLine();
         }
 
-        static void WillCrewMemberShoot(List<Criminal> crew, List<Location> locations, bool isPlayerAttemptingMoneySplit)
+        static void WillCrewMemberShoot(List<Criminal> crew, List<BaseLocation> locations, bool isPlayerAttemptingMoneySplit)
         // Check every crew member's morale to see if they will turn
         {
             // SIMILAR to WillCrewMemberTurnAfterHeist
@@ -1164,7 +1152,7 @@ _____
             int chanceInt,
             int randFrom100,
             List<Criminal> crew,
-            List<Location> locations,
+            List<BaseLocation> locations,
             Criminal traitor,
             bool isPlayerAttemptingMoneySplit)
         {
@@ -1212,15 +1200,14 @@ _____
 
         // MESSAGE METHOD
         static void DisplayWhoIcedWho(List<Criminal> crew,
-            List<Location> locations,
+            List<BaseLocation> locations,
             Criminal traitor,
             Criminal gotShot,
             bool isPlayerAttemptingMoneySplit)
         {
-            ASCII ASCII = new ASCII();
             Console.Clear();
 
-            Console.WriteLine(ASCII.DisplayHeadingIced());
+            Console.WriteLine(Heading.DisplayHeadingIced());
             Console.WriteLine(gotShot.FaceIced);
             Console.WriteLine("");
             if (gotShot.IsPlayer)
@@ -1333,9 +1320,7 @@ _____
 
         static void DisplayCurrentCrew(List<Criminal> crew)
         {
-            ASCII art = new ASCII();
-
-            Console.WriteLine(art.DisplayCrewHeading());
+            Console.WriteLine(Heading.DisplayCrewHeading());
             DisplayCrewInfo(crew);
             crew.ForEach(c => {
                 if (c.IsPlayer)
@@ -1360,7 +1345,6 @@ ___________");
 
         static List<Criminal> CreateCrew(List<Criminal> crew)
         {
-            ASCII art = new ASCII();
             bool recruiting = true;
             List<Criminal> newCrew = new List<Criminal>();
             int playerContactsLeft;
@@ -1416,7 +1400,7 @@ ___________");
                 }
                 else
                 {
-                    Console.WriteLine(art.DisplayCrewHire());
+                    Console.WriteLine(Heading.DisplayCrewHire());
 
                     // While we are recruiting, prompt user to continue recruiting
                     while (recruiting)
@@ -1475,9 +1459,8 @@ ___________");
 
         static void ShowCrewCreatedMsg(List<Criminal> crew)
         {
-            ASCII ASCII = new ASCII();
             Console.Clear();
-            Console.WriteLine(ASCII.DisplayCrewCreated());
+            Console.WriteLine(Heading.DisplayCrewCreated());
             crew.ForEach(c =>
             {
                 if (crew.Count() <= 2) Console.WriteLine($@"{c.Face}
@@ -1565,8 +1548,7 @@ _________
 
         static void DisplayIntro()
         {
-            ASCII ASCII = new ASCII();
-            Console.WriteLine(ASCII.DisplayTitle());
+            Console.WriteLine(Heading.DisplayTitle());
         }
     }
 }
