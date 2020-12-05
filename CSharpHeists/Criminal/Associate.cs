@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CSharpHeists.Criminal
 {
-    public class Associate : Criminal
+    public class Associate : BaseCriminal
     {
     }
 }

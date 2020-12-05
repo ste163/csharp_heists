@@ -9,7 +9,7 @@ using System;
 
 namespace heist
 {
-    public class ASCII
+    public static class ASCII
     {
         public string DisplayCrewHeading()
         {

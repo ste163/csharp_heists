@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using CSharpHeists.ASCII;
 
 namespace CSharpHeists.Location
@@ -95,12 +94,13 @@ namespace CSharpHeists.Location
             int baDiffMax = 900;
             int baDiff = (new Random().Next(baDiffMin, baDiffMax));
             int baCash = (new Random().Next(1_000_000, 4_000_000));
+
             // Instantiate locations
-            Location houseLocation = new Location(ASCII.ASCII.DisplayHouse(), houseName, houseSummary, houseDiff, houseDiffMin, houseDiffMax, houseCash);
-            Location gasLocation = new Location(ASCII.ASCII.Display711(), gasName, gasSummary, gasDiff, gasDiffMin, gasDiffMax, gasCash);
-            Location wfLocation = new Location(ASCII.ASCII.DisplayWF(), wfName, wfSummary, wfDiff, wfDiffMin, wfDiffMax, wfCash);
-            Location pnLocation = new Location(ASCII.ASCII.DisplayPNB(), pnName, pnSummary, pnDiff, pnDiffMin, pnDiffMax, pnCash);
-            Location baLocation = new Location(ASCII.ASCII.DisplayBOA(), baName, baSummary, baDiff, baDiffMin, baDiffMax, baCash);
+            Location houseLocation = new Location(Headings.DisplayHouse(), houseName, houseSummary, houseDiff, houseDiffMin, houseDiffMax, houseCash);
+            Location gasLocation = new Location(ASCII.Face.Display711(), gasName, gasSummary, gasDiff, gasDiffMin, gasDiffMax, gasCash);
+            Location wfLocation = new Location(ASCII.Face.DisplayWF(), wfName, wfSummary, wfDiff, wfDiffMin, wfDiffMax, wfCash);
+            Location pnLocation = new Location(ASCII.Face.DisplayPNB(), pnName, pnSummary, pnDiff, pnDiffMin, pnDiffMax, pnCash);
+            Location baLocation = new Location(ASCII.Face.DisplayBOA(), baName, baSummary, baDiff, baDiffMin, baDiffMax, baCash);
 
             // Add locations to list
             Locations.Add(houseLocation);

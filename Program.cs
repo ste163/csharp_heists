@@ -39,8 +39,7 @@ namespace heist
             while (locationsLeftToRob.Count() > 0)
             {
                 Console.Clear();
-                ASCII art = new ASCII();
-                Console.Write(art.DisplayPlanning());
+                Console.Write(ASCII.DisplayPlanning());
                 DisplayCrewInfo(crew);
                 Console.WriteLine(art.DisplayNashville());
 
