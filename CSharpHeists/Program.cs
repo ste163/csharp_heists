@@ -21,18 +21,18 @@ namespace CSharpHeists
             DisplayIntro();
             BaseLocation getLocations = new BaseLocation();
             List<BaseLocation> locations = getLocations.GenerateAllLocations();
-            List<Criminal> currentCrew = CreateCrew(new List<Criminal>());
+            List<BaseCriminal> currentCrew = CreateCrew(new List<BaseCriminal>());
             ShowCrewCreatedMsg(currentCrew);
             LevelSelect(currentCrew, locations);
             // From level select, go to the split money view, then game over
         }
 
-        static void LevelSelect(List<Criminal> crew, List<BaseLocation> locations)
+        static void LevelSelect(List<BaseCriminal> crew, List<BaseLocation> locations)
         {
             // While there are levels not yet completed, allow user to continue selecting levels
             List<BaseLocation> locationsLeftToRob = locations.Where(l => l.Completed == false).ToList();
 
-            Criminal player = crew.Find(c => c.IsPlayer);
+            BaseCriminal player = crew.Find(c => c.IsPlayer);
 
             while (locationsLeftToRob.Count() > 0)
             {
@@ -124,7 +124,7 @@ namespace CSharpHeists
             SplitCash(PrepCrewForEndGame(crew), locations);
         }
 
-        static List<Criminal> PrepCrewForEndGame(List<Criminal> crew)
+        static List<BaseCriminal> PrepCrewForEndGame(List<BaseCriminal> crew)
         {
             // Ensure player can give a speech
             // Lower everyone's morale 20-30 points each because all that money is tempting.
@@ -136,12 +136,12 @@ namespace CSharpHeists
             }).ToList();
         }
 
-        static void SplitCash(List<Criminal> crew, List<BaseLocation> locations)
+        static void SplitCash(List<BaseCriminal> crew, List<BaseLocation> locations)
         {
             // get crew cash
             int totalCash = 0;
             crew.ForEach(c => totalCash = c.CrewTotalCash);
-            Criminal player = crew.Find(c => c.IsPlayer);
+            BaseCriminal player = crew.Find(c => c.IsPlayer);
 
             if (totalCash > 0)
             {
@@ -185,7 +185,7 @@ namespace CSharpHeists
                             break;
                         case 2:
                             // Player ices an associate 
-                            List<Criminal> smallerCrew = IceCrewMember(crew, locations, true);
+                            List<BaseCriminal> smallerCrew = IceCrewMember(crew, locations, true);
                             if (player.PlayerFiredWeapon) WillCrewMemberShoot(smallerCrew, locations, false);
                             smallerCrew.ForEach(c =>
                             {
@@ -210,7 +210,7 @@ namespace CSharpHeists
             }
         }
 
-        static void StakeOutLocation(List<Criminal> crew, List<BaseLocation> locations, int userSelected)
+        static void StakeOutLocation(List<BaseCriminal> crew, List<BaseLocation> locations, int userSelected)
         // Must always return the current crew and the current locations
         // LocationInfo names MUST match those in Location.cs
         {
@@ -255,7 +255,7 @@ namespace CSharpHeists
             }
         }
 
-        static void LocationInfo(List<BaseLocation> locations, string locName, List<Criminal> crew)
+        static void LocationInfo(List<BaseLocation> locations, string locName, List<BaseCriminal> crew)
         {
             Console.Clear();
             // Get the selected location
@@ -329,14 +329,14 @@ _____
             return locations;
         }
 
-        static void BeginHeist(List<Criminal> crew, List<BaseLocation> locations, string locName)
+        static void BeginHeist(List<BaseCriminal> crew, List<BaseLocation> locations, string locName)
         {
             // Regardless of success/failure, reset all waits in van
             locations.ForEach(l => l.WaitsInVanAvailable = 3);
 
             bool heistSuccess = false;
 
-            List<Criminal> crewSuccess = crew;
+            List<BaseCriminal> crewSuccess = crew;
 
             List<BaseLocation> updatedLocations = locations.Select(l =>
             {
@@ -398,7 +398,7 @@ _____
             else HeistFailure(crewSuccess, updatedLocations);
         }
 
-        static void HeistSuccess(List<Criminal> crew, List<BaseLocation> locations, string locName)
+        static void HeistSuccess(List<BaseCriminal> crew, List<BaseLocation> locations, string locName)
         {
             Console.Clear();
 
@@ -410,7 +410,7 @@ _____
             Console.WriteLine(Heading.DisplaySuccessOveriew());
 
             BaseLocation currentLocation = locations.Find(l => l.Name == locName);
-            Criminal player = crew.Find(c => c.IsPlayer);
+            BaseCriminal player = crew.Find(c => c.IsPlayer);
             int cashEarned = player.CrewTotalCash;
 
             // Display how much money we earned from location
@@ -435,10 +435,10 @@ _____
             LevelSelect(crew, locations);
         }
 
-        static void HeistFailure(List<Criminal> crew, List<BaseLocation> locations)
+        static void HeistFailure(List<BaseCriminal> crew, List<BaseLocation> locations)
         {
             Console.Clear();
-            Criminal player = crew.Find(c => c.IsPlayer);
+            BaseCriminal player = crew.Find(c => c.IsPlayer);
             string msg = "Press any key to continue ";
             string moraleMsg = "Crew morale decreased.";
             // 50-50 chance for arrested or escaped
@@ -469,7 +469,7 @@ _____
                     int crewSize = crew.Count();
                     int randomCrewMember = new Random().Next(1, crewSize);
 
-                    Criminal arrestedMember = crew.ElementAt(randomCrewMember);
+                    BaseCriminal arrestedMember = crew.ElementAt(randomCrewMember);
                     Console.WriteLine("");
                     Console.WriteLine($"{arrestedMember.Face}");
                     Console.WriteLine("");
@@ -532,9 +532,9 @@ _____
             }
         }
 
-        static void GameOver(List<Criminal> crew, List<BaseLocation> locations, bool playerAlive, Criminal player)
+        static void GameOver(List<BaseCriminal> crew, List<BaseLocation> locations, bool playerAlive, BaseCriminal player)
         {
-            Criminal firstIndex = crew[0];
+            BaseCriminal firstIndex = crew[0];
             int cashStolen = firstIndex.CrewTotalCash;
             int playersCut = cashStolen / crew.Count();
             int totalCashAvailable = 0;
@@ -624,7 +624,7 @@ _____
             ExitGame();
         }
 
-        static void DisplayCrewMembersWhoSurvived(List<Criminal> crew)
+        static void DisplayCrewMembersWhoSurvived(List<BaseCriminal> crew)
         {
             Console.WriteLine($"Crew members (besides you) who survived:");
             if (crew.Count() == 1)
@@ -654,7 +654,7 @@ _____
             else if (input == "") Environment.Exit(0);
         }
 
-        static void WillCrewMemberTurnAfterHeist(List<Criminal> crew, List<BaseLocation> locations, string locName)
+        static void WillCrewMemberTurnAfterHeist(List<BaseCriminal> crew, List<BaseLocation> locations, string locName)
         {
             // Get selected location
             BaseLocation selectedLocation = locations.Find(l => l.Name == locName);
@@ -671,7 +671,7 @@ _____
                     if (morale <= 40 && selectedLocation.crewMemberStoleCash == false)
                     {
                         // Save as traitor for easy understanding
-                        Criminal traitor = c;
+                        BaseCriminal traitor = c;
 
                         // Generate a new random number between 1-10 to handle the % a person will turn
                         Random r = new Random();
@@ -700,9 +700,9 @@ _____
         static void ChanceToTurnAfterHeist(
             int chanceInt,
             int randFrom100,
-            List<Criminal> crew,
+            List<BaseCriminal> crew,
             List<BaseLocation> locations,
-            Criminal traitor,
+            BaseCriminal traitor,
             string locName)
         {
             // If the percentage chance is under the random value picked
@@ -734,12 +734,12 @@ _____
             }
         }
 
-        static void TraitorScreen(List<Criminal> crew, List<BaseLocation> locations, string locName, Criminal traitor)
+        static void TraitorScreen(List<BaseCriminal> crew, List<BaseLocation> locations, string locName, BaseCriminal traitor)
         {
             BaseLocation currentLocation = locations.Find(l => l.Name == locName);
 
-            Console.WriteLine(art.DisplayHeadingTraitor());
-            Console.WriteLine(art.DisplaySubheadingTraitor());
+            Console.WriteLine(Heading.DisplayHeadingTraitor());
+            Console.WriteLine(Heading.DisplaySubheadingTraitor());
             Console.WriteLine("");
             Console.WriteLine($"{traitor.Face}");
             Console.WriteLine("");
@@ -756,17 +756,17 @@ _____
             LevelSelect(crew, locations);
         }
 
-        static void ManageCrew(List<Criminal> crew, List<BaseLocation> locations)
+        static void ManageCrew(List<BaseCriminal> crew, List<BaseLocation> locations)
         // Must always return the current crew and the current locations
         {
             Console.Clear();
 
 
-            List<Criminal> updatedCrew = crew;
+            List<BaseCriminal> updatedCrew = crew;
 
             DisplayCurrentCrew(updatedCrew);
 
-            Criminal player = crew.Find(c => c.IsPlayer);
+            BaseCriminal player = crew.Find(c => c.IsPlayer);
 
             // If only the player is in the crew & player has 0 contacts, return to level select
             if (crew.Count == 1 && player.PlayerContactCount == 0) LevelSelect(crew, locations);
@@ -804,10 +804,10 @@ _____
             }
         }
 
-        static List<Criminal> EncourageCrew(List<Criminal> crew, bool isSplitMenu)
+        static List<BaseCriminal> EncourageCrew(List<BaseCriminal> crew, bool isSplitMenu)
         {
             // Takes an isSplitMenu because different encouragements require different speeches
-            Criminal player = crew.Find(c => c.IsPlayer);
+            BaseCriminal player = crew.Find(c => c.IsPlayer);
             if (player.HasPlayerEncouragedCrew == false)
             {
                 Random r = new Random();
@@ -833,7 +833,7 @@ _____
             return crew;
         }
 
-        static void DisplayEncouragingSpeech(Criminal player, bool isSplitMenu)
+        static void DisplayEncouragingSpeech(BaseCriminal player, bool isSplitMenu)
         {
             Console.Clear();
             Console.WriteLine(Heading.DisplaySubheadingSpeech());
@@ -861,7 +861,7 @@ _____
             Console.ReadLine();
         }
 
-        static void DisplayIceAssociateWarning(List<Criminal> crew)
+        static void DisplayIceAssociateWarning(List<BaseCriminal> crew)
         {
             Console.WriteLine("");
             Console.WriteLine("Icing crew members upsets the rest of the crew.");
@@ -881,13 +881,13 @@ _____
             Console.Write("Enter name of who you will ice [leave blank to cancel]: ");
         }
 
-        static List<Criminal> IceCrewMember(List<Criminal> crew, List<BaseLocation> locations, bool splitCashMenu)
+        static List<BaseCriminal> IceCrewMember(List<BaseCriminal> crew, List<BaseLocation> locations, bool splitCashMenu)
         {
             if (crew.Count() > 1) return IceAssociateCheck(crew, locations, splitCashMenu);
             else return crew;
         }
 
-        static List<Criminal> IceAssociateCheck(List<Criminal> crew, List<BaseLocation> locations, bool splitCashMenu)
+        static List<BaseCriminal> IceAssociateCheck(List<BaseCriminal> crew, List<BaseLocation> locations, bool splitCashMenu)
         {
             Console.Clear();
             string name = "not empty for a base value";
@@ -902,15 +902,15 @@ _____
                     name = Console.ReadLine();
 
                     // Store the criminal who was iced for use in display
-                    Criminal whoWasIced = crew.Find(c => c.Name == name);
+                    BaseCriminal whoWasIced = crew.Find(c => c.Name == name);
                     // Make a new list of criminals WITHOUT the iced crew member
-                    List<Criminal> icedCrew = crew.Where(c => c.Name != name || c.IsPlayer == true).ToList();
+                    List<BaseCriminal> icedCrew = crew.Where(c => c.Name != name || c.IsPlayer == true).ToList();
 
                     // Only lower morale if we have iced a crew member
                     if (icedCrew.Count() < crew.Count())
                     {
                         // Lower the crews morale
-                        List<Criminal> newCrew = LowerMoraleFromIce(icedCrew);
+                        List<BaseCriminal> newCrew = LowerMoraleFromIce(icedCrew);
                         // Display Who was iced, if not null
                         if (whoWasIced != null) DisplayWhoWasIced(whoWasIced);
                         WillCrewMemberRunAfterIce(newCrew, locations);
@@ -927,15 +927,15 @@ _____
                 name = Console.ReadLine();
 
                 // Store the criminal who was iced for use in display
-                Criminal whoWasIced = crew.Find(c => c.Name == name);
+                BaseCriminal whoWasIced = crew.Find(c => c.Name == name);
                 // Make a new list of criminals WITHOUT the iced crew member
-                List<Criminal> icedCrew = crew.Where(c => c.Name != name || c.IsPlayer == true).ToList();
+                List<BaseCriminal> icedCrew = crew.Where(c => c.Name != name || c.IsPlayer == true).ToList();
 
                 // Only lower morale if we have iced a crew member
                 if (icedCrew.Count() < crew.Count())
                 {
                     // Lower the crews morale
-                    List<Criminal> newCrew = LowerMoraleFromIce(icedCrew);
+                    List<BaseCriminal> newCrew = LowerMoraleFromIce(icedCrew);
                     // Display Who was iced, if not null
                     if (whoWasIced != null) DisplayWhoWasIced(whoWasIced);
                     newCrew.ForEach(c =>
@@ -959,7 +959,7 @@ _____
             return crew;
         }
 
-        static List<Criminal> LowerMoraleFromIce(List<Criminal> icedCrew)
+        static List<BaseCriminal> LowerMoraleFromIce(List<BaseCriminal> icedCrew)
         {
             return icedCrew.Select(c =>
             {
@@ -972,7 +972,7 @@ _____
             }).ToList();
         }
 
-        static void DisplayWhoWasIced(Criminal whoWasIced)
+        static void DisplayWhoWasIced(BaseCriminal whoWasIced)
         {
             Console.Clear();
 
@@ -993,14 +993,14 @@ _____
             Console.ReadLine();
         }
 
-        static void WillCrewMemberRunAfterIce(List<Criminal> crew, List<BaseLocation> locations)
+        static void WillCrewMemberRunAfterIce(List<BaseCriminal> crew, List<BaseLocation> locations)
         {
             // SIMILAR to WillCrewMemberTurnAfterHeist
             // But this checks EVERY member instead of until one turns
-            List<Criminal> checkedCrew = new List<Criminal>();
-            List<Criminal> notScaredCrew = new List<Criminal>();
+            List<BaseCriminal> checkedCrew = new List<BaseCriminal>();
+            List<BaseCriminal> notScaredCrew = new List<BaseCriminal>();
 
-            Criminal player = crew.Find(c => c.IsPlayer);
+            BaseCriminal player = crew.Find(c => c.IsPlayer);
             int currentCashTotal = player.CrewTotalCash;
             // Loop through criminals & check their morale
             checkedCrew = crew.Select(c =>
@@ -1011,7 +1011,7 @@ _____
                     // if morale is less than 40, chance to run    
                     if (morale <= 40)
                     {
-                        Criminal possibleTraitor = c;
+                        BaseCriminal possibleTraitor = c;
 
                         // Get new random
                         Random r = new Random();
@@ -1064,10 +1064,10 @@ _____
             ManageCrew(notScaredCrew, locations);
         }
 
-        static Criminal ChanceToRun(
+        static BaseCriminal ChanceToRun(
             int chanceInt,
             int randFrom100,
-            Criminal possibleTraitor)
+            BaseCriminal possibleTraitor)
         {
             // Check if they're a traitor
             if (chanceInt != 0 && chanceInt >= randFrom100)
@@ -1080,7 +1080,7 @@ _____
             return possibleTraitor;
         }
 
-        static void AssociateRanInFear(Criminal scared)
+        static void AssociateRanInFear(BaseCriminal scared)
         {
             Console.Clear();
             Console.WriteLine(Heading.DisplayHeadingFled());
@@ -1105,11 +1105,11 @@ _____
             Console.ReadLine();
         }
 
-        static void WillCrewMemberShoot(List<Criminal> crew, List<BaseLocation> locations, bool isPlayerAttemptingMoneySplit)
+        static void WillCrewMemberShoot(List<BaseCriminal> crew, List<BaseLocation> locations, bool isPlayerAttemptingMoneySplit)
         // Check every crew member's morale to see if they will turn
         {
             // SIMILAR to WillCrewMemberTurnAfterHeist
-            Criminal player = crew.Find(c => c.IsPlayer);
+            BaseCriminal player = crew.Find(c => c.IsPlayer);
 
             crew.ForEach(c =>
             {
@@ -1117,7 +1117,7 @@ _____
                 if (c.IsPlayer == false && morale <= 40)
                 {
                     // Save as traitor for easy understanding
-                    Criminal traitor = c;
+                    BaseCriminal traitor = c;
 
                     // Generate a new random number between 1-10 to handle the % a person will turn
                     Random r = new Random();
@@ -1151,9 +1151,9 @@ _____
         static void ChanceToShoot(
             int chanceInt,
             int randFrom100,
-            List<Criminal> crew,
+            List<BaseCriminal> crew,
             List<BaseLocation> locations,
-            Criminal traitor,
+            BaseCriminal traitor,
             bool isPlayerAttemptingMoneySplit)
         {
             if (chanceInt != 0 && chanceInt >= randFrom100 && !traitor.isAssociateIced)
@@ -1162,7 +1162,7 @@ _____
                 // Get the traitor's index value
                 int traitorIndex = crew.IndexOf(traitor);
                 // Declare a target's index
-                Criminal target = null;
+                BaseCriminal target = null;
                 Random r = new Random();
                 bool lookingForTarget = true;
                 // WHILE we do not have a person to shoot
@@ -1199,10 +1199,10 @@ _____
         }
 
         // MESSAGE METHOD
-        static void DisplayWhoIcedWho(List<Criminal> crew,
+        static void DisplayWhoIcedWho(List<BaseCriminal> crew,
             List<BaseLocation> locations,
-            Criminal traitor,
-            Criminal gotShot,
+            BaseCriminal traitor,
+            BaseCriminal gotShot,
             bool isPlayerAttemptingMoneySplit)
         {
             Console.Clear();
@@ -1270,7 +1270,7 @@ _____
             return entered;
         }
 
-        static void DisplayCrewInfo(List<Criminal> crew)
+        static void DisplayCrewInfo(List<BaseCriminal> crew)
         {
             // Get crew's skills
             List<int> TotalSkills = new List<int>();
@@ -1285,7 +1285,7 @@ _____
                 MoraleSkillBonus.Add(c.MoraleSkillBonus);
             });
 
-            Criminal player = crew.Find(c => c.IsPlayer);
+            BaseCriminal player = crew.Find(c => c.IsPlayer);
             TotalCash = player.CrewTotalCash;
 
             int CurrentSplit = (TotalCash / crew.Count());
@@ -1301,12 +1301,12 @@ _____
             Console.WriteLine("--------");
         }
 
-        static void DisplayCrewInfoShortened(List<Criminal> crew)
+        static void DisplayCrewInfoShortened(List<BaseCriminal> crew)
         {
             // Get crew's cash
             int TotalCash;
 
-            Criminal player = crew.Find(c => c.IsPlayer);
+            BaseCriminal player = crew.Find(c => c.IsPlayer);
             TotalCash = player.CrewTotalCash;
 
             int CurrentSplit = (TotalCash / crew.Count());
@@ -1318,7 +1318,7 @@ _____
             Console.WriteLine("--------");
         }
 
-        static void DisplayCurrentCrew(List<Criminal> crew)
+        static void DisplayCurrentCrew(List<BaseCriminal> crew)
         {
             Console.WriteLine(Heading.DisplayCrewHeading());
             DisplayCrewInfo(crew);
@@ -1343,16 +1343,16 @@ ___________");
             });
         }
 
-        static List<Criminal> CreateCrew(List<Criminal> crew)
+        static List<BaseCriminal> CreateCrew(List<BaseCriminal> crew)
         {
             bool recruiting = true;
-            List<Criminal> newCrew = new List<Criminal>();
+            List<BaseCriminal> newCrew = new List<BaseCriminal>();
             int playerContactsLeft;
 
             // After player created, can only add new criminals (this is for manage crew view)
             if (crew.Count != 0)
             {
-                List<Criminal> updatedCrew = new List<Criminal>();
+                List<BaseCriminal> updatedCrew = new List<BaseCriminal>();
 
                 // To save the playerContactsLeft count, must loop through
                 // the incoming crew, update the player, then resave everyone to
@@ -1365,7 +1365,7 @@ ___________");
                         Console.WriteLine("");
                         Console.WriteLine($"{playerContactsLeft} associates left to hire.");
                         updatedCrew.Add(c);
-                        updatedCrew.Add(RecruitNewCriminal(crew));
+                        updatedCrew.Add(RecruitNewAssociate(crew));
                         c.PlayerContactCount = --playerContactsLeft;
                     }
                     else
@@ -1409,7 +1409,7 @@ ___________");
                         string recruitingMessage = "Continue recruiting? [y/n]: ";
                         // Loop through the newCrew, checking how many
                         // Criminals the player has left to contact
-                        List<Criminal> updatedCrew = new List<Criminal>();
+                        List<BaseCriminal> updatedCrew = new List<BaseCriminal>();
 
                         // Loop over the new criminal list 
                         newCrew.ForEach(c =>
@@ -1418,7 +1418,7 @@ ___________");
                             if (c.IsPlayer && playerContactsLeft > 0)
                             {
                                 updatedCrew.Add(c);
-                                updatedCrew.Add(RecruitNewCriminal(newCrew));
+                                updatedCrew.Add(RecruitNewAssociate(newCrew));
 
                                 c.PlayerContactCount = --playerContactsLeft;
                                 Console.WriteLine("");
@@ -1457,7 +1457,7 @@ ___________");
             }
         }
 
-        static void ShowCrewCreatedMsg(List<Criminal> crew)
+        static void ShowCrewCreatedMsg(List<BaseCriminal> crew)
         {
             Console.Clear();
             Console.WriteLine(Heading.DisplayCrewCreated());
@@ -1484,39 +1484,39 @@ ___________");
             Console.ReadLine();
         }
 
-        static Criminal RecruitNewCriminal(List<Criminal> crew)
+        static BaseCriminal RecruitNewAssociate(List<BaseCriminal> crew)
         {
             bool nameAvailable = true;
             // Set a blank new criminal that we can return after the loop completes
-            Criminal newCriminal = null;
+            BaseCriminal newAssociate = null;
 
             while (nameAvailable)
             {
                 Console.Write("Enter associate's nickname: ");
                 string enteredName = Console.ReadLine();
 
-                Criminal isNameTaken = crew.Find(c => c.Name == enteredName);
+                BaseCriminal isNameTaken = crew.Find(c => c.Name == enteredName);
 
                 if (isNameTaken == null && enteredName != "")
                 {
-                    newCriminal = new Criminal(enteredName, false, crew);
+                    newAssociate = new BaseCriminal(enteredName, false, crew);
                     nameAvailable = false;
-                    Console.WriteLine($@"{newCriminal.Face}
+                    Console.WriteLine($@"{newAssociate.Face}
 
-{newCriminal.Name} recruited!
+{newAssociate.Name} recruited!
 _________
    
-   base skill: {newCriminal.BaseSkill}
+   base skill: {newAssociate.BaseSkill}
  ");
                 }
                 // Reset isNameTaken
                 isNameTaken = null;
             }
             // Exit loop and return new criminal
-            return newCriminal;
+            return newAssociate;
         }
 
-        static Criminal CreatePlayer(List<Criminal> crew)
+        static BaseCriminal CreatePlayer(List<BaseCriminal> crew)
         {
             string playerName = "this is not an empty string";
 
@@ -1534,7 +1534,7 @@ _________
                 }
             }
             // Create player object
-            Criminal player = new Criminal(playerName, true, crew);
+            BaseCriminal player = new BaseCriminal(playerName, true, crew);
 
             Console.WriteLine($@"{player.Face}
 

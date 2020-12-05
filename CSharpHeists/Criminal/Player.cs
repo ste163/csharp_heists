@@ -4,7 +4,11 @@ using System.Text;
 
 namespace CSharpHeists.Criminal
 {
-    public class Player : BaseCriminal
-    {
-    }
+    //public class Player : BaseCriminal
+    //{
+    //    //public Player()
+    //    //{
+
+    //    //}
+    //}
 }
