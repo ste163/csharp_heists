@@ -15,7 +15,7 @@ namespace CSharpHeists
             StartGame();
         }
 
-        static void StartGame()
+        private static void StartGame()
         {
             Console.Clear();
             DisplayIntro();
@@ -1481,7 +1481,7 @@ ___________");
             });
 
             Console.Write("Press any key to begin planning heists");
-            Console.ReadLine();
+            Console.ReadKey();
         }
 
         static BaseCriminal RecruitNewAssociate(List<BaseCriminal> crew)
