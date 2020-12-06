@@ -23,10 +23,18 @@ namespace CSharpHeists
             // From LevelSelect player enters end game.
             Console.Clear();
             Intro.DisplayIntro();
+
+            // Create all the levels in memory
             BaseLocation getLocations = new BaseLocation();
             List<BaseLocation> locations = getLocations.GenerateAllLocations();
-            List<BaseCriminal> currentCrew = CreateCrew(new List<BaseCriminal>());
-            Intro.ShowCrewCreatedMsg(currentCrew);
+
+            // Create the player & initial crew
+            List<BaseCriminal> currentCrew = Intro.CreateInitialCrew();
+
+            // Only show the crew created message if you made a crew
+            if (currentCrew.Count() > 1) Intro.ShowCrewCreatedMsg(currentCrew);
+            
+            // Begin LevelSelect while loop that runs until the player runs out of locations to rob, then begin endgame
             LevelSelect(currentCrew, locations);
         }
 
@@ -765,9 +773,9 @@ _____
             Console.Clear();
 
 
-            List<BaseCriminal> updatedCrew = crew;
+            List<BaseCriminal> modifiedCrew = crew;
 
-            DisplayCurrentCrew(updatedCrew);
+            DisplayCurrentCrew(modifiedCrew);
 
             BaseCriminal player = crew.Find(c => c.IsPlayer);
 
@@ -790,19 +798,19 @@ _____
             switch (input)
             {
                 case 1:
-                    updatedCrew = CreateCrew(updatedCrew);
-                    ManageCrew(updatedCrew, locations);
+                    modifiedCrew = ModifyCrew(modifiedCrew);
+                    ManageCrew(modifiedCrew, locations);
                     break;
                 case 2:
-                    if (crew.Count() > 1) updatedCrew = EncourageCrew(updatedCrew, false);
-                    ManageCrew(updatedCrew, locations);
+                    if (crew.Count() > 1) modifiedCrew = EncourageCrew(modifiedCrew, false);
+                    ManageCrew(modifiedCrew, locations);
                     break;
                 case 3:
-                    updatedCrew = IceCrewMember(updatedCrew, locations, false);
-                    ManageCrew(updatedCrew, locations);
+                    modifiedCrew = IceCrewMember(modifiedCrew, locations, false);
+                    ManageCrew(modifiedCrew, locations);
                     break;
                 case 4:
-                    LevelSelect(updatedCrew, locations);
+                    LevelSelect(modifiedCrew, locations);
                     break;
             }
         }
@@ -1346,123 +1354,30 @@ ___________");
             });
         }
 
-        // Split into 2 methods
-            // CreateInitialCrew
-            // ModifyCrew
-        static List<BaseCriminal> CreateCrew(List<BaseCriminal> crew)
+        static List<BaseCriminal> ModifyCrew(List<BaseCriminal> crew)
         {
-            bool recruiting = true;
-            List<BaseCriminal> newCrew = new List<BaseCriminal>();
+            List<BaseCriminal> modifiedCrew = new List<BaseCriminal>();
             int playerContactsLeft;
 
-            // After player created, can only add new criminals (this is for manage crew view)
-            if (crew.Count != 0)
+            // To save playerContactsLeft count, must loop through
+            // incoming crew, update the player, then resave everyone in a new list
+            crew.ForEach(c =>
             {
-                List<BaseCriminal> updatedCrew = new List<BaseCriminal>();
-
-                // To save the playerContactsLeft count, must loop through
-                // the incoming crew, update the player, then resave everyone to
-                // a new array
-                crew.ForEach(c =>
+                playerContactsLeft = c.PlayerContactCount;
+                if (c.IsPlayer && playerContactsLeft > 0)
                 {
-                    playerContactsLeft = c.PlayerContactCount;
-                    if (c.IsPlayer && playerContactsLeft > 0)
-                    {
-                        Console.WriteLine("");
-                        Console.WriteLine($"{playerContactsLeft} associates left to hire.");
-                        updatedCrew.Add(c);
-                        updatedCrew.Add(RecruitNewAssociate(crew));
-                        c.PlayerContactCount = --playerContactsLeft;
-                    }
-                    else
-                    {
-                        updatedCrew.Add(c);
-                    }
-                });
-
-                return updatedCrew;
-            }
-            else
-            {
-                // Create the player and add them first to the roster
-                newCrew.Add(Intro.CreatePlayer(crew));
-
-                string hireMessage = @"Go solo or hire a crew (you can recruit associates later)? [solo/hire]: ";
-
-                Console.WriteLine(hireMessage);
-                string solo = Console.ReadLine().ToLower();
-
-                Console.Clear();
-
-                while (solo != "solo" && solo != "hire")
-                {
-                    Console.Write(hireMessage);
-                    solo = Console.ReadLine().ToLower();
+                    Console.WriteLine("");
+                    Console.WriteLine($"{playerContactsLeft} associates left to hire.");
+                    modifiedCrew.Add(c);
+                    modifiedCrew.Add(RecruitNewAssociate(crew));
+                    c.PlayerContactCount = --playerContactsLeft;
                 }
-
-                if (solo == "solo")
-                {
-                    return newCrew;
-                }
-                else
-                {
-                    Console.WriteLine(Heading.DisplayCrewHire());
-
-                    // While we are recruiting, prompt user to continue recruiting
-                    while (recruiting)
-                    {
-                        Console.WriteLine("");
-                        string recruitingMessage = "Continue recruiting? [y/n]: ";
-                        // Loop through the newCrew, checking how many
-                        // Criminals the player has left to contact
-                        List<BaseCriminal> updatedCrew = new List<BaseCriminal>();
-
-                        // Loop over the new criminal list 
-                        newCrew.ForEach(c =>
-                        {
-                            playerContactsLeft = c.PlayerContactCount;
-                            if (c.IsPlayer && playerContactsLeft > 0)
-                            {
-                                updatedCrew.Add(c);
-                                updatedCrew.Add(RecruitNewAssociate(newCrew));
-
-                                c.PlayerContactCount = --playerContactsLeft;
-                                Console.WriteLine("");
-                                Console.WriteLine($"{playerContactsLeft} associates available to contact.");
-
-                                // Check based on if the player wants to continue hiring
-                                if (playerContactsLeft > 0)
-                                {
-                                    if (updatedCrew.Count() > 1) Console.WriteLine($"{newCrew.Count() + 1} associates in crew.");
-                                    Console.Write(recruitingMessage);
-                                    string response = Console.ReadLine().ToLower();
-
-                                    while (response != "y" && response != "n")
-                                    {
-                                        Console.Write(recruitingMessage);
-                                        response = Console.ReadLine().ToLower();
-                                    }
-
-                                    recruiting = response == "y" ? true : false;
-                                }
-
-                                if (playerContactsLeft == 0) recruiting = false;
-
-                                newCrew = updatedCrew;
-                            }
-                            else
-                            {
-                                updatedCrew.Add(c);
-                                newCrew = updatedCrew;
-                            }
-                        });
-                    }
-                    return newCrew;
-                }
-            }
+                else modifiedCrew.Add(c);                 
+            });
+            return modifiedCrew;
         }
-     
-        static BaseCriminal RecruitNewAssociate(List<BaseCriminal> crew)
+    
+        public static BaseCriminal RecruitNewAssociate(List<BaseCriminal> crew)
         {
             bool nameAvailable = true;
             // Set a blank new criminal that we can return after the loop completes
@@ -1495,3 +1410,4 @@ _________
         }
     }
 }
+
