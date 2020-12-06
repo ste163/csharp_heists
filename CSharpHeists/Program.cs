@@ -4,6 +4,7 @@ using System.Linq;
 using CSharpHeists.ASCII;
 using CSharpHeists.Location;
 using CSharpHeists.Criminal;
+using CSharpHeists.GameSections;
 
 namespace CSharpHeists
 {
@@ -12,19 +13,21 @@ namespace CSharpHeists
 
         static void Main(string[] args)
         {
+            // By taking the game method out of Main, we are able to restart gameplay whenever we want by invoking StartGame();
             StartGame();
         }
 
         private static void StartGame()
         {
+            // Displays intro, creates levels, player, crew, and enters the LevelSelect loop
+            // From LevelSelect player enters end game.
             Console.Clear();
-            DisplayIntro();
+            Intro.DisplayIntro();
             BaseLocation getLocations = new BaseLocation();
             List<BaseLocation> locations = getLocations.GenerateAllLocations();
             List<BaseCriminal> currentCrew = CreateCrew(new List<BaseCriminal>());
-            ShowCrewCreatedMsg(currentCrew);
+            Intro.ShowCrewCreatedMsg(currentCrew);
             LevelSelect(currentCrew, locations);
-            // From level select, go to the split money view, then game over
         }
 
         static void LevelSelect(List<BaseCriminal> crew, List<BaseLocation> locations)
@@ -1343,6 +1346,9 @@ ___________");
             });
         }
 
+        // Split into 2 methods
+            // CreateInitialCrew
+            // ModifyCrew
         static List<BaseCriminal> CreateCrew(List<BaseCriminal> crew)
         {
             bool recruiting = true;
@@ -1379,7 +1385,7 @@ ___________");
             else
             {
                 // Create the player and add them first to the roster
-                newCrew.Add(CreatePlayer(crew));
+                newCrew.Add(Intro.CreatePlayer(crew));
 
                 string hireMessage = @"Go solo or hire a crew (you can recruit associates later)? [solo/hire]: ";
 
@@ -1447,7 +1453,6 @@ ___________");
                             else
                             {
                                 updatedCrew.Add(c);
-
                                 newCrew = updatedCrew;
                             }
                         });
@@ -1456,34 +1461,7 @@ ___________");
                 }
             }
         }
-
-        static void ShowCrewCreatedMsg(List<BaseCriminal> crew)
-        {
-            Console.Clear();
-            Console.WriteLine(Heading.DisplayCrewCreated());
-            crew.ForEach(c =>
-            {
-                if (crew.Count() <= 2) Console.WriteLine($@"{c.Face}
-                ");
-                if (c.IsPlayer == true)
-                {
-                    Console.WriteLine($@"You: {c.Name}");
-                    Console.WriteLine($" base skill level: {c.BaseSkill}");
-                }
-
-                if (c.IsPlayer == false)
-                {
-                    Console.WriteLine($@"{c.Name}");
-                    Console.WriteLine($@" {c.MoraleDescription}
- base skill level: {c.BaseSkill}");
-                }
-                Console.WriteLine("");
-            });
-
-            Console.Write("Press any key to begin planning heists");
-            Console.ReadKey();
-        }
-
+     
         static BaseCriminal RecruitNewAssociate(List<BaseCriminal> crew)
         {
             bool nameAvailable = true;
@@ -1514,41 +1492,6 @@ _________
             }
             // Exit loop and return new criminal
             return newAssociate;
-        }
-
-        static BaseCriminal CreatePlayer(List<BaseCriminal> crew)
-        {
-            string playerName = "this is not an empty string";
-
-            // Ask user to enter a name until they enter anything other than an empty string
-            while (true)
-            {
-                Console.WriteLine("");
-                Console.WriteLine("Who are you?");
-                Console.Write("Enter your name: ");
-
-                playerName = Console.ReadLine();
-                if (playerName != "")
-                {
-                    break;
-                }
-            }
-            // Create player object
-            BaseCriminal player = new BaseCriminal(playerName, true, crew);
-
-            Console.WriteLine($@"{player.Face}
-
-{player.Name}
-_________
-  
-  skill level: {player.BaseSkill}
- ");
-            return player;
-        }
-
-        static void DisplayIntro()
-        {
-            Console.WriteLine(Heading.DisplayTitle());
         }
     }
 }
