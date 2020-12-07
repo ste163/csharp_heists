@@ -164,7 +164,7 @@ _________
                     });
                 }
                 Console.WriteLine("");
-                Console.WriteLine("Press any key to review crew ");
+                Console.Write("Press any key to review crew ");
                 Console.ReadKey();
                 return initialCrew;
             }
