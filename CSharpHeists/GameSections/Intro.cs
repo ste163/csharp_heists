@@ -33,7 +33,7 @@ namespace CSharpHeists.GameSections
                 Console.Write("Enter your name: ");
 
                 playerName = Console.ReadLine();
-                if (playerName != "") break;
+                if (!string.IsNullOrWhiteSpace(playerName)) break;
             }
             // Create player object
             BaseCriminal player = new BaseCriminal(playerName, true, crew);
@@ -56,7 +56,7 @@ _________
             Console.WriteLine(Heading.DisplayCrewCreated());
             crew.ForEach(c =>
             {
-                if (crew.Count() <= 2) Console.WriteLine($@"{c.Face}
+                if (crew.Count() <= 3) Console.WriteLine($@"{c.Face}
                 ");
                 if (c.IsPlayer == true)
                 {
@@ -102,7 +102,7 @@ _________
 
             else if (playerInput == "crew")
             {
-                // Clear the player info froms screen
+                // Clear the player info from screen
                 Console.Clear();
 
                 Console.WriteLine(Heading.DisplayCrewHire());
@@ -131,7 +131,6 @@ _________
                             Console.WriteLine("");
                             if (playerContactsLeft > 0) Console.WriteLine($"{playerContactsLeft} associates available to contact.");
                             if (playerContactsLeft == 0) Console.WriteLine($"All associates contacted.");
-
 
                             // Check based on if the player wants to continue hiring
                             if (playerContactsLeft > 0)

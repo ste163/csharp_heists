@@ -44,12 +44,12 @@ namespace CSharpHeists.GameSections
         // Displays ending game message and handles input
         static void ExitGame()
         {
-            while(true)
-            {
             Console.WriteLine("");
             Console.WriteLine("_________");
             Console.WriteLine("");
-            Console.Write("Play again or exit C# Heists [play/exit] ");
+            while(true)
+            {
+            Console.Write("Play again or exit C# Heists [play/exit]: ");
             string input = Console.ReadLine().ToLower();
             if (input == "play") Program.StartGame();
             else if (input == "exit") Environment.Exit(0);

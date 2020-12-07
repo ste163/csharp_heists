@@ -14,7 +14,7 @@ namespace CSharpHeists.GameSections.MainLoop
 {
     public class CrewManagement
     {
-        // Main vew for managing crew
+        // Main view for managing crew
         public static void ManageCrew(List<BaseCriminal> crew, List<BaseLocation> locations)
         // Must always return the current crew and the current locations
         {
@@ -76,7 +76,7 @@ namespace CSharpHeists.GameSections.MainLoop
 
                 BaseCriminal isNameTaken = crew.Find(c => c.Name == enteredName);
 
-                if (isNameTaken == null && enteredName != "")
+                if (isNameTaken == null && !string.IsNullOrWhiteSpace(enteredName))
                 {
                     newAssociate = new BaseCriminal(enteredName, false, crew);
                     nameAvailable = false;
@@ -108,7 +108,7 @@ _________
             int playerContactsLeft;
 
             // To save playerContactsLeft count, must loop through
-            // incoming crew, update the player, then resave everyone in a new list
+            // incoming crew, update the player, then re-save everyone in a new list
             crew.ForEach(c =>
             {
                 playerContactsLeft = c.PlayerContactCount;
@@ -162,6 +162,7 @@ _________
         {
             Console.WriteLine(Heading.DisplayCrewHeading());
             DisplayCrewInfo(crew);
+
             crew.ForEach(c => {
                 if (c.IsPlayer)
                 {
