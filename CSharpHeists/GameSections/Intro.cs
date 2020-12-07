@@ -88,7 +88,7 @@ _________
 
             // Ask player if they want to add crew members or go solo
             string recruitMessage = "Go solo or recruit a crew of associates (you can recruit associates later)? [solo/crew]: ";
-            Console.WriteLine(recruitMessage);
+            Console.Write(recruitMessage);
             // Store their response
             string playerInput = Console.ReadLine().ToLower();
 
@@ -129,12 +129,15 @@ _________
 
                             c.PlayerContactCount = --playerContactsLeft;
                             Console.WriteLine("");
-                            Console.WriteLine($"{playerContactsLeft} associates available to contact.");
+                            if (playerContactsLeft > 0) Console.WriteLine($"{playerContactsLeft} associates available to contact.");
+                            if (playerContactsLeft == 0) Console.WriteLine($"All associates contacted.");
+
 
                             // Check based on if the player wants to continue hiring
                             if (playerContactsLeft > 0)
                             {
                                 if (modifiedCrew.Count() > 1) Console.WriteLine($"{initialCrew.Count() + 1} associates in crew.");
+                                Console.WriteLine("");
                                 Console.Write(recruitingMessage);
                                 string response = Console.ReadLine().ToLower();
 

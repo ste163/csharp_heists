@@ -1,10 +1,10 @@
 ﻿//ASCII CREDITS(I TAKE NO CREDIT FOR ANY ARTWORK.I did modify most artwork to fit the screen better)
-// https://textfancy.com/multiline-text-art/
-//https://asciiart.website/
-//https://asciiart.website/index.php?art=people/faces
-//https://simpletextart.blogspot.com/2013/12/money-bag-picture-made-with-ascii-text.html
-//https://www.asciiart.eu/buildings-and-places/cities
-// http://www.asciiworld.com/-Buildings-.html
+    // https://textfancy.com/multiline-text-art/
+    // https://asciiart.website/
+    // https://asciiart.website/index.php?art=people/faces
+    // https://simpletextart.blogspot.com/2013/12/money-bag-picture-made-with-ascii-text.html
+    // https://www.asciiart.eu/buildings-and-places/cities
+    // http://www.asciiworld.com/-Buildings-.html
 
 using System;
 using System.Collections.Generic;

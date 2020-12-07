@@ -47,7 +47,7 @@ namespace CSharpHeists.GameSections.MainLoop
                     if (!l.Completed)
                     {
                         if (l.Name == "Annoying Neighbor's House") Console.WriteLine("2) stakeout Annoying Neighbor's House");
-                        if (l.Name == "Corner 7-Eleven") Console.WriteLine("3) stock-up at Corner 7-Eleven");
+                        if (l.Name == "Corner Evan-Eleven") Console.WriteLine("3) stock-up at Corner Evan-Eleven");
                         if (l.Name == "Welts Fargo") Console.WriteLine("4) stakeout Welts Fargo");
                         if (l.Name == "Pinnackle National Bank") Console.WriteLine("5) stakeout Pinnackle National Bank");
                         if (l.Name == "Bank of Amereeka") Console.WriteLine("6) stakeout Bank of Amereeka");
@@ -84,7 +84,7 @@ namespace CSharpHeists.GameSections.MainLoop
                         StakeOutLocation(crew, locations, 2);
                         break;
                     case 3:
-                        // 7-Eleven
+                        // Evan-Eleven
                         StakeOutLocation(crew, locations, 3);
                         break;
                     case 4:
@@ -130,7 +130,7 @@ namespace CSharpHeists.GameSections.MainLoop
                     else LevelSelect(crew, locations);
                     break;
                 case 3:
-                    string gasSelected = "Corner 7-Eleven";
+                    string gasSelected = "Corner Evan-Eleven";
                     List<BaseLocation> isGasCompleted = locations.Where(l => l.Name == gasSelected && !l.Completed).ToList();
                     if (isGasCompleted.Count() == 1) LocationInfo(locations, gasSelected, crew);
                     else LevelSelect(crew, locations);

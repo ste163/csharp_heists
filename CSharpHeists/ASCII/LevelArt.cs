@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CSharpHeists.ASCII
 {
@@ -53,10 +51,10 @@ namespace CSharpHeists.ASCII
    [||]= ==||:___:|| = = [||]\\//\\//\\[||]";
         }
 
-        public static string Display711()
+        public static string DisplayEvan11()
         {
             return @"                    __________________________
-                   ||    7 - Eleven         ||
+                   ||    Evan - Eleven      ||
    ________________||_______________________||_____________
   |_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_||
   |_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|| /|

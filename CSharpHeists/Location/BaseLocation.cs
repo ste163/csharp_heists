@@ -67,7 +67,7 @@ namespace CSharpHeists.Location
             int houseDiff = (new Random().Next(houseDiffMin, houseDiffMax));
             int houseCash = (new Random().Next(2_000, 150_000));
 
-            string gasName = "Corner 7-Eleven";
+            string gasName = "Corner Evan-Eleven";
             string gasSummary = @"Need to fill up the van and get some snacks. Might as well take their cash, too.";
             int gasDiffMin = 80;
             int gasDiffMax = 240;
@@ -97,7 +97,7 @@ namespace CSharpHeists.Location
 
             // Instantiate locations
             BaseLocation houseLocation = new BaseLocation(LevelArt.DisplayHouse(), houseName, houseSummary, houseDiff, houseDiffMin, houseDiffMax, houseCash);
-            BaseLocation gasLocation = new BaseLocation(LevelArt.Display711(), gasName, gasSummary, gasDiff, gasDiffMin, gasDiffMax, gasCash);
+            BaseLocation gasLocation = new BaseLocation(LevelArt.DisplayEvan11(), gasName, gasSummary, gasDiff, gasDiffMin, gasDiffMax, gasCash);
             BaseLocation wfLocation = new BaseLocation(LevelArt.DisplayWF(), wfName, wfSummary, wfDiff, wfDiffMin, wfDiffMax, wfCash);
             BaseLocation pnLocation = new BaseLocation(LevelArt.DisplayPNB(), pnName, pnSummary, pnDiff, pnDiffMin, pnDiffMax, pnCash);
             BaseLocation baLocation = new BaseLocation(LevelArt.DisplayBOA(), baName, baSummary, baDiff, baDiffMin, baDiffMax, baCash);
