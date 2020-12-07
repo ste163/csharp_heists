@@ -73,7 +73,7 @@ _________
                 Console.WriteLine("");
             });
 
-            Console.Write("Press any key to begin planning heists");
+            Console.Write("Press any key to begin planning heists ");
             Console.ReadKey();
         }
 

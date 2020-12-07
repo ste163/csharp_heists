@@ -164,6 +164,10 @@ namespace CSharpHeists.GameSections.MainLoop
             // Display the Stakeout heading
             Console.WriteLine(Heading.DisplayStakeout());
             CrewManagement.DisplayCrewInfo(crew);
+
+            //Split the difficulty description on the '[' for easier reading
+            List<string> diffDesciptions = selectedLoc.DifficultyDescription.Split("[").ToList();
+
             // Display location info
             Console.WriteLine($@"
 {selectedLoc.Image}
@@ -172,7 +176,11 @@ namespace CSharpHeists.GameSections.MainLoop
 _____
 
 {selectedLoc.Summary}
-{selectedLoc.DifficultyDescription}
+
+{diffDesciptions[0]}
+
+[{diffDesciptions[1]}
+_____
 ");
             // Options for stakeouts
             if (selectedLoc.WaitsInVanAvailable >= 1)

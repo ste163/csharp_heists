@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using CSharpHeists.ASCII;
 using CSharpHeists.Criminal;
 using CSharpHeists.Location;
+using CSharpHeists.UI;
 
 namespace CSharpHeists.GameSections.MainLoop
 {
@@ -109,9 +110,8 @@ namespace CSharpHeists.GameSections.MainLoop
             Console.WriteLine("");
             Console.WriteLine("Watch the crew. Unhappy members may turn.");
             Console.WriteLine("");
-            Console.Write("Press any key to continue ");
 
-            Console.ReadLine();
+            Menu.Continue();
             Level.LevelSelect(crew, locations);
         }
     }
