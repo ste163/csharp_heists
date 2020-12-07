@@ -17,7 +17,12 @@
 - Download ```win64_csharp-heists-v1.0.zip``` from: https://github.com/ste163/csharp_heists/releases/tag/v1.0
 - Run ```heist.exe```.
 
-### Non-Windows
+### Linux
+- Download ```lin64_csharp-heists-v1.0.zip``` from: https://github.com/ste163/csharp_heists/releases/tag/v1.0
+- Change permissions on CSharpHeists file with ```chmod 777 ./CSharpHeists```
+- Run with ```./CSharpHeists```
+
+### Mac
 #### Prerequisites
 - .NET 5
 #### Download the project
