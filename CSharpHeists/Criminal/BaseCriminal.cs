@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace heist
+namespace CSharpHeists.Criminal
 {
-    public class Criminal
+    public class BaseCriminal
     {
         public string Name { get; set; }
 
@@ -13,23 +13,24 @@ namespace heist
         public int Morale { get; set; }
         public int MoraleSkillBonus
         {
-            get {
+            get
+            {
                 int bonus = 0;
 
                 if (Morale <= 9) return bonus = -20;
                 if (Morale >= 10 && Morale <= 19) return bonus = -10;
                 if (Morale >= 20 && Morale <= 29) return bonus = -8;
-                if (Morale >= 30 && Morale <= 39) return bonus =  -5;
-                if (Morale >= 40 && Morale <= 49) return bonus =  0;
-                if (Morale >= 50 && Morale <= 59) return bonus =  10;
-                if (Morale >= 60 && Morale <= 69) return bonus =  20;
-                if (Morale >= 70 && Morale <= 79) return bonus =  30;
-                if (Morale >= 80 && Morale <= 89) return bonus =  40;
-                if (Morale >= 90 && Morale <= 99) return bonus =  50;
+                if (Morale >= 30 && Morale <= 39) return bonus = -5;
+                if (Morale >= 40 && Morale <= 49) return bonus = 0;
+                if (Morale >= 50 && Morale <= 59) return bonus = 10;
+                if (Morale >= 60 && Morale <= 69) return bonus = 20;
+                if (Morale >= 70 && Morale <= 79) return bonus = 30;
+                if (Morale >= 80 && Morale <= 89) return bonus = 40;
+                if (Morale >= 90 && Morale <= 99) return bonus = 50;
                 if (Morale >= 100) return bonus = 100;
 
                 return bonus;
-                }
+            }
         }
         public string MoraleDescription
         {
@@ -52,7 +53,7 @@ namespace heist
                 return d;
             }
         }
-        
+
         public int CrewTotalCash { get; set; } = 0;
 
         public bool IsPlayer { get; set; }
@@ -67,21 +68,20 @@ namespace heist
         public string Face { get; set; }
         public string FaceIced { get; set; }
 
-        public int TotalSkillLevel 
+        public int TotalSkillLevel
         {
-            get 
+            get
             {
-               return MoraleSkillBonus + BaseSkill;
+                return MoraleSkillBonus + BaseSkill;
             }
         }
-        public Criminal(string name, bool player, List<Criminal> crew)
+        public BaseCriminal(string name, bool player, List<BaseCriminal> crew)
         {
-            ASCII ASCII = new ASCII();
             Random r = new Random();
-            
+
             Name = name;
             BaseSkill = new Random().Next(20, 40);
-            
+
             bool checkFaces = true;
 
             while (checkFaces)
@@ -91,20 +91,20 @@ namespace heist
 
                 if (crew.Count == 0)
                 {
-                    Face = ASCII.DisplayCriminalFace(faceInt);
-                    FaceIced = ASCII.DisplayCriminalFaceIced(faceInt);
+                    Face = ASCII.Face.GenerateCriminalFace(faceInt);
+                    FaceIced = ASCII.Face.GenerateCriminalFaceIced(faceInt);
                     FaceMatchingInt = faceInt;
                     checkFaces = false;
                 }
                 else
                 {
                     // Check if face value is in the crew already
-                    Criminal anyMatches = crew.Find(c => c.FaceMatchingInt == faceInt);
+                    BaseCriminal anyMatches = crew.Find(c => c.FaceMatchingInt == faceInt);
                     // If it's null, we didn't find a match!
                     if (anyMatches == null)
                     {
-                        Face = ASCII.DisplayCriminalFace(faceInt);
-                        FaceIced = ASCII.DisplayCriminalFaceIced(faceInt);
+                        Face = ASCII.Face.GenerateCriminalFace(faceInt);
+                        FaceIced = ASCII.Face.GenerateCriminalFaceIced(faceInt);
                         FaceMatchingInt = faceInt;
                         checkFaces = false;
                     }

@@ -1,9 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using CSharpHeists.ASCII;
 
-namespace heist
+namespace CSharpHeists.Location
 {
-    public class Location
+    public class BaseLocation
     {
         public string Image { get; set; }
         public string Name { get; set; }
@@ -12,7 +13,7 @@ namespace heist
         public bool crewMemberStoleCash { get; set; } = false;
         public int Difficulty { get; set; }
         public int DifficultyMin { get; set; }
-        public int DifficultyMax { get; set;}
+        public int DifficultyMax { get; set; }
         public string DifficultyDescription
         {
             get
@@ -35,15 +36,15 @@ namespace heist
             }
         }
         public int Cash { get; set; }
-        public bool Completed{ get; set; } = false;
+        public bool Completed { get; set; } = false;
 
-        public Location()
+        public BaseLocation()
         {
             // Blank location constructor to instantiate an initial location
             // So we can use the GenerateAllLocations method
         }
 
-        public Location(string img, string name, string summary, int diff, int diffMin, int diffMax, int cash)
+        public BaseLocation(string img, string name, string summary, int diff, int diffMin, int diffMax, int cash)
         {
             Image = img;
             Name = name;
@@ -54,11 +55,9 @@ namespace heist
             Cash = cash;
         }
 
-        public List<Location> GenerateAllLocations()
+        public List<BaseLocation> GenerateAllLocations()
         {
-            ASCII ASCII = new ASCII();
-
-            List<Location> Locations = new List<Location>();
+            List<BaseLocation> Locations = new List<BaseLocation>();
 
             // Store values for locations
             string houseName = "Annoying Neighbor's House";
@@ -97,12 +96,12 @@ namespace heist
             int baCash = (new Random().Next(1_000_000, 4_000_000));
 
             // Instantiate locations
-            Location houseLocation = new Location(ASCII.DisplayHouse(), houseName, houseSummary, houseDiff, houseDiffMin, houseDiffMax, houseCash); 
-            Location gasLocation = new Location(ASCII.Display711(), gasName, gasSummary, gasDiff, gasDiffMin, gasDiffMax, gasCash); 
-            Location wfLocation = new Location(ASCII.DisplayWF(), wfName, wfSummary, wfDiff, wfDiffMin, wfDiffMax, wfCash);
-            Location pnLocation = new Location(ASCII.DisplayPNB(), pnName, pnSummary, pnDiff, pnDiffMin, pnDiffMax, pnCash);
-            Location baLocation = new Location(ASCII.DisplayBOA(), baName, baSummary, baDiff, baDiffMin, baDiffMax, baCash);
-            
+            BaseLocation houseLocation = new BaseLocation(LevelArt.DisplayHouse(), houseName, houseSummary, houseDiff, houseDiffMin, houseDiffMax, houseCash);
+            BaseLocation gasLocation = new BaseLocation(LevelArt.Display711(), gasName, gasSummary, gasDiff, gasDiffMin, gasDiffMax, gasCash);
+            BaseLocation wfLocation = new BaseLocation(LevelArt.DisplayWF(), wfName, wfSummary, wfDiff, wfDiffMin, wfDiffMax, wfCash);
+            BaseLocation pnLocation = new BaseLocation(LevelArt.DisplayPNB(), pnName, pnSummary, pnDiff, pnDiffMin, pnDiffMax, pnCash);
+            BaseLocation baLocation = new BaseLocation(LevelArt.DisplayBOA(), baName, baSummary, baDiff, baDiffMin, baDiffMax, baCash);
+
             // Add locations to list
             Locations.Add(houseLocation);
             Locations.Add(gasLocation);
