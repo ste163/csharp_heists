@@ -33,10 +33,7 @@ namespace CSharpHeists.GameSections
                 Console.Write("Enter your name: ");
 
                 playerName = Console.ReadLine();
-                if (playerName != "")
-                {
-                    break;
-                }
+                if (playerName != "") break;
             }
             // Create player object
             BaseCriminal player = new BaseCriminal(playerName, true, crew);
@@ -90,7 +87,7 @@ _________
             initialCrew.Add(Intro.CreatePlayer(initialCrew));
 
             // Ask player if they want to add crew members or go solo
-            string recruitMessage = "Go solo or recruit a crew (you can recruit associates later)? [solo/crew]: ";
+            string recruitMessage = "Go solo or recruit a crew of associates (you can recruit associates later)? [solo/crew]: ";
             Console.WriteLine(recruitMessage);
             // Store their response
             string playerInput = Console.ReadLine().ToLower();
@@ -137,7 +134,7 @@ _________
                             // Check based on if the player wants to continue hiring
                             if (playerContactsLeft > 0)
                             {
-                                if (modifiedCrew.Count() > 1) Console.WriteLine($"{modifiedCrew.Count() + 1} associates in crew.");
+                                if (modifiedCrew.Count() > 1) Console.WriteLine($"{initialCrew.Count() + 1} associates in crew.");
                                 Console.Write(recruitingMessage);
                                 string response = Console.ReadLine().ToLower();
 
@@ -163,6 +160,9 @@ _________
                         }
                     });
                 }
+                Console.WriteLine("");
+                Console.WriteLine("Press any key to review crew ");
+                Console.ReadKey();
                 return initialCrew;
             }
             return initialCrew;

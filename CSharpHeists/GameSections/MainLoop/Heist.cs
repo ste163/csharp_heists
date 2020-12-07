@@ -4,6 +4,7 @@
 using CSharpHeists.ASCII;
 using CSharpHeists.Criminal;
 using CSharpHeists.Location;
+using CSharpHeists.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -114,8 +115,7 @@ namespace CSharpHeists.GameSections.MainLoop
                 Console.WriteLine("Your skill increased");
             }
             Console.WriteLine("");
-            Console.Write("Press any key to continue ");
-            Console.ReadLine();
+            Menu.Continue();
             Level.LevelSelect(crew, locations);
         }
 
@@ -123,7 +123,6 @@ namespace CSharpHeists.GameSections.MainLoop
         {
             Console.Clear();
             BaseCriminal player = crew.Find(c => c.IsPlayer);
-            string msg = "Press any key to continue ";
             string moraleMsg = "Crew morale decreased.";
             // 50-50 chance for arrested or escaped
             Random random = new Random();
@@ -141,9 +140,7 @@ namespace CSharpHeists.GameSections.MainLoop
                 {
                     crew.ForEach(c => c.IsPlayerArrested = true);
                     Console.WriteLine(Face.DisplayArrested());
-                    Console.Write(msg);
-                    Console.ReadLine();
-                    Console.WriteLine();
+                    Menu.Continue();
                     Outro.GameOver(crew, locations, true, player);
                 }
                 // If multiple crew members
@@ -160,8 +157,7 @@ namespace CSharpHeists.GameSections.MainLoop
                     Console.WriteLine($"The cops got {arrestedMember.Name}!");
                     Console.WriteLine(moraleMsg);
                     Console.WriteLine("");
-                    Console.Write(msg);
-                    Console.ReadLine();
+                    Menu.Continue();
 
                     crew.RemoveAt(randomCrewMember);
                     // Randomly lower every non-player's morale
@@ -197,8 +193,7 @@ namespace CSharpHeists.GameSections.MainLoop
                 Console.WriteLine(Vehicle.DisplayPoliceCar());
                 if (crew.Count() > 1) Console.WriteLine(moraleMsg);
                 Console.WriteLine("");
-                Console.Write(msg);
-                Console.ReadLine();
+                Menu.Continue();
                 // Return to level select menu
                 Level.LevelSelect(crew, locations);
             }

@@ -44,13 +44,16 @@ namespace CSharpHeists.GameSections
         // Displays ending game message and handles input
         static void ExitGame()
         {
+            while(true)
+            {
             Console.WriteLine("");
             Console.WriteLine("_________");
             Console.WriteLine("");
-            Console.Write("Enter any key to play again or leave blank and press Enter to exit C# Heists ");
-            string input = Console.ReadLine();
-            if (input != "") Program.StartGame();
-            else if (input == "") Environment.Exit(0);
+            Console.Write("Play again or exit C# Heists [play/exit] ");
+            string input = Console.ReadLine().ToLower();
+            if (input == "play") Program.StartGame();
+            else if (input == "exit") Environment.Exit(0);
+            }
         }
 
         public static void SplitCash(List<BaseCriminal> crew, List<BaseLocation> locations)

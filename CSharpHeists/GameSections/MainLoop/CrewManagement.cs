@@ -250,8 +250,7 @@ ___________");
             Console.WriteLine("Crew morale increased.");
             Console.WriteLine("");
 
-            Console.Write("Press any key to continue ");
-            Console.ReadKey();
+            Menu.Continue();
         }
     }
 }

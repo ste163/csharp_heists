@@ -9,6 +9,7 @@ using System.Linq;
 using CSharpHeists.ASCII;
 using CSharpHeists.Criminal;
 using CSharpHeists.Location;
+using CSharpHeists.UI;
 
 namespace CSharpHeists.GameSections.MainLoop
 {
@@ -139,8 +140,7 @@ namespace CSharpHeists.GameSections.MainLoop
 
             // Player input to continue
             Console.WriteLine("");
-            Console.Write("Press any key to return to crew management ");
-            Console.ReadLine();
+            Menu.Continue();
         }
 
         public static void WillCrewMemberRunAfterIce(List<BaseCriminal> crew, List<BaseLocation> locations)
@@ -251,8 +251,7 @@ namespace CSharpHeists.GameSections.MainLoop
             }
 
             Console.WriteLine("");
-            Console.Write("Press any key to continue ");
-            Console.ReadLine();
+            Menu.Continue();
         }
 
         public static void WillCrewMemberShoot(List<BaseCriminal> crew, List<BaseLocation> locations, bool isPlayerAttemptingMoneySplit)
@@ -361,8 +360,7 @@ namespace CSharpHeists.GameSections.MainLoop
             if (gotShot.IsPlayer)
             {
                 Console.WriteLine($"{traitor.Name} iced YOU in the face!");
-                Console.WriteLine("Press any key to continue ");
-                Console.ReadLine();
+                Menu.Continue();
                 Outro.GameOver(crew, locations, false, gotShot);
             }
 
@@ -373,7 +371,7 @@ namespace CSharpHeists.GameSections.MainLoop
                 Console.WriteLine("Survivor's morale decreased.");
                 Console.WriteLine("");
                 Console.WriteLine("Press any key to return to splitting the cash ");
-                Console.ReadLine();
+                Console.ReadKey();
 
                 // If player is NOT attempting to split the cash, return to SplitCash view
                 if (!isPlayerAttemptingMoneySplit)

@@ -36,5 +36,11 @@ namespace CSharpHeists.UI
 
             return entered;
         }
+
+        public static void Continue()
+        {
+            Console.Write("Press any key to continue ");
+            Console.ReadKey();
+        }
     }
 }

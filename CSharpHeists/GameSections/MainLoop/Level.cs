@@ -212,7 +212,7 @@ _____
                     // If we have turns left, randomize the difficulty based on the min & max
                     if (l.WaitsInVanAvailable > 0)
                     {
-                        int difficultyModifier = r.Next(-90, 91);
+                        int difficultyModifier = r.Next(-100, 81);
                         // Add the modifier to the current location difficulty
                         int newDifficulty = l.Difficulty + difficultyModifier;
                         // If the difficulty is below the min, set to min
