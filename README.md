@@ -37,3 +37,6 @@ Thanks to these sites for the amazing ASCII artwork:
 - https://simpletextart.blogspot.com/2013/12/money-bag-picture-made-with-ascii-text.html
 - https://www.asciiart.eu/buildings-and-places/cities
 - http://www.asciiworld.com/-Buildings-.html
+
+## License
+[MIT](/LICENSE)
