@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CSharpHeists.ASCII;
 using CSharpHeists.Criminal;
+using CSharpHeists.GameSections.MainLoop;
 
 namespace CSharpHeists.GameSections
 {
@@ -127,7 +128,7 @@ _________
                         if (c.IsPlayer && playerContactsLeft > 0)
                         {
                             modifiedCrew.Add(c);
-                            modifiedCrew.Add(Program.RecruitNewAssociate(initialCrew));
+                            modifiedCrew.Add(CrewManagement.RecruitNewAssociate(initialCrew));
 
                             c.PlayerContactCount = --playerContactsLeft;
                             Console.WriteLine("");

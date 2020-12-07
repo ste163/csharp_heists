@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CSharpHeists.ASCII
 {
-    public class Level
+    public class LevelArt
     {
         public static string DisplayNashville()
         {

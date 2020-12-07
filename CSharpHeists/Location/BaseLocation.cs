@@ -96,11 +96,11 @@ namespace CSharpHeists.Location
             int baCash = (new Random().Next(1_000_000, 4_000_000));
 
             // Instantiate locations
-            BaseLocation houseLocation = new BaseLocation(Level.DisplayHouse(), houseName, houseSummary, houseDiff, houseDiffMin, houseDiffMax, houseCash);
-            BaseLocation gasLocation = new BaseLocation(Level.Display711(), gasName, gasSummary, gasDiff, gasDiffMin, gasDiffMax, gasCash);
-            BaseLocation wfLocation = new BaseLocation(Level.DisplayWF(), wfName, wfSummary, wfDiff, wfDiffMin, wfDiffMax, wfCash);
-            BaseLocation pnLocation = new BaseLocation(Level.DisplayPNB(), pnName, pnSummary, pnDiff, pnDiffMin, pnDiffMax, pnCash);
-            BaseLocation baLocation = new BaseLocation(Level.DisplayBOA(), baName, baSummary, baDiff, baDiffMin, baDiffMax, baCash);
+            BaseLocation houseLocation = new BaseLocation(LevelArt.DisplayHouse(), houseName, houseSummary, houseDiff, houseDiffMin, houseDiffMax, houseCash);
+            BaseLocation gasLocation = new BaseLocation(LevelArt.Display711(), gasName, gasSummary, gasDiff, gasDiffMin, gasDiffMax, gasCash);
+            BaseLocation wfLocation = new BaseLocation(LevelArt.DisplayWF(), wfName, wfSummary, wfDiff, wfDiffMin, wfDiffMax, wfCash);
+            BaseLocation pnLocation = new BaseLocation(LevelArt.DisplayPNB(), pnName, pnSummary, pnDiff, pnDiffMin, pnDiffMax, pnCash);
+            BaseLocation baLocation = new BaseLocation(LevelArt.DisplayBOA(), baName, baSummary, baDiff, baDiffMin, baDiffMax, baCash);
 
             // Add locations to list
             Locations.Add(houseLocation);

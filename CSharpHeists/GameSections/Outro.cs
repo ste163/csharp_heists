@@ -1,9 +1,15 @@
-﻿using System;
+﻿// Outro class methods:
+    // Prep crew for endgame
+    // Handle the split cash view & its options
+    // Display ending views/summaries
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using CSharpHeists.ASCII;
 using CSharpHeists.Criminal;
+using CSharpHeists.GameSections.MainLoop;
 using CSharpHeists.Location;
+using CSharpHeists.UI;
 
 namespace CSharpHeists.GameSections
 {
@@ -19,6 +25,20 @@ namespace CSharpHeists.GameSections
                 c.Morale = c.Morale - r.Next(25, 41);
                 return c;
             }).ToList();
+        }
+
+        // Show who lived
+        public static void DisplayCrewMembersWhoSurvived(List<BaseCriminal> crew)
+        {
+            Console.WriteLine($"Crew members (besides you) who survived:");
+            if (crew.Count() == 1) Console.WriteLine("  All your crew members either ran off, were arrested, or shot dead.");
+            else
+            {
+                crew.ForEach(c =>
+                {
+                    if (!c.IsPlayer) Console.WriteLine($"  {c.Name}");
+                });
+            }
         }
 
         // Displays ending game message and handles input
@@ -50,7 +70,7 @@ namespace CSharpHeists.GameSections
                     // Display headings and crew info
                     Console.WriteLine(Heading.DisplayHeadingSplit());
                     Console.WriteLine(Heading.DisplaySubheadingSplit());
-                    Program.DisplayCrewInfoShortened(crew);
+                    CrewManagement.DisplayCrewInfoShortened(crew);
 
                     // Money bag image
                     Console.WriteLine(Misc.DisplayMoneyBag());
@@ -73,19 +93,19 @@ namespace CSharpHeists.GameSections
                     Console.WriteLine("2) ice a crew member");
                     if (player.HasPlayerEncouragedCrew == false) Console.WriteLine("3) give congratulations speech");
 
-                    int select = Program.MenuInput(3);
+                    int select = Menu.MenuInput(3);
 
                     switch (select)
                     {
                         case 1:
                             // Player gives up chance to shoot. Otherwise the player will always have the chance to ice the last person
-                            Program.WillCrewMemberShoot(crew, locations, true);
+                            Ice.WillCrewMemberShoot(crew, locations, true);
                             GameOver(crew, locations, true, player);
                             break;
                         case 2:
                             // Player ices an associate 
-                            List<BaseCriminal> smallerCrew = Program.IceCrewMember(crew, locations, true);
-                            if (player.PlayerFiredWeapon) Program.WillCrewMemberShoot(smallerCrew, locations, false);
+                            List<BaseCriminal> smallerCrew = Ice.IceCrewMember(crew, locations, true);
+                            if (player.PlayerFiredWeapon) Ice.WillCrewMemberShoot(smallerCrew, locations, false);
                             smallerCrew.ForEach(c =>
                             {
                                 if (c.IsPlayer) c.PlayerFiredWeapon = false;
@@ -93,7 +113,7 @@ namespace CSharpHeists.GameSections
                             SplitCash(smallerCrew, locations);
                             break;
                         case 3:
-                            SplitCash(Program.EncourageCrew(crew, true), locations);
+                            SplitCash(CrewManagement.EncourageCrew(crew, true), locations);
                             break;
                     }
                     GameOver(crew, locations, true, player);
@@ -126,7 +146,7 @@ namespace CSharpHeists.GameSections
                     {
                         // Minus you from crew.Count
                         Console.WriteLine($"The cut per members not in jail: ${cashStolen / crew.Count() - 1}");
-                        Program.DisplayCrewMembersWhoSurvived(crew);
+                        DisplayCrewMembersWhoSurvived(crew);
                     }
 
                     if (player.PlayerContactCount > 0) Console.WriteLine($"Number of associates left you could have hired: {player.PlayerContactCount}");
@@ -141,7 +161,7 @@ namespace CSharpHeists.GameSections
 
                 if (player.CrewTotalCash == 0)
                 {
-                    Program.DisplayCrewMembersWhoSurvived(crew);
+                    DisplayCrewMembersWhoSurvived(crew);
                     if (player.PlayerContactCount > 0) Console.WriteLine($"Number of associates left you could have hired: {player.PlayerContactCount}");
 
                     Console.WriteLine(Heading.DisplaySubheadingWanted());
@@ -161,7 +181,7 @@ namespace CSharpHeists.GameSections
                     {
                         Console.WriteLine($"Cut per member: ${cashStolen / crew.Count()}");
 
-                        Program.DisplayCrewMembersWhoSurvived(crew);
+                        DisplayCrewMembersWhoSurvived(crew);
 
                         if (player.PlayerContactCount > 0) Console.WriteLine($"Number of associates left you could have hired: {player.PlayerContactCount}");
                     }
