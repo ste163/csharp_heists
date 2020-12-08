@@ -41,6 +41,7 @@ namespace CSharpHeists.GameSections.MainLoop
         public static List<BaseCriminal> IceAssociateCheck(List<BaseCriminal> crew, List<BaseLocation> locations, bool splitCashMenu)
         {
             Console.Clear();
+
             string name = "not empty for a base value";
             Console.WriteLine(Heading.DisplayIce());
 
@@ -125,7 +126,7 @@ namespace CSharpHeists.GameSections.MainLoop
 
         public static void DisplayWhoWasIced(BaseCriminal whoWasIced)
         {
-            Console.Clear();
+            Color.IcedRed();
 
             // Display ASCII artwork for who was killed 
             Console.WriteLine(Heading.DisplayHeadingIced());
@@ -232,7 +233,7 @@ namespace CSharpHeists.GameSections.MainLoop
 
         static void AssociateRanInFear(BaseCriminal scared)
         {
-            Console.Clear();
+            Color.CrewTurnedYellow();
             Console.WriteLine(Heading.DisplayHeadingFled());
             if (scared.CrewTotalCash == 0)
             {
@@ -346,7 +347,7 @@ namespace CSharpHeists.GameSections.MainLoop
             BaseCriminal gotShot,
             bool isPlayerAttemptingMoneySplit)
         {
-            Console.Clear();
+            Color.IcedRed();
 
             Console.WriteLine(Heading.DisplayHeadingIced());
             Console.WriteLine(gotShot.FaceIced);

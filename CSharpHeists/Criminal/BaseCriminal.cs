@@ -80,7 +80,7 @@ namespace CSharpHeists.Criminal
             Random r = new Random();
 
             Name = name;
-            BaseSkill = new Random().Next(20, 40);
+            BaseSkill = new Random().Next(25, 40);
 
             bool checkFaces = true;
 
@@ -126,8 +126,8 @@ namespace CSharpHeists.Criminal
                 PlayerContactCount = 0;
                 MoraleMin = r.Next(5, 15);
                 MoraleMax = r.Next(70, 101);
-                // Set morale start at a max of 50
-                Morale = r.Next(MoraleMin, 45);
+                // Set morale start at a max of 35
+                Morale = r.Next(MoraleMin, 35);
             }
         }
     }

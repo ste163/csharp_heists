@@ -134,7 +134,7 @@ namespace CSharpHeists.GameSections
             int totalCashAvailable = 0;
             locations.ForEach(l => totalCashAvailable = l.Cash + totalCashAvailable);
 
-            Console.Clear();
+            Color.EndingMagenta();
             Console.WriteLine(Heading.DisplayHeadingGameOver());
             Console.WriteLine(Heading.DisplaySubHeadingSummary());
             Console.WriteLine($"Total cash stolen: ${cashStolen} / ${totalCashAvailable}");

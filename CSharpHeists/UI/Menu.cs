@@ -41,6 +41,7 @@ namespace CSharpHeists.UI
         {
             Console.Write("Press any key to continue ");
             Console.ReadKey();
+            Console.ResetColor();
         }
     }
 }

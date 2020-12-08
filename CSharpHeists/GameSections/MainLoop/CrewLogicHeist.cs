@@ -96,6 +96,8 @@ namespace CSharpHeists.GameSections.MainLoop
         // Display traitor info
         public static void TraitorScreen(List<BaseCriminal> crew, List<BaseLocation> locations, string locName, BaseCriminal traitor)
         {
+            Color.CrewTurnedYellow();
+
             BaseLocation currentLocation = locations.Find(l => l.Name == locName);
 
             Console.WriteLine(Heading.DisplayHeadingTraitor());

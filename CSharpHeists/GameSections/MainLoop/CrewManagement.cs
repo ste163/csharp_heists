@@ -229,7 +229,7 @@ ___________");
         // Display player's speech
         public static void DisplayEncouragingSpeech(BaseCriminal player, bool isSplitMenu)
         {
-            Console.Clear();
+            Color.SuccessGreen();
             Console.WriteLine(Heading.DisplaySubheadingSpeech());
             Console.WriteLine(player.Face);
             Console.WriteLine("");

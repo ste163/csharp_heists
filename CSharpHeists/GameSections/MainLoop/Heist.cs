@@ -85,7 +85,7 @@ namespace CSharpHeists.GameSections.MainLoop
 
         public static void HeistSuccess(List<BaseCriminal> crew, List<BaseLocation> locations, string locName)
         {
-            Console.Clear();
+            Color.SuccessGreen();
 
             // Morale check before continuing
             CrewLogicHeist.WillCrewMemberTurnAfterHeist(crew, locations, locName);
@@ -121,7 +121,7 @@ namespace CSharpHeists.GameSections.MainLoop
 
         public static void HeistFailure(List<BaseCriminal> crew, List<BaseLocation> locations)
         {
-            Console.Clear();
+            Color.PoliceBlue();
             BaseCriminal player = crew.Find(c => c.IsPlayer);
             string moraleMsg = "Crew morale decreased.";
             // 50-50 chance for arrested or escaped
