@@ -1,6 +1,8 @@
 # C# Heists
 >Text-based heist adventure game for the terminal
 
+![C# Heists overview GIF](/readme_overview.gif)
+
 ## Features
 - manage a crew of untrustworthy criminals
     - hire associates
