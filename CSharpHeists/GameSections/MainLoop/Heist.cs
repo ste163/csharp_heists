@@ -154,7 +154,7 @@ namespace CSharpHeists.GameSections.MainLoop
                     Console.WriteLine("");
                     Console.WriteLine($"{arrestedMember.Face}");
                     Console.WriteLine("");
-                    Console.WriteLine($"The cops got {arrestedMember.Name}!");
+                    Console.WriteLine($"The cops got {arrestedMember.Name}!\n");
                     Console.WriteLine(moraleMsg);
                     Console.WriteLine("");
                     Menu.Continue();
