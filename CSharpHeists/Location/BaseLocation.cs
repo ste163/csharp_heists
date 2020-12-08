@@ -24,7 +24,7 @@ namespace CSharpHeists.Location
                 if (Difficulty >= 31 && Difficulty <= 80) d = "Saw movement, maybe one or two people inside. [~30-80 skill level required]";
                 if (Difficulty >= 81 && Difficulty <= 150) d = "Definitely people inside, can't see how tough they might be. [~80-150 skill level required]";
                 if (Difficulty >= 151 && Difficulty <= 250) d = "Mean looking people inside. [~150-250 skill level required]";
-                if (Difficulty >= 251 && Difficulty <= 350) d = "Tough guy by the door is definitly an armed guard. [~250-350 skill level required]";
+                if (Difficulty >= 251 && Difficulty <= 350) d = "Tough guy by the door is definitely an armed guard. [~250-350 skill level required]";
                 if (Difficulty >= 351 && Difficulty <= 450) d = "Armed guard and a mean looking dog by the door. [~350-450 skill level required]";
                 if (Difficulty >= 451 && Difficulty <= 550) d = "No guards outside, but there are security cameras. [~450-550 skill level required]";
                 if (Difficulty >= 551 && Difficulty <= 650) d = "Two security cameras and a guard outside. [~550-650 skill level required]";
