@@ -364,7 +364,7 @@ namespace CSharpHeists.GameSections.MainLoop
             {
                 Console.WriteLine($"{traitor.Name} iced {gotShot.Name} in the face!");
                 Console.WriteLine("");
-                Console.WriteLine("Survivor's morale decreased.");
+                Console.WriteLine("Survivors' morale decreased.");
                 Console.WriteLine("");
                 Menu.Continue();
 
