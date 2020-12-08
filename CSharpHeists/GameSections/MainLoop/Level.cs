@@ -188,7 +188,7 @@ _____
                 if (selectedLoc.WaitsInVanAvailable > 1) Console.WriteLine($"1) keep watching from van [{selectedLoc.WaitsInVanAvailable} waits left]");
                 else Console.WriteLine($"1) keep watching from van [{selectedLoc.WaitsInVanAvailable} wait left]");
             }
-            else if (selectedLoc.WaitsInVanAvailable == 0) Console.WriteLine("Come back later to contine staking out from van. Don't wait to raise suspicion");
+            else if (selectedLoc.WaitsInVanAvailable == 0) Console.WriteLine("Come back later to continue staking out from van. You don't wait to raise suspicion.");
             Console.WriteLine("2) begin heist");
             Console.WriteLine("3) return to planning");
             int selection = Menu.MenuInput(3);
@@ -221,7 +221,11 @@ _____
                     if (l.WaitsInVanAvailable > 0)
                     {
                         int difficultyModifier = r.Next(-100, 81);
-                        // Add the modifier to the current location difficulty
+                        if (difficultyModifier < 0 && difficultyModifier > -15) difficultyModifier = -60;
+                        if (difficultyModifier > 0 && difficultyModifier < 15) difficultyModifier = 30;
+                        // Display the page for watching from van
+                        DisplayWatchFromVan(difficultyModifier);
+                        // Add the modifier to the current location difficulty                   
                         int newDifficulty = l.Difficulty + difficultyModifier;
                         // If the difficulty is below the min, set to min
                         if (newDifficulty < l.DifficultyMin) l.Difficulty = l.DifficultyMin;
@@ -236,6 +240,26 @@ _____
             });
 
             return locations;
+        }
+
+        private static void DisplayWatchFromVan(int changeInDifficulty)
+        {
+            if (changeInDifficulty > 0) Color.CrewTurnedYellow();
+            if (changeInDifficulty < 0) Color.SuccessGreen();
+
+            Console.WriteLine(Heading.DisplayWatchFromVan());
+            Console.WriteLine(Vehicle.DisplayVan());
+            Console.WriteLine("");
+
+            Console.WriteLine($"You park the van a block away and keep watch for 15 minutes.\n");
+            if (changeInDifficulty < 0) Console.WriteLine("The situation has improved. Difficulty has decreased.");
+            if (changeInDifficulty > 0) Console.WriteLine("The situation has worsened. Difficulty has increased.");
+            if (changeInDifficulty == 0) Console.WriteLine("The situation didn't change. Difficulty stayed the same.");
+            Console.WriteLine($"THE DIFFICULTY CHANGE IS {changeInDifficulty}");
+            
+            Console.WriteLine("");
+
+            Menu.Continue();
         }
     }
 }

@@ -32,6 +32,18 @@ namespace CSharpHeists.ASCII
              ";
         }
 
+        public static string DisplayVan()
+        {
+            return @"  _________________
+ |              |   \
+ |  JUST-A-VAN  |____\_____
+ | _____        |    |_ __ |
+ [/ ___ \       |   / ___ \|
+[]_/.-.\_\______|__/_/.-.\_[]
+   |(O)|             |(O)|
+    '-'               '-'";
+        }
+
         public static string DisplayAssociateRanWithCash()
         {
             return @"                       _________________
