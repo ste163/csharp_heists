@@ -62,6 +62,16 @@ namespace CSharpHeists.GameSections.MainLoop
             }
         }
 
+        public static List<BaseCriminal> SortCrew(List<BaseCriminal> crew)
+        {
+            crew.Sort((x, y) =>
+            {
+                if (y.IsPlayer) return 0;
+                else return y.BaseSkill.CompareTo(x.BaseSkill);
+            });
+            return crew;
+        }
+
         // Add associates to crew both on initial crew creation and later in game
         public static BaseCriminal RecruitNewAssociate(List<BaseCriminal> crew)
         {
@@ -162,8 +172,8 @@ _________
         {
             Console.WriteLine(Heading.DisplayCrewHeading());
             DisplayCrewInfo(crew);
-
-            crew.ForEach(c => {
+            List<BaseCriminal> sortedCrew = SortCrew(crew);
+            sortedCrew.ForEach(c => {
                 if (c.IsPlayer)
                 {
                     if (crew.Count() <= 3) Console.WriteLine(c.Face);
@@ -243,8 +253,7 @@ ___________");
 
             if (isSplitMenu == true)
             {
-                Console.WriteLine("You give a big speech congratulating the crew's heist expertise");
-                Console.WriteLine("and talk about how much money you all have made as a team.");
+                Console.WriteLine("You give a big speech congratulating the crew's heist expertise.");
             }
 
             Console.WriteLine("");

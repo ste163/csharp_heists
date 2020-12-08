@@ -54,9 +54,10 @@ _________
         {
             Console.Clear();
             Console.WriteLine(Heading.DisplayCrewCreated());
-            crew.ForEach(c =>
+            List<BaseCriminal> sortedCrew = CrewManagement.SortCrew(crew);
+            sortedCrew.ForEach(c =>
             {
-                if (crew.Count() <= 3) Console.WriteLine($@"{c.Face}
+                if (sortedCrew.Count() <= 3) Console.WriteLine($@"{c.Face}
                 ");
                 if (c.IsPlayer == true)
                 {

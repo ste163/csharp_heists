@@ -58,6 +58,7 @@ namespace CSharpHeists.GameSections
 
         public static void SplitCash(List<BaseCriminal> crew, List<BaseLocation> locations)
         {
+            Color.SplitMagenta();
             // get crew cash
             int totalCash = 0;
             crew.ForEach(c => totalCash = c.CrewTotalCash);
@@ -134,7 +135,7 @@ namespace CSharpHeists.GameSections
             int totalCashAvailable = 0;
             locations.ForEach(l => totalCashAvailable = l.Cash + totalCashAvailable);
 
-            Color.EndingMagenta();
+            Color.EndingBlue();
             Console.WriteLine(Heading.DisplayHeadingGameOver());
             Console.WriteLine(Heading.DisplaySubHeadingSummary());
             Console.WriteLine($"Total cash stolen: ${cashStolen} / ${totalCashAvailable}");

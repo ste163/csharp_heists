@@ -33,10 +33,17 @@ namespace CSharpHeists.UI
             Console.Clear();
         }
 
-        public static void EndingMagenta()
+        public static void SplitMagenta()
         {
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.DarkMagenta;
+            Console.Clear();
+        }
+
+        public static void EndingBlue()
+        {
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.Cyan;
             Console.Clear();
         }
     }
