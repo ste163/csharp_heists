@@ -48,7 +48,7 @@ cd csharp_heists
 
 ## Credits
 ### Testing
-- [Ember Parr](https://www.linkedin.com/in/emberparr/) - OS X 64 version
+- [Ember Parr](https://www.linkedin.com/in/emberparr/) - for  OS X 64 version
 ### ASCII Art
 Thanks to these sites for the amazing ASCII artwork:
 - https://textfancy.com/multiline-text-art/
