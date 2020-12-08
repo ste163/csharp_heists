@@ -25,14 +25,14 @@
 - Unzip file and cd into directory
 - Change permissions on CSharpHeists file with ```chmod 777 ./CSharpHeists```
 - Run with ```./CSharpHeists```
->If text is distorted, maximize window.
+    >If text is distorted, maximize window
 
 ### Mac
 - Download ```version``` from from: UPDATED LINK v1.1
 - Unzip file and cd into directory
 - CHANGE PERMISSIONS
 - Run
->If text is distorted, maximize window.
+    >If text is distorted, maximize window
 
 ### Build application
 #### Prerequisites
