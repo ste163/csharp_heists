@@ -14,8 +14,8 @@ namespace CSharpHeists.UI
 
         public static void IcedRed()
         {
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.BackgroundColor = ConsoleColor.DarkRed;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.Red;
             Console.Clear();
         }
 
@@ -33,10 +33,10 @@ namespace CSharpHeists.UI
             Console.Clear();
         }
 
-        public static void SplitMagenta()
+        public static void SplitYellow()
         {
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.BackgroundColor = ConsoleColor.DarkMagenta;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.Yellow;
             Console.Clear();
         }
 

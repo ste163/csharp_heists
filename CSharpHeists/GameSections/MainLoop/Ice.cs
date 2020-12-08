@@ -41,14 +41,14 @@ namespace CSharpHeists.GameSections.MainLoop
         public static List<BaseCriminal> IceAssociateCheck(List<BaseCriminal> crew, List<BaseLocation> locations, bool splitCashMenu)
         {
             Console.Clear();
-
             string name = "not empty for a base value";
-            Console.WriteLine(Heading.DisplayIce());
 
             if (!splitCashMenu)
             {
                 while (name != "" && crew.Count() > 1)
                 {
+                    Console.Clear();
+                    Console.WriteLine(Heading.DisplayIce());
                     CrewManagement.DisplayCrewInfo(crew);
                     DisplayIceAssociateWarning(crew);
                     name = Console.ReadLine();
@@ -74,6 +74,8 @@ namespace CSharpHeists.GameSections.MainLoop
             }
             else if (splitCashMenu)
             {
+                Console.Clear();
+                Console.WriteLine(Heading.DisplayIce());
                 CrewManagement.DisplayCrewInfoShortened(crew);
                 DisplayIceAssociateWarning(crew);
                 name = Console.ReadLine();
