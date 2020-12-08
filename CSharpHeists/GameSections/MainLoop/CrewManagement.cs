@@ -237,7 +237,7 @@ ___________");
             // will need to make some random compliments
             if (isSplitMenu == false)
             {
-                Console.WriteLine("You give a big speech complimenting the crew's skills.");
+                Console.WriteLine("You give a big speech complimenting the crew's skills.\n");
                 Console.WriteLine("You promise everyone will get rich.");
             }
 

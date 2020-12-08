@@ -20,6 +20,7 @@ namespace CSharpHeists
         public static void StartGame()
         {
             // Displays intro, creates levels, player, crew, and enters the LevelSelect loop
+            Console.ResetColor();
             Console.Clear();
             Intro.DisplayIntro();
 

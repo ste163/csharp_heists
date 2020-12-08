@@ -255,7 +255,6 @@ _____
             if (changeInDifficulty < 0) Console.WriteLine("The situation has improved. Difficulty has decreased.");
             if (changeInDifficulty > 0) Console.WriteLine("The situation has worsened. Difficulty has increased.");
             if (changeInDifficulty == 0) Console.WriteLine("The situation didn't change. Difficulty stayed the same.");
-            Console.WriteLine($"THE DIFFICULTY CHANGE IS {changeInDifficulty}");
             
             Console.WriteLine("");
 
