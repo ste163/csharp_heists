@@ -5,6 +5,13 @@ namespace CSharpHeists.UI
 {
     public class Color
     {
+        public static void DefaultGray()
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.DarkGray;
+            Console.Clear();
+        }
+
         public static void SuccessGreen()
         {
             Console.ForegroundColor = ConsoleColor.White;

@@ -31,7 +31,7 @@ namespace CSharpHeists.GameSections
         public static void DisplayCrewMembersWhoSurvived(List<BaseCriminal> crew)
         {
             Console.WriteLine($"Crew members (besides you) who survived:");
-            if (crew.Count() == 1) Console.WriteLine("  All your crew members either ran off, were arrested, or shot dead.");
+            if (crew.Count() == 1) Console.WriteLine("  All of your crew members either ran off, were arrested, or shot dead.");
             else
             {
                 crew.ForEach(c =>

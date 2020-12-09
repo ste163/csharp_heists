@@ -18,11 +18,11 @@ namespace CSharpHeists.GameSections.MainLoop
         public static void ManageCrew(List<BaseCriminal> crew, List<BaseLocation> locations)
         // Must always return the current crew and the current locations
         {
-            Console.Clear();
+            Color.DefaultGray();
 
             List<BaseCriminal> modifiedCrew = crew;
 
-            CrewManagement.DisplayCurrentCrew(modifiedCrew);
+            DisplayCurrentCrew(modifiedCrew);
 
             BaseCriminal player = crew.Find(c => c.IsPlayer);
 

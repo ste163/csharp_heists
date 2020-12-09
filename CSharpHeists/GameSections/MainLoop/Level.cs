@@ -16,6 +16,7 @@ namespace CSharpHeists.GameSections.MainLoop
     {
         public static void LevelSelect(List<BaseCriminal> crew, List<BaseLocation> locations)
         {
+            Color.DefaultGray();
             // While there are levels not yet completed, allow user to continue selecting levels
             List<BaseLocation> locationsLeftToRob = locations.Where(l => l.Completed == false).ToList();
 
@@ -115,8 +116,6 @@ namespace CSharpHeists.GameSections.MainLoop
         // Must always return the current crew and the current locations
         // LocationInfo names MUST match those in Location.cs
         {
-            Console.Clear();
-
             switch (userSelected)
             {
                 case 2:
@@ -158,7 +157,7 @@ namespace CSharpHeists.GameSections.MainLoop
 
         public static void LocationInfo(List<BaseLocation> locations, string locName, List<BaseCriminal> crew)
         {
-            Console.Clear();
+            Color.DefaultGray();
             // Get the selected location
             BaseLocation selectedLoc = locations.Find(l => l.Name == locName);
             // Display the Stakeout heading
