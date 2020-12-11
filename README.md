@@ -19,34 +19,23 @@
 - Pressing any key during a heist countdown will skip heist summary
 
 ## Setup
+- Download [CSharp Heists v1.1]() for Windows, Linux, or Mac
+
 ### Windows
-- Download ```win64_csharp-heists-v1.0.zip``` from: UPDATED LINK v1.1
 - Unzip file
-- Run ```heist.exe```
+- Run ```heist.exe``` to play
 
 ### Linux
-- Download ```lin64_csharp-heists-v1.0.zip``` from: UPDATED LINK v1.1
-- Unzip file and cd into directory
-- Change permissions on CSharpHeists file with ```chmod 777 ./CSharpHeists```
-- Run with ```./CSharpHeists```
+- Unzip file
+- With the terminal, ```cd``` into unzipped directory
+- Change permissions on ```CSharpHeists``` file with the following command: ```chmod 777 ./CSharpHeists```
+- Still in the terminal, run with the following command to play: ```./CSharpHeists```
 
-### Mac
-- Download ```version``` from from: UPDATED LINK v1.1
-- Unzip file and cd into directory
-- CHANGE PERMISSIONS
-- Run
-
-### Build application
-#### Prerequisites
-- .NET 5
-#### Download the project
-- ```git clone``` repo and ```cd``` into it.
-```
-git clone git@github.com:ste163/csharp_heists.git
-cd csharp_heists
-```
-#### Build & run the application
-- Inside the ```csharp_heists``` directory, run ```dotnet run``` to build and run the application.
+### Mac (needs testing)
+- Unzip file (you will get a warning about this file possibly being unsafe)
+- With the terminal, ```cd``` into unzipped directory
+- Change permissions on ```CSharpHeists``` file with the following command: ```chmod +x CSharpHeists```
+- Still in the terminal, run with the following command to play: ```./CSharpHeists```
 
 ## Credits
 ### Testing
