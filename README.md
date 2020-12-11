@@ -14,6 +14,10 @@
 - six endings based on how much money you got away with, whether you survived, or got arrested
 - enough randomization so no two playthroughs have the same outcome
 
+## Known Issues
+- Distorted text if terminal window is not wide enough. Maximizing window fixes this.
+- Pressing any key during a heist countdown will skip the heist summary.
+
 ## Setup
 ### Windows
 - Download ```win64_csharp-heists-v1.0.zip``` from: UPDATED LINK v1.1
@@ -43,10 +47,6 @@ cd csharp_heists
 ```
 #### Build & run the application
 - Inside the ```csharp_heists``` directory, run ```dotnet run``` to build and run the application.
-
-## Known Issues
-- Distorted text if terminal window is not wide enough. Maximizing window fixes this.
-- Pressing any key during a heist countdown will skip the heist summary.
 
 ## Credits
 ### Testing
