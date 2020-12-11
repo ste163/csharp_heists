@@ -35,7 +35,13 @@ namespace CSharpHeists.GameSections.MainLoop
                         break;
                 }
                 // Show number for one second
-                Thread.Sleep(1000);
+                Thread.Sleep(1000);     
+            }
+            // If user pressed any key while waiting, capture it so the summary screen isn't skipped
+            if (Console.KeyAvailable)
+            {
+                Console.Write("Press enter to continue: ");
+                Console.ReadLine();
             }
         }
 
