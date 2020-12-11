@@ -25,14 +25,12 @@
 - Unzip file and cd into directory
 - Change permissions on CSharpHeists file with ```chmod 777 ./CSharpHeists```
 - Run with ```./CSharpHeists```
-    >If text is distorted, maximize window
 
 ### Mac
 - Download ```version``` from from: UPDATED LINK v1.1
 - Unzip file and cd into directory
 - CHANGE PERMISSIONS
 - Run
-    >If text is distorted, maximize window
 
 ### Build application
 #### Prerequisites
@@ -45,6 +43,10 @@ cd csharp_heists
 ```
 #### Build & run the application
 - Inside the ```csharp_heists``` directory, run ```dotnet run``` to build and run the application.
+
+## Known Issues
+- Distorted text if terminal window is not wide enough. Maximizing window fixes this.
+- Pressing any key during a heist countdown will skip the heist summary.
 
 ## Credits
 ### Testing
