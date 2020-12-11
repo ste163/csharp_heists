@@ -15,8 +15,8 @@
 - enough randomization so no two playthroughs have the same outcome
 
 ## Known Issues
-- Distorted text if terminal window is not wide enough. Maximizing window fixes this.
-- Pressing any key during a heist countdown will skip the heist summary.
+- Distorted text if terminal window is not wide enough. Maximizing window fixes this
+- Pressing any key during a heist countdown will skip heist summary
 
 ## Setup
 ### Windows
