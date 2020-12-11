@@ -8,11 +8,37 @@ using CSharpHeists.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace CSharpHeists.GameSections.MainLoop
 {
     public class Heist
     {
+        public static void CountDown()
+        {
+            // Repeat the heading countdown every second
+            for (int i = 0; i < 3; i++)
+            {
+                Console.Clear();
+                Console.WriteLine(Heading.DisplayCountDownHeading());
+                    
+                switch (i)
+                {
+                    case 0:
+                        Console.WriteLine(Heading.DisplayCountDown3());
+                        break;
+                    case 1:
+                        Console.WriteLine(Heading.DisplayCountDown2());
+                        break;
+                    case 2:
+                        Console.WriteLine(Heading.DisplayCountDown1());
+                        break;
+                }
+                // Show number for one second
+                Thread.Sleep(1000);
+            }
+        }
+
         // Run through checks to see if crew succeeds
         public static void BeginHeist(List<BaseCriminal> crew, List<BaseLocation> locations, string locName)
         {

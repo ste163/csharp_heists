@@ -198,6 +198,50 @@ _______________________________________________________________________________
 ______________________________
 ";
         }
+        
+        public static string DisplayCountDownHeading()
+        {
+            return @"
+
+██▄ ██▀ ▄▀  █ █▄ █ █▄ █ █ █▄ █ ▄▀    █▄█ ██▀ █ ▄▀▀ ▀█▀   █ █▄ █
+█▄█ █▄▄ ▀▄█ █ █ ▀█ █ ▀█ █ █ ▀█ ▀▄█   █ █ █▄▄ █ ▄██  █    █ █ ▀█
+________________________________________________________________
+";
+        }
+
+        public static string DisplayCountDown1()
+        {
+            return @"
+     ██╗
+    ███║
+    ╚██║
+     ██║
+     ██║
+     ╚═╝
+";
+        }
+        public static string DisplayCountDown2()
+        {
+            return @"
+    ██████╗ 
+    ╚════██╗
+     █████╔╝
+    ██╔═══╝ 
+    ███████╗
+    ╚══════╝
+";
+        }
+        public static string DisplayCountDown3()
+        {
+            return @"
+    ██████╗ 
+    ╚════██╗
+     █████╔╝
+     ╚═══██╗
+    ██████╔╝
+    ╚═════╝ 
+";
+        }
 
         public static string DisplayCrewHeading()
         {

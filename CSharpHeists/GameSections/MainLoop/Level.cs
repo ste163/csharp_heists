@@ -198,6 +198,7 @@ _____
                     LocationInfo(WaitInVan(locations, locName), locName, crew);
                     break;
                 case 2:
+                    Heist.CountDown();
                     Heist.BeginHeist(crew, locations, locName);
                     break;
                 case 3:
