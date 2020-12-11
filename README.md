@@ -16,7 +16,7 @@
 
 ## Known Issues
 - Distorted text if terminal window is not wide enough. Maximizing window fixes this
-- Pressing any key during a heist countdown will skip heist summary
+- Pressing ```enter``` multiple times during a heist countdown will skip heist summary
 
 ## Setup
 - Download [CSharp Heists v1.1]() for Windows, Linux, or Mac
@@ -29,13 +29,13 @@
 - Unzip file
 - With the terminal, ```cd``` into unzipped directory
 - Change permissions on ```CSharpHeists``` file with the following command: ```chmod 777 ./CSharpHeists```
-- Still in the terminal, run with the following command to play: ```./CSharpHeists```
+- Still in the terminal, run the following command to play: ```./CSharpHeists```
 
 ### Mac (needs testing)
 - Unzip file (you will get a warning about this file possibly being unsafe)
 - With the terminal, ```cd``` into unzipped directory
 - Change permissions on ```CSharpHeists``` file with the following command: ```chmod +x CSharpHeists```
-- Still in the terminal, run with the following command to play: ```./CSharpHeists```
+- Still in the terminal, run the following command to play: ```./CSharpHeists```
 
 ## Credits
 ### Testing
