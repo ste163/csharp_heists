@@ -119,6 +119,7 @@ namespace CSharpHeists.Criminal
                 IsPlayer = true;
                 PlayerContactCount = 4;
                 Morale = 35;
+                BaseSkill = BaseSkill + 20;
             }
             else
             {

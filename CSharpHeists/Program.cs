@@ -6,6 +6,7 @@ using CSharpHeists.Location;
 using CSharpHeists.Criminal;
 using CSharpHeists.GameSections;
 using CSharpHeists.GameSections.MainLoop;
+using CSharpHeists.UI;
 
 namespace CSharpHeists
 {
@@ -14,13 +15,14 @@ namespace CSharpHeists
         static void Main(string[] args)
         {
             // By taking the game method out of Main, we are able to restart gameplay whenever we want by invoking StartGame();
+            Console.Clear();
             StartGame();
         }
 
         public static void StartGame()
         {
             // Displays intro, creates levels, player, crew, and enters the LevelSelect loop
-            Console.ResetColor();
+            Color.DefaultGray();
             Console.Clear();
             Intro.DisplayIntro();
 
