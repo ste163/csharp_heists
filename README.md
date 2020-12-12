@@ -33,7 +33,7 @@
 
 ### Mac (OS X)
 >You will get warnings about the safety of this file
-- Unzip file, which will create a new directory.
+- Unzip file, which will create a new directory
 - Open the terminal (from ```Finder```, go to the top of the screen and click ```Go``` then ```Utilities``` then ```Terminal``` )
 - ```cd``` into unzipped directory
 - Change permissions on ```CSharpHeists``` file with the following command: ```chmod +x CSharpHeists```
