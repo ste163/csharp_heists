@@ -1,5 +1,5 @@
 # C# Heists
->Text-based heist adventure game for the terminal
+>Text-based heist adventure game Windows, Linux, and Mac terminals
 
 ![C# Heists overview GIF](/readme_overview.gif)
 
@@ -8,9 +8,8 @@
     - hire associates
     - ice unruly associates
     - manage morale (unhappy associates may turn against you!)
-    - each associate has a unique ASCII face
 - perform five heists throughout Nashville
-    - each with ASCII art
+    - stakeout locations to see if they become more or less difficult
 - six endings based on how much money you got away with, whether you survived, or got arrested
 - enough randomization so no two playthroughs have the same outcome
 
@@ -20,7 +19,7 @@
 - Background color may not resize correctly on Linux. Restarting game with a maximized window fixes this
 
 ## Setup
-- Download [CSharp Heists v1.1]() for Windows, Linux, or Mac
+- Download [CSharp Heists v1.1](https://github.com/ste163/csharp_heists/releases) for Windows, Linux, or Mac
 
 ### Windows
 - Unzip file
