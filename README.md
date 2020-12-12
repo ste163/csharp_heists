@@ -1,40 +1,49 @@
 # C# Heists
->Text-based heist adventure game for the terminal
+>Text-based heist adventure game Windows, Linux, and Mac terminals
+
+![C# Heists overview GIF](/readme_overview.gif)
 
 ## Features
 - manage a crew of untrustworthy criminals
     - hire associates
     - ice unruly associates
     - manage morale (unhappy associates may turn against you!)
-    - each associate has a unique ASCII face
 - perform five heists throughout Nashville
-    - each with ASCII art
+    - stakeout locations to see if they become more or less difficult
 - six endings based on how much money you got away with, whether you survived, or got arrested
 - enough randomization so no two playthroughs have the same outcome
 
+## Known Issues
+- Pressing ```enter``` multiple times during a heist countdown will skip heist summary
+- Text distortion if terminal window is not wide enough. Maximizing window fixes this
+- Background color may not resize correctly on Linux. Restarting game with a maximized window fixes this
+
 ## Setup
+- Download [CSharp Heists v1.1](https://github.com/ste163/csharp_heists/releases) for Windows, Linux, or Mac
+
 ### Windows
-- Download ```win64_csharp-heists-v1.0.zip``` from: https://github.com/ste163/csharp_heists/releases/tag/v1.0
-- Run ```heist.exe```.
+- Unzip file
+- Run ```heist.exe``` to play
 
 ### Linux
-- Download ```lin64_csharp-heists-v1.0.zip``` from: https://github.com/ste163/csharp_heists/releases/tag/v1.0
-- Change permissions on CSharpHeists file with ```chmod 777 ./CSharpHeists```
-- Run with ```./CSharpHeists```
+- Unzip file
+- With the terminal, ```cd``` into unzipped directory
+- Change permissions on ```CSharpHeists``` file with the following command: ```chmod 777 ./CSharpHeists```
+- Still in the terminal, run the following command to play: ```./CSharpHeists```
 
 ### Mac
-#### Prerequisites
-- .NET 5
-#### Download the project
-- ```git clone``` repo and ```cd``` into it.
-```
-git clone git@github.com:ste163/csharp_heists.git
-cd csharp_heists
-```
-#### Build & run the application
-- Inside the ```csharp_heists``` directory, run ```dotnet run``` to build and run the application.
+>You will get warnings about the safety of this file
+- Unzip file, which will create a new directory.
+- Open the terminal (from ```Finder```, go to the top of the screen and click ```Go``` then ```Utilities``` then ```Terminal``` )
+- ```cd``` into unzipped directory
+- Change permissions on ```CSharpHeists``` file with the following command: ```chmod +x CSharpHeists```
+- In ```Finder```, enter the directory with the ```CSharpHeists``` file
+- Click ```CSharpHeists``` to play (maximize your Terminal window for best results)
 
-## ASCII Art Credits
+## Credits
+### Testing
+- [Ember Parr](https://www.linkedin.com/in/emberparr/) - for  OS X 64 version
+### ASCII Art
 Thanks to these sites for the amazing ASCII artwork:
 - https://textfancy.com/multiline-text-art/
 - https://asciiart.website/
