@@ -31,11 +31,14 @@
 - Change permissions on ```CSharpHeists``` file with the following command: ```chmod 777 ./CSharpHeists```
 - Still in the terminal, run the following command to play: ```./CSharpHeists```
 
-### Mac (needs testing)
-- Unzip file (you will get a warning about this file possibly being unsafe)
-- With the terminal, ```cd``` into unzipped directory
+### Mac
+>You will get warnings about the safety of this file
+- Unzip file, which will create a new directory.
+- Open the terminal (from ```Finder```, go to the top of the screen and click ```Go``` then ```Utilities``` then ```Terminal``` )
+- ```cd``` into unzipped directory
 - Change permissions on ```CSharpHeists``` file with the following command: ```chmod +x CSharpHeists```
-- Still in the terminal, run the following command to play: ```./CSharpHeists```
+- In ```Finder```, enter the directory with the ```CSharpHeists``` file
+- Click ```CSharpHeists``` to play (maximize your Terminal window for best results)
 
 ## Credits
 ### Testing
