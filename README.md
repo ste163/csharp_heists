@@ -15,8 +15,9 @@
 - enough randomization so no two playthroughs have the same outcome
 
 ## Known Issues
-- Distorted text if terminal window is not wide enough. Maximizing window fixes this
 - Pressing ```enter``` multiple times during a heist countdown will skip heist summary
+- Text distortion if terminal window is not wide enough. Maximizing window fixes this
+- Background color may not resize correctly on Linux. Restarting game with a maximized window fixes this
 
 ## Setup
 - Download [CSharp Heists v1.1]() for Windows, Linux, or Mac
