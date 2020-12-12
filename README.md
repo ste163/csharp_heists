@@ -19,7 +19,7 @@
 - Background color may not resize correctly on Linux. Restarting game with a maximized window fixes this
 
 ## Setup
-- Download [CSharp Heists v1.1](https://github.com/ste163/csharp_heists/releases) for Windows, Linux, or Mac
+- Download [CSharp Heists v1.1](https://github.com/ste163/csharp_heists/releases/tag/v1.1) for Windows, Linux, or Mac
 
 ### Windows
 - Unzip file
